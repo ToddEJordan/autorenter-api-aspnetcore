@@ -40,22 +40,18 @@ We would love to hear your [feedback](https://go.microsoft.com/fwlink/?LinkId=51
 
 
 ### Local - Development
-dotnet restore
-dotnet build
-dotnet run
+*   dotnet restore
+*   dotnet build
+*   dotnet run
 
 ### Docker - Deployment
 
-docker build -t autorenter-api-image .
-docker run -d -p 80:5000 --name autorenter-api autorenter-api-image
-docker attach --sig-proxy=false autorenter-api
+*   docker build -t autorenter-api-image .
+*   docker run -d -p 80:5000 --name autorenter-api autorenter-api-image
+*   docker attach --sig-proxy=false autorenter-api
 
 ### Docker - Cleanup
 
-docker stop autorenter-api
-docker rm autorenter-api
-docker rmi autorenter-api-image
-
-### Swagger - Development
-
-http://localhost:61820/swagger/ui/
+*   docker stop autorenter-api
+*   docker rm autorenter-api
+*   docker rmi autorenter-api-image
