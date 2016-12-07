@@ -26,6 +26,7 @@ namespace AutoRenter.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddResponseCompression();
             ConfigureCors(services);
             ConfigureMvc(services);
             ConfigureDI(services);
@@ -56,6 +57,8 @@ namespace AutoRenter.API
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.UseResponseCompression();
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
