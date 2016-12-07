@@ -1,16 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoRenter.API.Models;
 
 namespace AutoRenter.API.Services
 {
     public class InMemoryLocationService : ILocationService
     {
-        private readonly IDictionary<int, Location> _internalStorage = new Dictionary<int, Location>
+        private readonly IDictionary<Guid, Location> _internalStorage = new Dictionary<Guid, Location>
         {
             {
-                1, new Location
+                new Guid("75bc8361-5c47-4c95-9340-e68e5286d2c5"), new Location
                 {
-                    Id = 1,
+                    Id = new Guid("75bc8361-5c47-4c95-9340-e68e5286d2c5"),
                     SiteId = "13Z",
                     Name = "Loring Seaplane Base",
                     City = "Loring",
@@ -24,23 +25,23 @@ namespace AutoRenter.API.Services
             return _internalStorage.Values;
         }
 
-        public Location Get(int id)
+        public Location Get(Guid id)
         {
             return _internalStorage[id];
         }
 
         public void Create(Location model)
         {
-            model.Id = _internalStorage.Count + 1;
+            model.Id = Guid.NewGuid();
             _internalStorage.Add(model.Id, model);
         }
 
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
             _internalStorage.Remove(id);
         }
 
-        public void Update(int id, Location model)
+        public void Update(Guid id, Location model)
         {
             _internalStorage[id] = model;
         }

@@ -26,10 +26,15 @@ namespace AutoRenter.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddResponseCompression();
+            ConfigureCompression(services);
             ConfigureCors(services);
             ConfigureMvc(services);
             ConfigureDI(services);
+        }
+
+        private static void ConfigureCompression(IServiceCollection services)
+        {
+            services.AddResponseCompression();
         }
 
         private static void ConfigureDI(IServiceCollection services)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoRenter.API.Models;
@@ -28,8 +29,8 @@ namespace AutoRenter.API.Controllers
             return Ok(formattedResult);
         }
 
-        [HttpGet("{id:int:min(1)}", Name = "GetVehicle")]
-        public IActionResult Get([Required] int id)
+        [HttpGet("{id:Guid}", Name = "GetVehicle")]
+        public IActionResult Get([Required] Guid id)
         {
             try
             {
@@ -60,14 +61,14 @@ namespace AutoRenter.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(Guid id)
         {
             VehicleService.Delete(id);
             return NoContent();
         }
 
         [HttpPut]
-        public IActionResult Put(int id, [FromBody] Vehicle model)
+        public IActionResult Put(Guid id, [FromBody] Vehicle model)
         {
             VehicleService.Update(id, model);
             return Ok(model);

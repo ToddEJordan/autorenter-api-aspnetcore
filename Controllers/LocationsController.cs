@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using AutoRenter.API.Models;
@@ -28,9 +29,9 @@ namespace AutoRenter.API.Controllers
             return Ok(formattedResult);
         }
 
-        [HttpGet("{id:int:min(1)}", Name = "GetLocation")]
+        [HttpGet("{id:Guid}", Name = "GetLocation")]
         [Produces(typeof(Location))]
-        public IActionResult Get(int id)
+        public IActionResult Get(Guid id)
         {
             try
             {
@@ -61,14 +62,14 @@ namespace AutoRenter.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(Guid id)
         {
             LocationService.Delete(id);
             return NoContent();
         }
 
         [HttpPut]
-        public IActionResult Update(int id, [FromBody] Location model)
+        public IActionResult Update(Guid id, [FromBody] Location model)
         {
             LocationService.Update(id, model);
             return Ok(model);
