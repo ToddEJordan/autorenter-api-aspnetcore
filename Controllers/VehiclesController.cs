@@ -14,15 +14,14 @@ namespace AutoRenter.API.Controllers
     [Route("api/vehicles")]
     public class VehiclesController : Controller
     {
+        private readonly IResponseConverter _responseConverter;
         private readonly IVehicleRepository _vehicleRepository;
 
         public VehiclesController(IVehicleRepository vehicleRepository, IResponseConverter responseConverter)
         {
-            ResponseConverter = responseConverter;
+            _responseConverter = responseConverter;
             _vehicleRepository = vehicleRepository;
         }
-
-        private IResponseConverter ResponseConverter { get; }
 
         // TODO: Fix route to be /api/locations/{locationId}/vehicles
         [HttpGet]
@@ -34,7 +33,7 @@ namespace AutoRenter.API.Controllers
                 .ToList();
 
             var vehicleDtos = Mapper.Map<IEnumerable<Vehicle>, IEnumerable<VehicleDto>>(vehicles);
-            var formattedResult = ResponseConverter.Convert(vehicleDtos);
+            var formattedResult = _responseConverter.Convert(vehicleDtos);
 
             Response.Headers.Add("x-total-count", totalVehicles.ToString());
             return Ok(formattedResult);
@@ -48,7 +47,7 @@ namespace AutoRenter.API.Controllers
             if (vehicle != null)
             {
                 var vehicleDto = Mapper.Map<Vehicle, VehicleDto>(vehicle);
-                var formattedResult = ResponseConverter.Convert(vehicleDto);
+                var formattedResult = _responseConverter.Convert(vehicleDto);
                 return Ok(formattedResult);
             }
 

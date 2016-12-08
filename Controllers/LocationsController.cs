@@ -15,17 +15,16 @@ namespace AutoRenter.API.Controllers
     public class LocationsController : Controller
     {
         private readonly ILocationRepository _locationRepository;
+        private readonly IResponseConverter _responseConverter;
         private readonly IVehicleRepository _vehicleRepository;
 
         public LocationsController(ILocationRepository locationRepository, IVehicleRepository vehicleRepository,
             IResponseConverter responseConverter)
         {
-            ResponseConverter = responseConverter;
+            _responseConverter = responseConverter;
             _vehicleRepository = vehicleRepository;
             _locationRepository = locationRepository;
         }
-
-        private IResponseConverter ResponseConverter { get; }
 
         [HttpGet]
         public IActionResult Get()
@@ -36,7 +35,7 @@ namespace AutoRenter.API.Controllers
                 .ToList();
 
             var locationDtos = Mapper.Map<IEnumerable<Location>, IEnumerable<LocationDto>>(locations);
-            var formattedResult = ResponseConverter.Convert(locationDtos);
+            var formattedResult = _responseConverter.Convert(locationDtos);
 
             Response.Headers.Add("x-total-count", totalLocations.ToString());
             return Ok(formattedResult);
@@ -50,7 +49,7 @@ namespace AutoRenter.API.Controllers
             if (location != null)
             {
                 var locationDto = Mapper.Map<Location, LocationDto>(location);
-                var formattedResult = ResponseConverter.Convert(locationDto);
+                var formattedResult = _responseConverter.Convert(locationDto);
                 return Ok(formattedResult);
             }
 
