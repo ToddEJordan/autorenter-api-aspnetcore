@@ -17,7 +17,11 @@
     "Microsoft.Extensions.Logging.Debug": "1.1.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
     "Microsoft.AspNetCore.Diagnostics": "1.1.0",
-    "Microsoft.AspNetCore.ResponseCompression": "1.0.0"
+    "Microsoft.AspNetCore.ResponseCompression": "1.0.0",
+    "Microsoft.EntityFrameworkCore": "1.1.0",
+    "Microsoft.EntityFrameworkCore.InMemory": "1.1.0",
+    "Microsoft.EntityFrameworkCore.Relational": "1.0.1",
+    "AutoMapper": "5.1.1"
   },
 
   "tools": {

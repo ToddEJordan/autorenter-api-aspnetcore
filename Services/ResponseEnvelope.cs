@@ -1,4 +1,4 @@
-﻿namespace AutoRenter.API.Models
+﻿namespace AutoRenter.API.Services
 {
     public class ResponseEnvelope
     {

@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using AutoMapper;
+using AutoRenter.API.Data;
+using AutoRenter.API.Entities;
 using AutoRenter.API.Models;
 using AutoRenter.API.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -11,40 +14,46 @@ namespace AutoRenter.API.Controllers
     [Route("api/vehicles")]
     public class VehiclesController : Controller
     {
-        public VehiclesController(IVehicleService vehicleService, IResponseConverter responseConverter)
+        private readonly IVehicleRepository _vehicleRepository;
+
+        public VehiclesController(IVehicleRepository vehicleRepository, IResponseConverter responseConverter)
         {
-            VehicleService = vehicleService;
             ResponseConverter = responseConverter;
+            _vehicleRepository = vehicleRepository;
         }
 
-        private IVehicleService VehicleService { get; }
         private IResponseConverter ResponseConverter { get; }
 
+        // TODO: Fix route to be /api/locations/{locationId}/vehicles
         [HttpGet]
         public IActionResult Get()
         {
-            var vehicles = VehicleService.List();
-            var formattedResult = ResponseConverter.Convert(vehicles);
+            var totalVehicles = _vehicleRepository.Count();
+            var vehicles = _vehicleRepository.AllIncluding(s => s.Location)
+                .OrderBy(s => s.Year)
+                .ToList();
 
-            Response.Headers.Add("x-total-count", vehicles.Count().ToString());
+            var vehicleDtos = Mapper.Map<IEnumerable<Vehicle>, IEnumerable<VehicleDto>>(vehicles);
+            var formattedResult = ResponseConverter.Convert(vehicleDtos);
+
+            Response.Headers.Add("x-total-count", totalVehicles.ToString());
             return Ok(formattedResult);
         }
 
         [HttpGet("{id:Guid}", Name = "GetVehicle")]
         public IActionResult Get([Required] Guid id)
         {
-            try
-            {
-                var vehicle = VehicleService.Get(id);
-                var formattedResult = ResponseConverter.Convert(vehicle);
+            var vehicle = _vehicleRepository.GetSingle(s => s.Id == id, s => s.Location);
 
+            if (vehicle != null)
+            {
+                var vehicleDto = Mapper.Map<Vehicle, VehicleDto>(vehicle);
+                var formattedResult = ResponseConverter.Convert(vehicleDto);
                 return Ok(formattedResult);
             }
-            catch (KeyNotFoundException)
-            {
-                Response.Headers.Add("x-status-reason", $"No resource was found with the unique identifier '{id}'.");
-                return NotFound();
-            }
+
+            Response.Headers.Add("x-status-reason", $"No resource was found with the unique identifier '{id}'.");
+            return NotFound();
         }
 
         [HttpGet("{name}")]
@@ -56,23 +65,48 @@ namespace AutoRenter.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Vehicle model)
+        public IActionResult Post([FromBody] VehicleDto model)
         {
-            VehicleService.Create(model);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var vehicle = Mapper.Map<VehicleDto, Vehicle>(model);
+            _vehicleRepository.Add(vehicle);
+            _vehicleRepository.Commit();
+
+            model = Mapper.Map<Vehicle, VehicleDto>(vehicle);
+
             return CreatedAtRoute("GetVehicle", new {id = model.Id}, null);
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)
         {
-            VehicleService.Delete(id);
+            var vehicle = _vehicleRepository.GetSingle(id);
+
+            if (vehicle == null)
+                return NotFound();
+
+            _vehicleRepository.Delete(vehicle);
+            _vehicleRepository.Commit();
             return NoContent();
         }
 
         [HttpPut]
-        public IActionResult Put(Guid id, [FromBody] Vehicle model)
+        public IActionResult Put(Guid id, [FromBody] VehicleDto model)
         {
-            VehicleService.Update(id, model);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var vehicle = _vehicleRepository.GetSingle(id);
+
+            if (vehicle == null)
+                return NotFound();
+
+            Mapper.Map(model, vehicle);
+            _vehicleRepository.Update(vehicle);
+
+            //TODO: Figure out route url for location header
             return Ok(model);
         }
     }

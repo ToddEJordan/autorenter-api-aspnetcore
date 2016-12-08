@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using AutoMapper;
+using AutoRenter.API.Data;
+using AutoRenter.API.Entities;
 using AutoRenter.API.Models;
 using AutoRenter.API.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -11,41 +14,48 @@ namespace AutoRenter.API.Controllers
     [Route("api/locations")]
     public class LocationsController : Controller
     {
-        public LocationsController(ILocationService locationService, IResponseConverter responseConverter)
+        private readonly ILocationRepository _locationRepository;
+        private readonly IVehicleRepository _vehicleRepository;
+
+        public LocationsController(ILocationRepository locationRepository, IVehicleRepository vehicleRepository,
+            IResponseConverter responseConverter)
         {
-            LocationService = locationService;
             ResponseConverter = responseConverter;
+            _vehicleRepository = vehicleRepository;
+            _locationRepository = locationRepository;
         }
 
-        private ILocationService LocationService { get; }
         private IResponseConverter ResponseConverter { get; }
 
         [HttpGet]
         public IActionResult Get()
         {
-            var locations = LocationService.List();
-            var formattedResult = ResponseConverter.Convert(locations);
+            var totalLocations = _locationRepository.Count();
+            var locations = _locationRepository.AllIncluding(s => s.Vehicles)
+                .OrderBy(s => s.Name)
+                .ToList();
 
-            Response.Headers.Add("x-total-count", locations.Count().ToString());
+            var locationDtos = Mapper.Map<IEnumerable<Location>, IEnumerable<LocationDto>>(locations);
+            var formattedResult = ResponseConverter.Convert(locationDtos);
+
+            Response.Headers.Add("x-total-count", totalLocations.ToString());
             return Ok(formattedResult);
         }
 
         [HttpGet("{id:Guid}", Name = "GetLocation")]
-        [Produces(typeof(Location))]
         public IActionResult Get(Guid id)
         {
-            try
-            {
-                var location = LocationService.Get(id);
-                var formattedResult = ResponseConverter.Convert(location);
+            var location = _locationRepository.GetSingle(s => s.Id == id, s => s.Vehicles);
 
+            if (location != null)
+            {
+                var locationDto = Mapper.Map<Location, LocationDto>(location);
+                var formattedResult = ResponseConverter.Convert(locationDto);
                 return Ok(formattedResult);
             }
-            catch (KeyNotFoundException)
-            {
-                Response.Headers.Add("x-status-reason", $"No resource was found with the unique identifier '{id}'.");
-                return NotFound();
-            }
+
+            Response.Headers.Add("x-status-reason", $"No resource was found with the unique identifier '{id}'.");
+            return NotFound();
         }
 
         [HttpGet("{name}")]
@@ -57,24 +67,51 @@ namespace AutoRenter.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Location model)
+        public IActionResult Post([FromBody] LocationDto model)
         {
-            LocationService.Create(model);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var location = Mapper.Map<LocationDto, Location>(model);
+            _locationRepository.Add(location);
+            _locationRepository.Commit();
+
+            model = Mapper.Map<Location, LocationDto>(location);
+
             return CreatedAtRoute("GetLocation", new {id = model.Id}, null);
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)
         {
-            LocationService.Delete(id);
+            var location = _locationRepository.GetSingle(id);
+
+            if (location == null)
+                return NotFound();
+
+            _vehicleRepository.DeleteWhere(a => a.LocationId == id);
+            _locationRepository.Delete(location);
+            _locationRepository.Commit();
             return NoContent();
         }
 
         [HttpPut]
-        public IActionResult Update(Guid id, [FromBody] Location model)
+        public IActionResult Put(Guid id, [FromBody] LocationDto model)
         {
-            LocationService.Update(id, model);
-            return Ok(model);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var location = _locationRepository.GetSingle(id);
+
+            if (location == null)
+            {
+                return NotFound();
+            }
+            Mapper.Map(model, location);
+            _locationRepository.Update(location);
+
+            //TODO: Figure out route url for location header
+            return NoContent();
         }
     }
 }

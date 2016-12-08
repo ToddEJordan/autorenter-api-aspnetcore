@@ -1,4 +1,4 @@
-﻿using AutoRenter.API.Models;
+﻿using AutoRenter.API.Entities;
 
 namespace AutoRenter.API.Services
 {

@@ -1,16 +1,24 @@
+using System;
+using System.Net;
+using AutoRenter.API.Core;
+using AutoRenter.API.Data;
 using AutoRenter.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.Http;
 
 namespace AutoRenter.API
 {
     public class Startup
     {
+        private bool useInMemoryProvider = true;
         private const string CorsPolicyName = "AllowAll";
 
         public Startup(IHostingEnvironment env)
@@ -27,10 +35,35 @@ namespace AutoRenter.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            ConfigureData(services);
             ConfigureCompression(services);
             ConfigureCors(services);
             ConfigureMvc(services);
             ConfigureDI(services);
+        }
+
+        private void ConfigureData(IServiceCollection services)
+        {
+            try
+            {
+                useInMemoryProvider = bool.Parse(Configuration["AppSettings:InMemoryProvider"]);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            services.AddDbContext<AutoRenterContext>(options =>
+            {
+                switch (useInMemoryProvider)
+                {
+                    case true:
+                        options.UseInMemoryDatabase();
+                        break;
+                    default:
+                        break;
+                }
+            });
         }
 
         private static void ConfigureCompression(IServiceCollection services)
@@ -40,8 +73,8 @@ namespace AutoRenter.API
 
         private static void ConfigureDI(IServiceCollection services)
         {
-            services.AddSingleton<ILocationService, InMemoryLocationService>();
-            services.AddSingleton<IVehicleService, InMemoryVehicleService>();
+            services.AddScoped<ILocationRepository, LocationRepository>();
+            services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddTransient<IResponseConverter, ResponseConverter>();
         }
 
@@ -76,11 +109,36 @@ namespace AutoRenter.API
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
             else
-                app.UseExceptionHandler();
+                app.UseExceptionHandler(builder =>
+                {
+                    builder.Run(
+                      async context =>
+                      {
+                          context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                          context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+
+                          var error = context.Features.Get<IExceptionHandlerFeature>();
+                          if (error != null)
+                          {
+                              context.Response.AddApplicationError(error.Error.Message);
+                              await context.Response.WriteAsync(error.Error.Message).ConfigureAwait(false);
+                          }
+                      });
+                });
 
             app.UseStatusCodePages();
 
+            AutoMapper.Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<Entities.Location, Models.LocationDto>();
+                cfg.CreateMap<Entities.Vehicle, Models.VehicleDto>();
+                cfg.CreateMap<Models.LocationDto, Entities.Location>();
+                cfg.CreateMap<Models.VehicleDto, Entities.Vehicle>();
+            });
+
             app.UseMvc();
+
+            AutoRenterDbInitializer.Initialize(app.ApplicationServices);
         }
     }
 }
