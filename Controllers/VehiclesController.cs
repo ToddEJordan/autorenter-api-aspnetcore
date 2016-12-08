@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using AutoRenter.API.Models;
 using AutoRenter.API.Services;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations;
 
 namespace AutoRenter.API.Controllers
 {
@@ -51,7 +50,8 @@ namespace AutoRenter.API.Controllers
         [HttpGet("{name}")]
         public IActionResult GetByName([Required] string name)
         {
-            Response.Headers.Add("x-status-reason", $"The value '{name}' is not recognize as a valid integer to uniquely identify a resource.");
+            Response.Headers.Add("x-status-reason",
+                $"The value '{name}' is not recognize as a valid integer to uniquely identify a resource.");
             return BadRequest();
         }
 

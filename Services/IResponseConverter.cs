@@ -1,7 +1,9 @@
-﻿namespace AutoRenter.API.Services
+﻿using AutoRenter.API.Models;
+
+namespace AutoRenter.API.Services
 {
     public interface IResponseConverter
     {
-        string Convert(dynamic data);
+        ResponseEnvelope Convert(dynamic data);
     }
 }

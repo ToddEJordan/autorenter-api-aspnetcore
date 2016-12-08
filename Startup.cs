@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Serialization;
 
 namespace AutoRenter.API
 {
@@ -46,7 +47,9 @@ namespace AutoRenter.API
 
         private static void ConfigureMvc(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc()
+                .AddJsonOptions(
+                    a => a.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
         }
 
         private static void ConfigureCors(IServiceCollection services)
