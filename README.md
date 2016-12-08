@@ -19,22 +19,39 @@ These instructions will cover usage information for the API and the optional dev
 
 - Install [.NET Core](https://www.microsoft.com/net/core).
 
-### Local - Development
-*   dotnet restore
-*   dotnet build
-*   dotnet run
+### Local - Development - With Visual Studio
 
-### Docker - Deployment
+1. Open the project in VS 2015 or higher
+2. Build and run
 
-*   docker build -t autorenter-api-image .
-*   docker run -d -p 3000:3000 --name autorenter-api autorenter-api-image
-*   docker attach --sig-proxy=false autorenter-api
+### Local - Development - Without Visual Studio
+
+1. Open the project folder in your favorite text editor (preferable VS Code)
+2. Run `dotnet restore` from the command line
+   1. Optionally run `dotnet build` if you prefer to build before running. Running will also build.
+3. Run `dotnet run` from the command line
+
+### Docker - Deployment (or Development)
+
+In a command line, run the following form the project's root:
+```bash
+docker build -t autorenter-api-image .
+docker run -d -p 3000:3000 --name autorenter-api autorenter-api-image
+```
+
+To connect to the container:
+```bash
+docker attach --sig-proxy=false autorenter-api
+```
 
 ### Docker - Cleanup
 
-*   docker stop autorenter-api
-*   docker rm autorenter-api
-*   docker rmi autorenter-api-image
+To clean up the container once your done with it:
+```bash
+docker stop autorenter-api
+docker rm autorenter-api
+docker rmi autorenter-api-image
+```
 
 ## License
 
