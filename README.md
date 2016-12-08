@@ -27,7 +27,7 @@ These instructions will cover usage information for the API and the optional dev
 ### Docker - Deployment
 
 *   docker build -t autorenter-api-image .
-*   docker run -d -p 80:3000 --name autorenter-api autorenter-api-image
+*   docker run -d -p 3000:3000 --name autorenter-api autorenter-api-image
 *   docker attach --sig-proxy=false autorenter-api
 
 ### Docker - Cleanup
