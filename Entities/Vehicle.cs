@@ -4,7 +4,6 @@ namespace AutoRenter.API.Entities
 {
     public class Vehicle : IEntityBase
     {
-        public Guid Id { get; set; }
         public string Vin { get; set; }
         public string Make { get; set; }
         public string Model { get; set; }
@@ -15,5 +14,6 @@ namespace AutoRenter.API.Entities
 
         public Guid LocationId { get; set; }
         public Location Location { get; set; }
+        public Guid Id { get; set; }
     }
 }

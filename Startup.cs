@@ -1,25 +1,28 @@
 using System;
 using System.Net;
+using AutoMapper;
 using AutoRenter.API.Core;
 using AutoRenter.API.Data;
+using AutoRenter.API.Entities;
+using AutoRenter.API.Models;
 using AutoRenter.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
-using Microsoft.AspNetCore.Http;
 
 namespace AutoRenter.API
 {
     public class Startup
     {
-        private bool useInMemoryProvider = true;
         private const string CorsPolicyName = "AllowAll";
+        private bool _useInMemoryProvider = true;
 
         public Startup(IHostingEnvironment env)
         {
@@ -46,7 +49,7 @@ namespace AutoRenter.API
         {
             try
             {
-                useInMemoryProvider = bool.Parse(Configuration["AppSettings:InMemoryProvider"]);
+                _useInMemoryProvider = bool.Parse(Configuration["AppSettings:InMemoryProvider"]);
             }
             catch (Exception)
             {
@@ -55,7 +58,7 @@ namespace AutoRenter.API
 
             services.AddDbContext<AutoRenterContext>(options =>
             {
-                switch (useInMemoryProvider)
+                switch (_useInMemoryProvider)
                 {
                     case true:
                         options.UseInMemoryDatabase();
@@ -112,28 +115,28 @@ namespace AutoRenter.API
                 app.UseExceptionHandler(builder =>
                 {
                     builder.Run(
-                      async context =>
-                      {
-                          context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                          context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+                        async context =>
+                        {
+                            context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+                            context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
 
-                          var error = context.Features.Get<IExceptionHandlerFeature>();
-                          if (error != null)
-                          {
-                              context.Response.AddApplicationError(error.Error.Message);
-                              await context.Response.WriteAsync(error.Error.Message).ConfigureAwait(false);
-                          }
-                      });
+                            var error = context.Features.Get<IExceptionHandlerFeature>();
+                            if (error != null)
+                            {
+                                context.Response.AddApplicationError(error.Error.Message);
+                                await context.Response.WriteAsync(error.Error.Message).ConfigureAwait(false);
+                            }
+                        });
                 });
 
             app.UseStatusCodePages();
 
-            AutoMapper.Mapper.Initialize(cfg =>
+            Mapper.Initialize(cfg =>
             {
-                cfg.CreateMap<Entities.Location, Models.LocationDto>();
-                cfg.CreateMap<Entities.Vehicle, Models.VehicleDto>();
-                cfg.CreateMap<Models.LocationDto, Entities.Location>();
-                cfg.CreateMap<Models.VehicleDto, Entities.Vehicle>();
+                cfg.CreateMap<Location, LocationDto>();
+                cfg.CreateMap<Vehicle, VehicleDto>();
+                cfg.CreateMap<LocationDto, Location>();
+                cfg.CreateMap<VehicleDto, Vehicle>();
             });
 
             app.UseMvc();

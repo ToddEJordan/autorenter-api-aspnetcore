@@ -104,9 +104,7 @@ namespace AutoRenter.API.Controllers
             var location = _locationRepository.GetSingle(id);
 
             if (location == null)
-            {
                 return NotFound();
-            }
             Mapper.Map(model, location);
             _locationRepository.Update(location);
 

@@ -6,7 +6,6 @@ namespace AutoRenter.API.Data
     {
         public VehicleRepository(AutoRenterContext context) : base(context)
         {
-
         }
     }
 }

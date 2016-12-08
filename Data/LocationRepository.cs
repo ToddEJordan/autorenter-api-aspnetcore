@@ -6,7 +6,6 @@ namespace AutoRenter.API.Data
     {
         public LocationRepository(AutoRenterContext context) : base(context)
         {
-            
         }
     }
 }

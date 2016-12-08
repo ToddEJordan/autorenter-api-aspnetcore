@@ -1,6 +1,4 @@
-﻿using AutoRenter.API.Entities;
-
-namespace AutoRenter.API.Services
+﻿namespace AutoRenter.API.Services
 {
     public interface IResponseConverter
     {
