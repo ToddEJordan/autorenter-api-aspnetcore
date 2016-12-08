@@ -40,6 +40,8 @@ For more in-depth testing, use a web debugging tool such as [Fiddler](https://ww
 
 ### Docker - Deployment (or Development)
 
+Note: If you want to try this with docker, postman needs to be updated to point to 192.168.99.100:3000 instead of 127.0.0.1:3000.
+
 In a command line, run the following form the project's root:
 ```bash
 docker build -t autorenter-api-image .
