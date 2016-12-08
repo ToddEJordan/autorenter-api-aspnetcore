@@ -23,22 +23,6 @@ namespace AutoRenter.API.Controllers
             _vehicleRepository = vehicleRepository;
         }
 
-        // TODO: Fix route to be /api/locations/{locationId}/vehicles
-        [HttpGet]
-        public IActionResult Get()
-        {
-            var totalVehicles = _vehicleRepository.Count();
-            var vehicles = _vehicleRepository.AllIncluding(s => s.Location)
-                .OrderBy(s => s.Year)
-                .ToList();
-
-            var vehicleDtos = Mapper.Map<IEnumerable<Vehicle>, IEnumerable<VehicleDto>>(vehicles);
-            var formattedResult = _responseConverter.Convert(vehicleDtos);
-
-            Response.Headers.Add("x-total-count", totalVehicles.ToString());
-            return Ok(formattedResult);
-        }
-
         [HttpGet("{id:Guid}", Name = "GetVehicle")]
         public IActionResult Get([Required] Guid id)
         {

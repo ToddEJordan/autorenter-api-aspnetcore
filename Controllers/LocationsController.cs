@@ -110,5 +110,25 @@ namespace AutoRenter.API.Controllers
             //TODO: Figure out route url for location header
             return NoContent();
         }
+
+        [HttpGet("{locationId}/vehicles")]
+        public IActionResult GetAllVehicles(Guid locationId)
+        {
+            var location = _locationRepository.GetSingle(s => s.Id == locationId, s => s.Vehicles);
+
+            if (location != null)
+            {
+                var totalVehicles = location.Vehicles.Count;
+                var vehicles = location.Vehicles;
+                var vehicleDtos = Mapper.Map<IEnumerable<Vehicle>, IEnumerable<VehicleDto>>(vehicles);
+                var formattedResult = _responseConverter.Convert(vehicleDtos);
+
+                Response.Headers.Add("x-total-count", totalVehicles.ToString());
+                return Ok(formattedResult);
+            }
+
+            Response.Headers.Add("x-status-reason", $"No resource was found with the unique identifier '{locationId}'.");
+            return NotFound();
+        }
     }
 }
