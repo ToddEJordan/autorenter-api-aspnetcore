@@ -12,18 +12,20 @@ namespace AutoRenter.API.Controllers
     [Route("api/vehicles")]
     public class VehiclesController : Controller
     {
-        public VehiclesController(IVehicleService vehicleService)
+        public VehiclesController(IVehicleService vehicleService, IResponseConverter responseConverter)
         {
             VehicleService = vehicleService;
+            ResponseConverter = responseConverter;
         }
 
         private IVehicleService VehicleService { get; }
+        private IResponseConverter ResponseConverter { get; }
 
         [HttpGet]
         public IActionResult Get()
         {
             var vehicles = VehicleService.List();
-            var formattedResult = JsonConvert.SerializeObject(vehicles, Formatting.Indented);
+            var formattedResult = ResponseConverter.Convert(vehicles);
 
             Response.Headers.Add("x-total-count", vehicles.Count().ToString());
             return Ok(formattedResult);
@@ -35,7 +37,7 @@ namespace AutoRenter.API.Controllers
             try
             {
                 var vehicle = VehicleService.Get(id);
-                var formattedResult = JsonConvert.SerializeObject(vehicle, Formatting.Indented);
+                var formattedResult = ResponseConverter.Convert(vehicle);
 
                 return Ok(formattedResult);
             }

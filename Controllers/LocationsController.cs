@@ -6,24 +6,27 @@ using AutoRenter.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Linq;
+using Newtonsoft.Json.Serialization;
 
 namespace AutoRenter.API.Controllers
 {
     [Route("api/locations")]
     public class LocationsController : Controller
     {
-        public LocationsController(ILocationService locationService)
+        public LocationsController(ILocationService locationService, IResponseConverter responseConverter)
         {
             LocationService = locationService;
+            ResponseConverter = responseConverter;
         }
 
         private ILocationService LocationService { get; }
+        private IResponseConverter ResponseConverter { get; }
 
         [HttpGet]
         public IActionResult Get()
         {
             var locations = LocationService.List();
-            var formattedResult = JsonConvert.SerializeObject(locations, Formatting.Indented);
+            var formattedResult = ResponseConverter.Convert(locations);
 
             Response.Headers.Add("x-total-count", locations.Count().ToString());
             return Ok(formattedResult);
@@ -35,9 +38,9 @@ namespace AutoRenter.API.Controllers
         {
             try
             {
-                var vehicle = LocationService.Get(id);
-                var formattedResult = JsonConvert.SerializeObject(vehicle, Formatting.Indented);
-
+                var location = LocationService.Get(id);
+                var formattedResult = ResponseConverter.Convert(location);
+                
                 return Ok(formattedResult);
             }
             catch (KeyNotFoundException)

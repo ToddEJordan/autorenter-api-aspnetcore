@@ -41,6 +41,7 @@ namespace AutoRenter.API
         {
             services.AddSingleton<ILocationService, InMemoryLocationService>();
             services.AddSingleton<IVehicleService, InMemoryVehicleService>();
+            services.AddTransient<IResponseConverter, ResponseConverter>();
         }
 
         private static void ConfigureMvc(IServiceCollection services)
