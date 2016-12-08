@@ -75,7 +75,7 @@ namespace AutoRenter.API.Controllers
             return NoContent();
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public IActionResult Put(Guid id, [FromBody] VehicleDto model)
         {
             if (!ModelState.IsValid)
@@ -88,9 +88,10 @@ namespace AutoRenter.API.Controllers
 
             Mapper.Map(model, vehicle);
             _vehicleRepository.Update(vehicle);
+            _vehicleRepository.Commit();
 
             //TODO: Figure out route url for location header
-            return Ok(model);
+            return NoContent();
         }
     }
 }

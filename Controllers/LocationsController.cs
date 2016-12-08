@@ -94,7 +94,7 @@ namespace AutoRenter.API.Controllers
             return NoContent();
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public IActionResult Put(Guid id, [FromBody] LocationDto model)
         {
             if (!ModelState.IsValid)
@@ -106,6 +106,7 @@ namespace AutoRenter.API.Controllers
                 return NotFound();
             Mapper.Map(model, location);
             _locationRepository.Update(location);
+            _locationRepository.Commit();
 
             //TODO: Figure out route url for location header
             return NoContent();
