@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using AutoRenter.API.Entities;
+using AutoRenter.API.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 

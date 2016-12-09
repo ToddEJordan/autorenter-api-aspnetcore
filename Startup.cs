@@ -3,8 +3,10 @@ using System.Net;
 using AutoMapper;
 using AutoRenter.API.Core;
 using AutoRenter.API.Data;
-using AutoRenter.API.Entities;
-using AutoRenter.API.Models;
+using AutoRenter.API.Domain;
+using AutoRenter.API.Infrastructure;
+using AutoRenter.API.Models.Locations;
+using AutoRenter.API.Models.Vehicle;
 using AutoRenter.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
@@ -16,6 +18,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
+using MediatR;
 
 namespace AutoRenter.API
 {
@@ -41,8 +44,21 @@ namespace AutoRenter.API
             ConfigureData(services);
             ConfigureCompression(services);
             ConfigureCors(services);
+            ConfigureAutoMapper(services);
             ConfigureMvc(services);
+            ConfigureMediatR(services);
             ConfigureDI(services);
+        }
+
+        private static void ConfigureAutoMapper(IServiceCollection services)
+        {
+            services.AddAutoMapper(typeof(Startup));
+            Mapper.AssertConfigurationIsValid();
+        }
+
+        private static void ConfigureMediatR(IServiceCollection services)
+        {
+            services.AddMediatR(typeof(Startup));
         }
 
         private void ConfigureData(IServiceCollection services)
@@ -83,7 +99,10 @@ namespace AutoRenter.API
 
         private static void ConfigureMvc(IServiceCollection services)
         {
-            services.AddMvc()
+            services.AddMvc(options =>
+                {
+                    options.Conventions.Add(new FeatureConvention());
+                })
                 .AddJsonOptions(
                     a => a.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
         }
@@ -110,8 +129,12 @@ namespace AutoRenter.API
             app.UseCors(CorsPolicyName);
 
             if (env.IsDevelopment())
+            {
                 app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
+            }
             else
+            {
                 app.UseExceptionHandler(builder =>
                 {
                     builder.Run(
@@ -128,17 +151,9 @@ namespace AutoRenter.API
                             }
                         });
                 });
+            }
 
             app.UseStatusCodePages();
-
-            Mapper.Initialize(cfg =>
-            {
-                cfg.CreateMap<Location, LocationDto>();
-                cfg.CreateMap<Vehicle, VehicleDto>();
-                cfg.CreateMap<LocationDto, Location>();
-                cfg.CreateMap<VehicleDto, Vehicle>();
-            });
-
             app.UseMvc();
 
             AutoRenterDbInitializer.Initialize(app.ApplicationServices);

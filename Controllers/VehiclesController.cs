@@ -4,8 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using AutoMapper;
 using AutoRenter.API.Data;
-using AutoRenter.API.Entities;
+using AutoRenter.API.Domain;
 using AutoRenter.API.Models;
+using AutoRenter.API.Models.Vehicle;
 using AutoRenter.API.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,7 +31,7 @@ namespace AutoRenter.API.Controllers
 
             if (vehicle != null)
             {
-                var vehicleDto = Mapper.Map<Vehicle, VehicleDto>(vehicle);
+                var vehicleDto = Mapper.Map<Vehicle, VehicleModel>(vehicle);
                 var formattedResult = _responseConverter.Convert(vehicleDto);
                 return Ok(formattedResult);
             }
@@ -48,16 +49,16 @@ namespace AutoRenter.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] VehicleDto model)
+        public IActionResult Post([FromBody] VehicleModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var vehicle = Mapper.Map<VehicleDto, Vehicle>(model);
+            var vehicle = Mapper.Map<VehicleModel, Vehicle>(model);
             _vehicleRepository.Add(vehicle);
             _vehicleRepository.Commit();
 
-            model = Mapper.Map<Vehicle, VehicleDto>(vehicle);
+            model = Mapper.Map<Vehicle, VehicleModel>(vehicle);
 
             return CreatedAtRoute("GetVehicle", new {id = model.Id}, null);
         }
@@ -76,7 +77,7 @@ namespace AutoRenter.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(Guid id, [FromBody] VehicleDto model)
+        public IActionResult Put(Guid id, [FromBody] VehicleModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

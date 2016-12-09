@@ -1,4 +1,5 @@
 ﻿using AutoRenter.API.Models;
+using AutoRenter.API.Models.Log;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -15,7 +16,7 @@ namespace AutoRenter.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] LogDto model)
+        public IActionResult Post([FromBody] LogModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

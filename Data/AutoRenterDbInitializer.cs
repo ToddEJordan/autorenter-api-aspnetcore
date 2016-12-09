@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoRenter.API.Entities;
+using AutoRenter.API.Domain;
 
 namespace AutoRenter.API.Data
 {
-    public class AutoRenterDbInitializer
+    public static class AutoRenterDbInitializer
     {
-        private static AutoRenterContext context;
+        private static AutoRenterContext _context;
 
         public static void Initialize(IServiceProvider serviceProvider)
         {
-            context = (AutoRenterContext) serviceProvider.GetService(typeof(AutoRenterContext));
+            _context = (AutoRenterContext) serviceProvider.GetService(typeof(AutoRenterContext));
             InitializeLocations();
         }
 
         private static void InitializeLocations()
         {
-            if (!context.Locations.Any())
+            if (!_context.Locations.Any())
             {
                 ICollection<Location> locations = new List<Location>
                 {
@@ -47,10 +47,10 @@ namespace AutoRenter.API.Data
                 };
 
                 foreach (var location in locations)
-                    context.Locations.Add(location);
+                    _context.Locations.Add(location);
             }
 
-            context.SaveChanges();
+            _context.SaveChanges();
         }
     }
 }

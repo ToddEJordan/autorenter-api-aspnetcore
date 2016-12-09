@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using AutoRenter.API.Entities;
+using AutoRenter.API.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace AutoRenter.API.Data
 {
     public class EntityBaseRepository<T> : IEntityBaseRepository<T>
-        where T : class, IEntityBase, new()
+        where T : class, IEntity, new()
     {
         private readonly AutoRenterContext _context;
 

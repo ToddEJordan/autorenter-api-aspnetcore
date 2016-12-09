@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using AutoRenter.API.Models.Vehicle;
 
-namespace AutoRenter.API.Models
+namespace AutoRenter.API.Models.Location
 {
-    public class LocationDto
+    public class LocationModel
     {
         public Guid Id { get; set; }
         public string SiteId { get; set; }
@@ -13,6 +14,6 @@ namespace AutoRenter.API.Models
 
         public int VehicleCount => Vehicles.Count;
 
-        public ICollection<VehicleDto> Vehicles { get; set; } = new List<VehicleDto>();
+        public ICollection<VehicleModel> Vehicles { get; set; } = new List<VehicleModel>();
     }
 }

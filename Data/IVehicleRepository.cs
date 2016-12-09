@@ -1,4 +1,4 @@
-﻿using AutoRenter.API.Entities;
+﻿using AutoRenter.API.Domain;
 
 namespace AutoRenter.API.Data
 {

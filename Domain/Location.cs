@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace AutoRenter.API.Entities
+namespace AutoRenter.API.Domain
 {
-    public class Location : IEntityBase
+    public class Location : IEntity
     {
         public string SiteId { get; set; }
         public string Name { get; set; }

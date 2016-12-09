@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace AutoRenter.API.Models
+namespace AutoRenter.API.Models.Vehicle
 {
-    public class VehicleDto
+    public class VehicleModel
     {
         public Guid Id { get; set; }
         public string Vin { get; set; }

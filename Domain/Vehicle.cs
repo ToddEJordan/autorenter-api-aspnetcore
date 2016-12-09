@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace AutoRenter.API.Entities
+namespace AutoRenter.API.Domain
 {
-    public class Vehicle : IEntityBase
+    public class Vehicle : IEntity
     {
         public string Vin { get; set; }
         public string Make { get; set; }

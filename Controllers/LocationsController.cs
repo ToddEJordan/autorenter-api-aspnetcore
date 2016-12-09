@@ -2,11 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using AutoRenter.API.Data;
-using AutoRenter.API.Entities;
+using AutoRenter.API.Domain;
 using AutoRenter.API.Models;
+using AutoRenter.API.Models.Location;
+using AutoRenter.API.Models.Locations;
+using AutoRenter.API.Models.Vehicle;
+using AutoRenter.API.Queries.Locations;
 using AutoRenter.API.Services;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AutoRenter.API.Controllers
@@ -17,27 +23,24 @@ namespace AutoRenter.API.Controllers
         private readonly ILocationRepository _locationRepository;
         private readonly IResponseConverter _responseConverter;
         private readonly IVehicleRepository _vehicleRepository;
+        private readonly IMediator _mediator;
 
         public LocationsController(ILocationRepository locationRepository, IVehicleRepository vehicleRepository,
-            IResponseConverter responseConverter)
+            IResponseConverter responseConverter, IMediator mediator)
         {
             _responseConverter = responseConverter;
+            _mediator = mediator;
             _vehicleRepository = vehicleRepository;
             _locationRepository = locationRepository;
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            var totalLocations = _locationRepository.Count();
-            var locations = _locationRepository.AllIncluding(s => s.Vehicles)
-                .OrderBy(s => s.Name)
-                .ToList();
+            var locations = await _mediator.SendAsync(new GetAllLocationsQuery());
+            var formattedResult = _responseConverter.Convert(locations);
 
-            var locationDtos = Mapper.Map<IEnumerable<Location>, IEnumerable<LocationDto>>(locations);
-            var formattedResult = _responseConverter.Convert(locationDtos);
-
-            Response.Headers.Add("x-total-count", totalLocations.ToString());
+            Response.Headers.Add("x-total-count", locations.Count.ToString());
             return Ok(formattedResult);
         }
 
@@ -48,7 +51,7 @@ namespace AutoRenter.API.Controllers
 
             if (location != null)
             {
-                var locationDto = Mapper.Map<Location, LocationDto>(location);
+                var locationDto = Mapper.Map<Location, LocationModel>(location);
                 var formattedResult = _responseConverter.Convert(locationDto);
                 return Ok(formattedResult);
             }
@@ -66,16 +69,16 @@ namespace AutoRenter.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] LocationDto model)
+        public IActionResult Post([FromBody] LocationModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var location = Mapper.Map<LocationDto, Location>(model);
+            var location = Mapper.Map<LocationModel, Location>(model);
             _locationRepository.Add(location);
             _locationRepository.Commit();
 
-            model = Mapper.Map<Location, LocationDto>(location);
+            model = Mapper.Map<Location, LocationModel>(location);
 
             return CreatedAtRoute("GetLocation", new {id = model.Id}, null);
         }
@@ -95,7 +98,7 @@ namespace AutoRenter.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(Guid id, [FromBody] LocationDto model)
+        public IActionResult Put(Guid id, [FromBody] LocationModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -121,7 +124,7 @@ namespace AutoRenter.API.Controllers
             {
                 var totalVehicles = location.Vehicles.Count;
                 var vehicles = location.Vehicles;
-                var vehicleDtos = Mapper.Map<IEnumerable<Vehicle>, IEnumerable<VehicleDto>>(vehicles);
+                var vehicleDtos = Mapper.Map<IEnumerable<Vehicle>, IEnumerable<VehicleModel>>(vehicles);
                 var formattedResult = _responseConverter.Convert(vehicleDtos);
 
                 Response.Headers.Add("x-total-count", totalVehicles.ToString());
