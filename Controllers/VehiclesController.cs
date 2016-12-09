@@ -1,11 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using AutoMapper;
 using AutoRenter.API.Data;
 using AutoRenter.API.Domain;
-using AutoRenter.API.Models;
 using AutoRenter.API.Models.Vehicle;
 using AutoRenter.API.Services;
 using Microsoft.AspNetCore.Mvc;

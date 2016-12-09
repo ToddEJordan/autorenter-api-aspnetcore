@@ -1,5 +1,4 @@
-﻿using AutoRenter.API.Models;
-using AutoRenter.API.Models.Log;
+﻿using AutoRenter.API.Models.Log;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 

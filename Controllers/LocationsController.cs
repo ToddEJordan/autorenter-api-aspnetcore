@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoRenter.API.Data;
 using AutoRenter.API.Domain;
-using AutoRenter.API.Models;
 using AutoRenter.API.Models.Location;
-using AutoRenter.API.Models.Locations;
 using AutoRenter.API.Models.Vehicle;
 using AutoRenter.API.Queries.Locations;
 using AutoRenter.API.Services;
@@ -21,9 +18,9 @@ namespace AutoRenter.API.Controllers
     public class LocationsController : Controller
     {
         private readonly ILocationRepository _locationRepository;
+        private readonly IMediator _mediator;
         private readonly IResponseConverter _responseConverter;
         private readonly IVehicleRepository _vehicleRepository;
-        private readonly IMediator _mediator;
 
         public LocationsController(ILocationRepository locationRepository, IVehicleRepository vehicleRepository,
             IResponseConverter responseConverter, IMediator mediator)

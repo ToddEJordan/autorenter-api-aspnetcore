@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoRenter.API.Models.Location;
-using AutoRenter.API.Models.Locations;
 
 namespace AutoRenter.API.Features.Location
 {

@@ -3,11 +3,9 @@ using System.Net;
 using AutoMapper;
 using AutoRenter.API.Core;
 using AutoRenter.API.Data;
-using AutoRenter.API.Domain;
 using AutoRenter.API.Infrastructure;
-using AutoRenter.API.Models.Locations;
-using AutoRenter.API.Models.Vehicle;
 using AutoRenter.API.Services;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics;
@@ -18,7 +16,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
-using MediatR;
 
 namespace AutoRenter.API
 {
@@ -99,10 +96,7 @@ namespace AutoRenter.API
 
         private static void ConfigureMvc(IServiceCollection services)
         {
-            services.AddMvc(options =>
-                {
-                    options.Conventions.Add(new FeatureConvention());
-                })
+            services.AddMvc(options => { options.Conventions.Add(new FeatureConvention()); })
                 .AddJsonOptions(
                     a => a.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
         }

@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoRenter.API.Data;
-using AutoRenter.API.Models;
 using AutoRenter.API.Models.Location;
 using AutoRenter.API.Models.Locations;
 using MediatR;

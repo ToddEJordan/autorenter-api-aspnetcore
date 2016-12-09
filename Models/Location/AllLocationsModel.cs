@@ -7,12 +7,10 @@ namespace AutoRenter.API.Models.Locations
     {
         public AllLocationsModel()
         {
-            
         }
 
         public AllLocationsModel(IEnumerable<LocationModel> collection) : base(collection)
         {
-            
         }
     }
 }
