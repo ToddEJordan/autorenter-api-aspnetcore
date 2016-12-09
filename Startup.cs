@@ -1,7 +1,6 @@
 using System;
 using System.Net;
 using AutoMapper;
-using AutoRenter.API.Core;
 using AutoRenter.API.Data;
 using AutoRenter.API.Infrastructure;
 using AutoRenter.API.Services;

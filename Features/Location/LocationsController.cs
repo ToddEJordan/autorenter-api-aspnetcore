@@ -4,15 +4,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoRenter.API.Data;
-using AutoRenter.API.Domain;
-using AutoRenter.API.Models.Location;
 using AutoRenter.API.Models.Vehicle;
-using AutoRenter.API.Queries.Locations;
 using AutoRenter.API.Services;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AutoRenter.API.Controllers
+namespace AutoRenter.API.Features.Location
 {
     [Route("api/locations")]
     public class LocationsController : Controller
@@ -20,36 +17,35 @@ namespace AutoRenter.API.Controllers
         private readonly ILocationRepository _locationRepository;
         private readonly IMediator _mediator;
         private readonly IResponseConverter _responseConverter;
-        private readonly IVehicleRepository _vehicleRepository;
 
-        public LocationsController(ILocationRepository locationRepository, IVehicleRepository vehicleRepository,
-            IResponseConverter responseConverter, IMediator mediator)
+        public LocationsController(ILocationRepository locationRepository, IResponseConverter responseConverter,
+            IMediator mediator)
         {
             _responseConverter = responseConverter;
             _mediator = mediator;
-            _vehicleRepository = vehicleRepository;
             _locationRepository = locationRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var locations = await _mediator.SendAsync(new GetAllLocationsQuery());
-            var formattedResult = _responseConverter.Convert(locations);
+            var query = new GetAll.Query();
+            var model = await _mediator.SendAsync(query);
+            var formattedResult = _responseConverter.Convert(model);
 
-            Response.Headers.Add("x-total-count", locations.Count.ToString());
+            Response.Headers.Add("x-total-count", model.Locations.ToString());
             return Ok(formattedResult);
         }
 
         [HttpGet("{id:Guid}", Name = "GetLocation")]
-        public IActionResult Get(Guid id)
+        public async Task<IActionResult> Get(Guid id)
         {
-            var location = _locationRepository.GetSingle(s => s.Id == id, s => s.Vehicles);
+            var query = new Get.Query {Id = id};
+            var model = await _mediator.SendAsync(query);
 
-            if (location != null)
+            if (model != null)
             {
-                var locationDto = Mapper.Map<Location, LocationModel>(location);
-                var formattedResult = _responseConverter.Convert(locationDto);
+                var formattedResult = _responseConverter.Convert(model);
                 return Ok(formattedResult);
             }
 
@@ -61,52 +57,55 @@ namespace AutoRenter.API.Controllers
         public IActionResult GetByName([Required] string name)
         {
             Response.Headers.Add("x-status-reason",
-                $"The value '{name}' is not recognize as a valid integer to uniquely identify a resource.");
+                $"The value '{name}' is not recognize as a valid guid to uniquely identify a resource.");
             return BadRequest();
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] LocationModel model)
+        public async Task<IActionResult> Post([FromBody] PostPut.Command command)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var location = Mapper.Map<LocationModel, Location>(model);
-            _locationRepository.Add(location);
-            _locationRepository.Commit();
+            var location = await _mediator.SendAsync(new PostPut.Query {Id = command.Id});
 
-            model = Mapper.Map<Location, LocationModel>(location);
+            if (command.Id == null || command.Id.Equals(Guid.Empty))
+            {
+                command.Id = location.Id;
+            }
+            
+            await _mediator.SendAsync(command);
 
-            return CreatedAtRoute("GetLocation", new {id = model.Id}, null);
+            return CreatedAtRoute("GetLocation", new {id = command.Id}, null);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var location = _locationRepository.GetSingle(id);
+            var query = new Delete.Query {Id = id};
+            var command = await _mediator.SendAsync(query);
 
-            if (location == null)
+            if (command == null)
                 return NotFound();
 
-            _vehicleRepository.DeleteWhere(a => a.LocationId == id);
-            _locationRepository.Delete(location);
-            _locationRepository.Commit();
+            await _mediator.SendAsync(command);
             return NoContent();
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(Guid id, [FromBody] LocationModel model)
+        public async Task<IActionResult> Put(Guid id, [FromBody] PostPut.Command command)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var location = _locationRepository.GetSingle(id);
+            var location = await _mediator.SendAsync(new PostPut.Query {Id = id});
 
             if (location == null)
                 return NotFound();
-            Mapper.Map(model, location);
-            _locationRepository.Update(location);
-            _locationRepository.Commit();
+
+            Mapper.Map(location, command);
+
+            await _mediator.SendAsync(command);
 
             //TODO: Figure out route url for location header
             return NoContent();
@@ -121,7 +120,7 @@ namespace AutoRenter.API.Controllers
             {
                 var totalVehicles = location.Vehicles.Count;
                 var vehicles = location.Vehicles;
-                var vehicleDtos = Mapper.Map<IEnumerable<Vehicle>, IEnumerable<VehicleModel>>(vehicles);
+                var vehicleDtos = Mapper.Map<IEnumerable<Domain.Vehicle>, IEnumerable<VehicleModel>>(vehicles);
                 var formattedResult = _responseConverter.Convert(vehicleDtos);
 
                 Response.Headers.Add("x-total-count", totalVehicles.ToString());

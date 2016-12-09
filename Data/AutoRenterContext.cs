@@ -1,7 +1,5 @@
-﻿using System.Linq;
-using AutoRenter.API.Domain;
+﻿using AutoRenter.API.Domain;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace AutoRenter.API.Data
 {
@@ -16,7 +14,7 @@ namespace AutoRenter.API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            /*foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
 
             modelBuilder.Entity<Location>()
@@ -28,7 +26,7 @@ namespace AutoRenter.API.Data
             modelBuilder.Entity<Vehicle>()
                 .HasOne(a => a.Location)
                 .WithMany(s => s.Vehicles)
-                .HasForeignKey(a => a.LocationId);
+                .HasForeignKey(a => a.LocationId);*/
         }
     }
 }

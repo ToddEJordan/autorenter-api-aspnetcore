@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace AutoRenter.API.Core
+namespace AutoRenter.API.Infrastructure
 {
-    public static class Extensions
+    public static class HttpResponseExtensions
     {
         public static void AddApplicationError(this HttpResponse response, string message)
         {
