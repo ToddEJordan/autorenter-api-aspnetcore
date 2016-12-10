@@ -45,13 +45,13 @@ namespace AutoRenter.API.Features.Location
                 Command model;
                 if (message.Id == null)
                 {
-                    model = new Command() {Id = Guid.NewGuid()};
+                    model = new Command {Id = Guid.NewGuid()};
                 }
                 else
                 {
                     var location =
-                    await
-                        Task.Run(() => _locationRepository.GetSingle(s => s.Id.Equals(message.Id), s => s.Vehicles));
+                        await
+                            Task.Run(() => _locationRepository.GetSingle(s => s.Id.Equals(message.Id), s => s.Vehicles));
                     model = Mapper.Map<Command>(location);
                 }
 
@@ -82,11 +82,11 @@ namespace AutoRenter.API.Features.Location
             protected override async Task HandleCore(Command message)
             {
                 var location = await
-                        Task.Run(() => _locationRepository.GetSingle(s => s.Id.Equals(message.Id), s => s.Vehicles));
+                    Task.Run(() => _locationRepository.GetSingle(s => s.Id.Equals(message.Id), s => s.Vehicles));
 
                 if (location == null)
                 {
-                    location = new Domain.Location { Id = (Guid)message.Id };
+                    location = new Domain.Location {Id = (Guid) message.Id};
                     _locationRepository.Add(location);
                     _locationRepository.Commit();
                 }
