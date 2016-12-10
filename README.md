@@ -12,6 +12,8 @@ These instructions will cover usage information for the API and the optional dev
 - Entity Framework Core
 - Repository Pattern
 - Automapper
+- FluentValidation
+- CQS Pattern - MediatR
 - Global exception handler
 - Cors
 
