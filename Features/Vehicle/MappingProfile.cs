@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoRenter.API.Models.Vehicle;
 
 namespace AutoRenter.API.Features.Vehicle
 {
@@ -7,8 +6,10 @@ namespace AutoRenter.API.Features.Vehicle
     {
         public MappingProfile()
         {
-            CreateMap<Domain.Vehicle, VehicleModel>();
-            CreateMap<VehicleModel, Domain.Vehicle>().ForMember(c => c.Location, opt => opt.Ignore());
+            CreateMap<Domain.Vehicle, GetAll.Model.Vehicle>();
+            CreateMap<Domain.Vehicle, Get.QueryModel>();
+            CreateMap<Domain.Vehicle, Delete.Command>();
+            CreateMap<Domain.Vehicle, PostPut.Command>();
         }
     }
 }

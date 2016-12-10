@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using AutoRenter.API.Data;
-using AutoRenter.API.Models.Vehicle;
-using MediatR;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
+using AutoRenter.API.Data;
+using MediatR;
 
 namespace AutoRenter.API.Features.Location
 {
     public class GetAll
     {
         public class Query : IAsyncRequest<Model>
-        { }
+        {
+        }
 
         public class Model
         {
@@ -32,7 +32,7 @@ namespace AutoRenter.API.Features.Location
         public class Hanlder : IAsyncRequestHandler<Query, Model>
         {
             private readonly ILocationRepository _locationRepository;
-            
+
             public Hanlder(ILocationRepository locationRepository)
             {
                 _locationRepository = locationRepository;
@@ -41,8 +41,8 @@ namespace AutoRenter.API.Features.Location
             public async Task<Model> Handle(Query message)
             {
                 var locations = await Task.Run(() => _locationRepository.AllIncluding(s => s.Vehicles)
-                .OrderBy(s => s.Name)
-                .ToList());
+                    .OrderBy(s => s.Name)
+                    .ToList());
 
                 var viewModel = new Model
                 {

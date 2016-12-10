@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using AutoRenter.API.Features.Location;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using AutoRenter.API.Features.Location;
 
 namespace AutoRenter.API.Domain
 {
