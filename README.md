@@ -19,7 +19,8 @@ These instructions will cover usage information for the API and the optional dev
 
 ## Prerequisites
 
-- Install [.NET Core](https://www.microsoft.com/net/core).
+- Install [.NET Core](https://www.microsoft.com/net/download/core#/current).
+  Be sure to select the .NET Core 1.1 SDK Installer option
 
 ### Local - Development - With Visual Studio
 
