@@ -19,7 +19,7 @@
     "AutoRenter.API": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:5000/api/locations",
+      "launchUrl": "http://localhost:3000/api/locations",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
