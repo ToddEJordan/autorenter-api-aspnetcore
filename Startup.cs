@@ -89,6 +89,7 @@ namespace AutoRenter.API
         private static void ConfigureDI(IServiceCollection services)
         {
             services.AddScoped<ILocationRepository, LocationRepository>();
+            services.AddScoped<ISkuRepository, SkuRepository>();
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddTransient<IResponseConverter, ResponseConverter>();
         }
