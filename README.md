@@ -19,20 +19,23 @@ These instructions will cover usage information for the API and the optional dev
 
 ## Prerequisites
 
-- Install [.NET Core](https://www.microsoft.com/net/download/core#/current).
-  Be sure to select the .NET Core 1.1 SDK Installer option
+- Install [.NET Core](https://www.microsoft.com/net/download/core#/current). Be sure to select the .NET Core 1.1 SDK Installer option
 
-### Local - Development - With Visual Studio
+## How To
 
-1. Open the project in VS 2015 or higher
-2. Build and run
+- Unless otherwise noted, all terminal commands must be issued from the project's root directory.
 
-### Local - Development - Without Visual Studio
+### Local Development - With Visual Studio
 
-1. Open the project folder in your favorite text editor (preferable VS Code)
-2. Run `dotnet restore` from the command line
+1. Open the project in VS 2015 with Update 3 or higher
+1. Build and run
+
+### Local Development - Without Visual Studio
+
+1. Open the project folder in your favorite text editor (preferably VS Code)
+1. Run `dotnet restore` from the command line
    1. Optionally run `dotnet build` if you prefer to build before running. Running will also build.
-3. Run `dotnet run` from the command line
+1. Run `dotnet run` from the command line
 
 ### Browse the app
 
@@ -41,11 +44,11 @@ For more in-depth testing, use a web debugging tool such as [Fiddler](https://ww
 
 [Postman collection](https://www.getpostman.com/collections/5530fbffa46505020891)
 
-### Docker - Deployment (or Development)
+### Docker Development
 
-Note: If you want to try this with docker, postman needs to be updated to point to 192.168.99.100:3000 instead of 127.0.0.1:3000.
+Note: If you want to use Docker, Postman needs to be updated to point to 192.168.99.100:3000 instead of 127.0.0.1:3000.
 
-In a command line, run the following form the project's root:
+To build and start the app:
 ```bash
 docker build -t autorenter-api-image .
 docker run -d -p 3000:3000 --name autorenter-api autorenter-api-image
@@ -56,14 +59,20 @@ To connect to the container:
 docker attach --sig-proxy=false autorenter-api
 ```
 
-### Docker - Cleanup
-
 To clean up the container once your done with it:
 ```bash
 docker stop autorenter-api
 docker rm autorenter-api
 docker rmi autorenter-api-image
 ```
+
+## Contributing
+
+Please read the [CONTRIBUTING](./CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+
+## Versioning
+
+We use [SemVer](http://semver.org/) for versioning.
 
 ## License
 
