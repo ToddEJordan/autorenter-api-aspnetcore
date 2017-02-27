@@ -1,6 +1,6 @@
-# AutoRenter - ASP.NET Core 1.1
+# AutoRenter - ASP.NET Core
 
-An ASP.NET Core 1.1 based implementation of the AutoRenter API.
+An ASP.NET Core based implementation of the AutoRenter API.
 
 ## Overview
 
@@ -19,18 +19,13 @@ These instructions will cover usage information for the API and the optional dev
 
 ## Prerequisites
 
-- Install [.NET Core](https://www.microsoft.com/net/download/core#/current). Be sure to select the .NET Core 1.1 SDK Installer option
+- Download and run the [.NET Core 1.0 RC4 SDK Installer](https://github.com/dotnet/core/blob/master/release-notes/rc4-download.md).
 
 ## How To
 
 - Unless otherwise noted, all terminal commands must be issued from the project's root directory.
 
-### Local Development - With Visual Studio
-
-1. Open the project in VS 2015 with Update 3 or higher
-1. Build and run
-
-### Local Development - Without Visual Studio
+### Local Development
 
 1. Open the project folder in your favorite text editor (preferably VS Code)
 1. Run `dotnet restore` from the command line
@@ -46,7 +41,7 @@ For more in-depth testing, use a web debugging tool such as [Fiddler](https://ww
 
 ### Docker Development
 
-Note: If you want to use Docker, Postman needs to be updated to point to 192.168.99.100:3000 instead of 127.0.0.1:3000.
+Note: If you want to use Docker, you will need to point your browser (and Postman, if you use it) to 192.168.99.100:3000 instead of 127.0.0.1:3000.
 
 To build and start the app:
 ```bash
@@ -65,6 +60,22 @@ docker stop autorenter-api
 docker rm autorenter-api
 docker rmi autorenter-api-image
 ```
+
+## Troubleshooting
+
+### The app does not run
+
+Make sure you have the correct version of ASP.NET Core:
+
+```bash
+dotnet --version
+```
+
+The supported version is 1.0.0-rc4-*.
+
+### The project does not load in Visual Studio
+
+The [Microsoft Documentation](https://www.microsoft.com/net/core#windowsvs2015) says that this will work with Visual Studio Update 3. Not so. The project file format has been changed from a JSON-based format to an XML-based format (allegedly to maintain compatibility with MSBuild). However, VS Update 3 does not yet support this new format.
 
 ## Contributing
 
