@@ -34,19 +34,19 @@ These instructions will cover usage information for the API and the optional dev
 
 ### Browse the app
 
-After successfully starting the API app, you should be able to view data by browsing to [http://127.0.0.1:5000/api/locations](http://127.0.0.1:5000/api/locations).
+After successfully starting the API app, you should be able to view data by browsing to [http://127.0.0.1:3000/api/locations](http://127.0.0.1:3000/api/locations).
 For more in-depth testing, use a web debugging tool such as [Fiddler](https://www.telerik.com/download/fiddler) or [Postman](https://www.getpostman.com/).
 
 [Postman collection](https://www.getpostman.com/collections/5530fbffa46505020891)
 
 ### Docker Development
 
-Note: If you want to use Docker, you will need to point your browser (and Postman, if you use it) to 192.168.99.100:5000 instead of 127.0.0.1:5000.
+Note: If you want to use Docker, you will need to point your browser (and Postman, if you use it) to 192.168.99.100:3000 instead of 127.0.0.1:3000.
 
 To build and start the app:
 ```bash
 docker build -t autorenter-api-image .
-docker run -d -p 5000:5000 --name autorenter-api autorenter-api-image
+docker run -d -p 3000:3000 --name autorenter-api autorenter-api-image
 ```
 
 To connect to the container:
