@@ -7,6 +7,7 @@ using AutoRenter.API.Domain;
 using AutoRenter.API.Services;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 namespace AutoRenter.API.Features.LookupData
 {
@@ -34,9 +35,10 @@ namespace AutoRenter.API.Features.LookupData
         // }
 
         [HttpGet]
-        public dynamic Get([FromQueryAttribute] Boolean makes, [FromQueryAttribute] Boolean models, [FromQueryAttribute] Boolean states)
+        public dynamic Get()
         {
-            var data = GetData(makes, models, states);
+            var query = Request.Query;
+            var data = GetData(query);
             var formattedResult = _responseConverter.Convert(data);
 
             Response.Headers.Add("x-total-count", data.ToString());
@@ -80,10 +82,10 @@ namespace AutoRenter.API.Features.LookupData
         //     return lookupData;
         // }
 
-        private Dictionary<string,object> GetData(Boolean makes, Boolean models, Boolean states)
+        private Dictionary<string,object> GetData(IQueryCollection lookupTypes)
         {
             Dictionary<string,object> lookupData = new Dictionary<string, object>();
-            if (makes) {
+            if (lookupTypes.ContainsKey("makes")) {
                 ICollection<Make> makesData = new List<Make> {
                     new Make{Id = "tsl", Name = "Tesla"},
                     new Make{Id = "che", Name = "Chevrolet"},
@@ -92,7 +94,7 @@ namespace AutoRenter.API.Features.LookupData
                 lookupData.Add("makes", makesData);
             }
 
-            if (models) {
+            if (lookupTypes.ContainsKey("models")) {
                 ICollection<Model> modelsData = new List<Model> {
                     new Model{Id = "tms", Name = "Model S"},
                     new Model{Id = "tmx", Name = "Model X"},
@@ -103,7 +105,7 @@ namespace AutoRenter.API.Features.LookupData
                 lookupData.Add("models", modelsData);
             }
 
-            if (states) {
+            if (lookupTypes.ContainsKey("states")) {
                 ICollection<State> statesData = new List<State> {
                     new State{StateCode = "AZ", Name = "Arizona"},
                     new State{StateCode = "CA", Name = "California"},
