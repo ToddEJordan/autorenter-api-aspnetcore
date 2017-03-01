@@ -8,12 +8,13 @@ namespace AutoRenter.API.Domain
     public class Vehicle : IEntity
     {
         public string Vin { get; set; }
-        public string Make { get; set; }
-        public string Model { get; set; }
+        public string MakeId { get; set; }
+        public string ModelId { get; set; }
         public int Year { get; set; }
         public int Miles { get; set; }
         public string Color { get; set; }
         public bool IsRentToOwn { get; set; }
+        public string Image { get; set;}
 
         [ForeignKey("Location")]
         public Guid LocationId { get; set; }
@@ -32,12 +33,13 @@ namespace AutoRenter.API.Domain
         private void UpdateDetails(PostPut.Command message)
         {
             Vin = message.Vin;
-            Make = message.Make;
-            Model = message.Model;
+            MakeId = message.MakeId;
+            ModelId = message.ModelId;
             Year = message.Year;
             Miles = message.Miles;
             Color = message.Color;
             IsRentToOwn = message.IsRentToOwn;
+            Image = message.Image;
             LocationId = message.LocationId;
         }
     }
