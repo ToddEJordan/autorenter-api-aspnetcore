@@ -43,16 +43,53 @@ namespace AutoRenter.API.Features.LookupData
             return Ok(formattedResult);
         }
 
-        private Domain.LookupData GetData(Boolean makes, Boolean models, Boolean states)
+        // private Domain.LookupData GetData(Boolean makes, Boolean models, Boolean states)
+        // {
+        //     var lookupData = new Domain.LookupData();
+        //     if (makes) {
+        //         ICollection<Make> makesData = new List<Make> {
+        //             new Make{Id = "tsl", Name = "Tesla"},
+        //             new Make{Id = "che", Name = "Chevrolet"},
+        //             new Make{Id = "frd", Name = "Ford"}
+        //         };
+        //         lookupData.Makes = makesData;
+        //     }
+
+        //     if (models) {
+        //         ICollection<Model> modelsData = new List<Model> {
+        //             new Model{Id = "tms", Name = "Model S"},
+        //             new Model{Id = "tmx", Name = "Model X"},
+        //             new Model{Id = "cvt", Name = "Corvette"},
+        //             new Model{Id = "fxp", Name = "Explorer"},
+        //             new Model{Id = "fta", Name = "Taurus"}
+        //         };
+        //         lookupData.Models = modelsData;
+        //     }
+
+        //     if (states) {
+        //         ICollection<State> statesData = new List<State> {
+        //             new State{StateCode = "AZ", Name = "Arizona"},
+        //             new State{StateCode = "CA", Name = "California"},
+        //             new State{StateCode = "HI", Name = "Hawaii"},
+        //             new State{StateCode = "IN", Name = "Indiana"},
+        //             new State{StateCode = "WA", Name = "Washington"}
+        //         };
+        //         lookupData.States = statesData;
+        //     }
+
+        //     return lookupData;
+        // }
+
+        private Dictionary<string,object> GetData(Boolean makes, Boolean models, Boolean states)
         {
-            var lookupData = new Domain.LookupData();
+            Dictionary<string,object> lookupData = new Dictionary<string, object>();
             if (makes) {
                 ICollection<Make> makesData = new List<Make> {
                     new Make{Id = "tsl", Name = "Tesla"},
                     new Make{Id = "che", Name = "Chevrolet"},
                     new Make{Id = "frd", Name = "Ford"}
                 };
-                lookupData.Makes = makesData;
+                lookupData.Add("makes", makesData);
             }
 
             if (models) {
@@ -63,7 +100,7 @@ namespace AutoRenter.API.Features.LookupData
                     new Model{Id = "fxp", Name = "Explorer"},
                     new Model{Id = "fta", Name = "Taurus"}
                 };
-                lookupData.Models = modelsData;
+                lookupData.Add("models", modelsData);
             }
 
             if (states) {
@@ -74,7 +111,7 @@ namespace AutoRenter.API.Features.LookupData
                     new State{StateCode = "IN", Name = "Indiana"},
                     new State{StateCode = "WA", Name = "Washington"}
                 };
-                lookupData.States = statesData;
+                lookupData.Add("states", statesData);
             }
 
             return lookupData;
