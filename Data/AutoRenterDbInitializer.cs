@@ -13,7 +13,10 @@ namespace AutoRenter.API.Data
         {
             _context = (AutoRenterContext) serviceProvider.GetService(typeof(AutoRenterContext));
             InitializeLocations();
+            InitializeMakes();
+            InitializeModels();
             InitializeSkus();
+            InitializeStates();
         }
 
         private static void InitializeLocations()
@@ -54,6 +57,40 @@ namespace AutoRenter.API.Data
             _context.SaveChanges();
         }
 
+        private static void InitializeMakes()
+        {
+            if (!_context.Makes.Any())
+            {
+                ICollection<Make> makes = new List<Make> {
+                    new Make{Id = "tsl", Name = "Tesla"},
+                    new Make{Id = "che", Name = "Chevrolet"},
+                    new Make{Id = "frd", Name = "Ford"}
+                };
+                foreach (var make in makes)
+                    _context.Makes.Add(make);
+            }
+
+            _context.SaveChanges();
+        }        
+
+        private static void InitializeModels()
+        {
+            if (!_context.Models.Any())
+            {
+                ICollection<Model> models = new List<Model> {
+                    new Model{Id = "tms", Name = "Model S"},
+                    new Model{Id = "tmx", Name = "Model X"},
+                    new Model{Id = "cvt", Name = "Corvette"},
+                    new Model{Id = "fxp", Name = "Explorer"},
+                    new Model{Id = "fta", Name = "Taurus"}
+                };
+                foreach (var model in models)
+                _context.Models.Add(model);
+            }
+
+            _context.SaveChanges();
+        }   
+
         private static void InitializeSkus()
         {
             if (!_context.Skus.Any())
@@ -86,5 +123,25 @@ namespace AutoRenter.API.Data
 
             _context.SaveChanges();
         }
+
+        private static void InitializeStates()
+        {
+            if (!_context.States.Any())
+            {
+                ICollection<State> states = new List<State> {
+                    new State{StateCode = "AZ", Name = "Arizona"},
+                    new State{StateCode = "CA", Name = "California"},
+                    new State{StateCode = "HI", Name = "Hawaii"},
+                    new State{StateCode = "IN", Name = "Indiana"},
+                    new State{StateCode = "WA", Name = "Washington"}
+                };
+                
+                foreach (var state in states)
+                    _context.States.Add(state);
+            }
+
+            _context.SaveChanges();
+        }   
+
     }
 }

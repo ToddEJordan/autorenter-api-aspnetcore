@@ -1,8 +1,11 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace AutoRenter.API.Domain
 {
     public class Model
     {
-        public string StateCode;
-        public string Name;
+        [Key]
+        public string Id { get; set; }
+        public string Name { get; set; }
     }
 }
