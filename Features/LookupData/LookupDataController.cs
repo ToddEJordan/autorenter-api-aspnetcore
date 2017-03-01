@@ -31,10 +31,11 @@ namespace AutoRenter.API.Features.LookupData
         public dynamic Get()
         {
             var query = Request.Query;
-            var data = GetData(query);
-            var formattedResult = _responseConverter.Convert(data);
+            var lookupData = GetData(query);
+            var formattedResult = new Dictionary<string, object>();
+            formattedResult.Add("lookupData", lookupData);
 
-            Response.Headers.Add("x-total-count", data.ToString());
+            Response.Headers.Add("x-total-count", lookupData.ToString());
             return Ok(formattedResult);
         }
 
