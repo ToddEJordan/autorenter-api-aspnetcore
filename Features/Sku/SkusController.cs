@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -25,7 +26,8 @@ namespace AutoRenter.API.Features.Sku
         {
             var query = new GetAll.Query();
             var model = await _mediator.SendAsync(query);
-            var formattedResult = _responseConverter.Convert(model);
+            var formattedResult = new Dictionary<string, object>();
+            formattedResult.Add("skus", model.Skus);
 
             Response.Headers.Add("x-total-count", model.Skus.ToString());
             return Ok(formattedResult);
