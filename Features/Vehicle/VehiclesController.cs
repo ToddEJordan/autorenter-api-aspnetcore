@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -28,7 +29,8 @@ namespace AutoRenter.API.Features.Vehicle
 
             if (model != null)
             {
-                var formattedResult = _responseConverter.Convert(model);
+                var formattedResult = new Dictionary<string, object>();
+                formattedResult.Add("vehicle", model);
                 return Ok(formattedResult);
             }
 

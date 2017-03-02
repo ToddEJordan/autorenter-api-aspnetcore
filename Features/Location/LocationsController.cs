@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -25,7 +26,8 @@ namespace AutoRenter.API.Features.Location
         {
             var query = new GetAll.Query();
             var model = await _mediator.SendAsync(query);
-            var formattedResult = _responseConverter.Convert(model);
+            var formattedResult = new Dictionary<string, object>();
+            formattedResult.Add("locations", model.Locations);
 
             Response.Headers.Add("x-total-count", model.Locations.ToString());
             return Ok(formattedResult);
@@ -39,7 +41,8 @@ namespace AutoRenter.API.Features.Location
 
             if (model != null)
             {
-                var formattedResult = _responseConverter.Convert(model);
+                var formattedResult = new Dictionary<string, object>();
+                formattedResult.Add("location", model);
                 return Ok(formattedResult);
             }
 
@@ -111,7 +114,8 @@ namespace AutoRenter.API.Features.Location
             if (model != null)
             {
                 var totalVehicles = model.Vehicles.Count;
-                var formattedResult = _responseConverter.Convert(model.Vehicles);
+                var formattedResult = new Dictionary<string, object>();
+                formattedResult.Add("vehicles", model.Vehicles);
 
                 Response.Headers.Add("x-total-count", totalVehicles.ToString());
                 return Ok(formattedResult);
