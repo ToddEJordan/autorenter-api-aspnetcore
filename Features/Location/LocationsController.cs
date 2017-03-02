@@ -114,7 +114,8 @@ namespace AutoRenter.API.Features.Location
             if (model != null)
             {
                 var totalVehicles = model.Vehicles.Count;
-                var formattedResult = _responseConverter.Convert(model.Vehicles);
+                var formattedResult = new Dictionary<string, object>();
+                formattedResult.Add("vehicles", model.Vehicles);
 
                 Response.Headers.Add("x-total-count", totalVehicles.ToString());
                 return Ok(formattedResult);
