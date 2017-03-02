@@ -97,8 +97,11 @@ namespace AutoRenter.API
         private static void ConfigureMvc(IServiceCollection services)
         {
             services.AddMvc(options => { options.Conventions.Add(new FeatureConvention()); })
-                .AddJsonOptions(
-                    a => a.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
+                .AddJsonOptions(a => 
+                {
+                    a.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                    a.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                });
         }
 
         private static void ConfigureCors(IServiceCollection services)
