@@ -8,6 +8,7 @@ using AutoRenter.Api.Data;
 using AutoRenter.Api.Domain;
 using AutoRenter.Api.Services;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
@@ -28,6 +29,7 @@ namespace AutoRenter.Api.Features.LookupData
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public dynamic Get()
         {
             var query = Request.Query;

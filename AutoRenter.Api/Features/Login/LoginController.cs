@@ -15,6 +15,8 @@ namespace AutoRenter.Api.Features.Login
         }
 
         [HttpPost]
+        //[Authorize(Policy="IsAdmin")]
+        //[Authorize]
         [AllowAnonymous]
         public IActionResult Post([FromBody] LoginModel loginModel)
         {

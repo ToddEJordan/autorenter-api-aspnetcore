@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AutoRenter.Api.Features.Logs
@@ -14,6 +15,7 @@ namespace AutoRenter.Api.Features.Logs
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public IActionResult Post([FromBody] Post.Command command)
         {
             if (!ModelState.IsValid)

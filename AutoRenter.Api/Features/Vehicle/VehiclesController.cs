@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoRenter.Api.Services;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AutoRenter.Api.Features.Vehicle
@@ -22,6 +23,7 @@ namespace AutoRenter.Api.Features.Vehicle
         }
 
         [HttpGet("{id:Guid}", Name = "GetVehicle")]
+        [AllowAnonymous]
         public async Task<IActionResult> Get([Required] Guid id)
         {
             var query = new Get.Query {Id = id};
@@ -39,6 +41,7 @@ namespace AutoRenter.Api.Features.Vehicle
         }
 
         [HttpGet("{name}")]
+        [AllowAnonymous]
         public IActionResult GetByName([Required] string name)
         {
             Response.Headers.Add("x-status-reason",
@@ -47,6 +50,7 @@ namespace AutoRenter.Api.Features.Vehicle
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] PostPut.Command command)
         {
             if (!ModelState.IsValid)
@@ -63,6 +67,7 @@ namespace AutoRenter.Api.Features.Vehicle
         }
 
         [HttpDelete("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> Delete(Guid id)
         {
             var query = new Delete.Query {Id = id};
@@ -76,6 +81,7 @@ namespace AutoRenter.Api.Features.Vehicle
         }
 
         [HttpPut("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> Put(Guid id, [FromBody] PostPut.Command command)
         {
             if (!ModelState.IsValid)
