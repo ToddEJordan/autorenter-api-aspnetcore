@@ -52,8 +52,6 @@ namespace AutoRenter.Api.Authorization
         {
             return new[]
             {
-                new Claim("alg", "HS256"),
-                new Claim("typ", "JWT"),
                 new Claim("username", userModel.Username),
                 new Claim(JwtRegisteredClaimNames.Email, userModel.Email),
                 new Claim("first_name", userModel.FirstName),

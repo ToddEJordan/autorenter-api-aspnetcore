@@ -28,20 +28,5 @@ namespace AutoRenter.Api.Features.Login
                 return BadRequest(exception.Message);
             }
         }
-
-        [HttpGet]
-        //[Authorize(Policy="IsAdmin")]
-        [Authorize]
-        public IActionResult Get()
-        {
-            try
-            {
-                return Ok(true);
-            }
-            catch (Exception exception)
-            {
-                return BadRequest(exception.Message);
-            }
-        }
     }
 }

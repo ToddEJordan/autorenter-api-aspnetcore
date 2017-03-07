@@ -59,6 +59,7 @@ namespace AutoRenter.Api.Tests.Authorization
             mockAppSettings.SetupGet(i => i.TokenSettings.Issuer).Returns("FusionAlliance").Verifiable();
             mockAppSettings.SetupGet(i => i.TokenSettings.Audience).Returns("ThoseWhoRock").Verifiable();
             mockAppSettings.SetupGet(i => i.TokenSettings.ExpirationMinutes).Returns(5).Verifiable();
+            mockAppSettings.SetupGet(i => i.TokenSettings.Secret).Returns("SecretSecretSecret").Verifiable();
 
             var mockTokenManager = new Mock<TokenManager>(Options.Create(mockAppSettings.Object), utcTime) { CallBase = true };
             mockTokenManager.Setup(i => i.GetClaims(It.IsAny<UserModel>())).Returns(claims).Verifiable();
@@ -110,9 +111,7 @@ namespace AutoRenter.Api.Tests.Authorization
 
             var result = mockTokenManager.Object.GetClaims(userModel);
 
-            Assert.AreEqual(7, result.Length);
-            Assert.AreEqual("HS256", result.ToList().FirstOrDefault(i => i.Type == "alg").Value);
-            Assert.AreEqual("JWT", result.ToList().FirstOrDefault(i => i.Type == "typ").Value);
+            Assert.AreEqual(5, result.Length);
             Assert.AreEqual(userModel.Username, result.ToList().FirstOrDefault(i => i.Type == "username").Value);
             Assert.AreEqual(userModel.Email, result.ToList().FirstOrDefault(i => i.Type == "email").Value);
             Assert.AreEqual(userModel.FirstName, result.ToList().FirstOrDefault(i => i.Type == "first_name").Value);
