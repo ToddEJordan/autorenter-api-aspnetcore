@@ -96,7 +96,7 @@ namespace AutoRenter.Api.Tests.Authorization
         }
 
         [TestMethod]
-        public void should_return_array_of_claims_from_GetClaims()
+        public void Should_return_array_of_claims_from_GetClaims()
         {
             var userModel = new UserModel
             {
@@ -120,7 +120,7 @@ namespace AutoRenter.Api.Tests.Authorization
         }
 
         [TestMethod]
-        public void should_return_array_of_claims_from_GetClaims_when_user_is_administrator()
+        public void Should_return_array_of_claims_from_GetClaims_when_user_is_administrator()
         {
             var userModel = new UserModel
             {
