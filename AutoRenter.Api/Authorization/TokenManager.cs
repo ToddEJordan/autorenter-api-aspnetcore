@@ -52,11 +52,11 @@ namespace AutoRenter.Api.Authorization
         {
             return new[]
             {
-                new Claim("username", userModel.Username),
-                new Claim(JwtRegisteredClaimNames.Email, userModel.Email),
-                new Claim("first_name", userModel.FirstName),
-                new Claim("last_name", userModel.LastName),
-                new Claim("is_administrator", userModel.IsAdministrator.ToString()),
+                new Claim(AutoRenterClaimNames.Username, userModel.Username),
+                new Claim(AutoRenterClaimNames.Email, userModel.Email),
+                new Claim(AutoRenterClaimNames.FirstName, userModel.FirstName),
+                new Claim(AutoRenterClaimNames.LastName, userModel.LastName),
+                new Claim(AutoRenterClaimNames.IsAdministrator, userModel.IsAdministrator.ToString()),
             };
         }
     }

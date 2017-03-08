@@ -123,7 +123,7 @@ namespace AutoRenter.API
             });
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("IsAdmin", policy => policy.Requirements.Add(new IsAdminRequirement()));
+                options.AddPolicy("Administrator", policy => policy.Requirements.Add(new AdministratorAuthorizationRequirement()));
             });
             services.AddSingleton<IAuthorizationHandler, IsAdminHandler>();
         }

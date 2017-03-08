@@ -2,7 +2,7 @@
 
 namespace AutoRenter.Api.Authorization
 {
-    public class IsAdminRequirement : IAuthorizationRequirement
+    public class AdministratorAuthorizationRequirement : IAuthorizationRequirement
     {
     }
 }

@@ -1,12 +1,5 @@
-﻿namespace AutoRenter.Api
+﻿namespace AutoRenter.Api.Settings
 {
-    public class AppSettings
-    {
-        public virtual bool InMemoryProvider { get; set; }
-
-        public virtual TokenSettings TokenSettings { get; set; }
-    }
-
     public class TokenSettings
     {
         public virtual string Issuer { get; set; }

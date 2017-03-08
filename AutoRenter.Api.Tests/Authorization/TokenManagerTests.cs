@@ -112,11 +112,11 @@ namespace AutoRenter.Api.Tests.Authorization
             var result = mockTokenManager.Object.GetClaims(userModel);
 
             Assert.AreEqual(5, result.Length);
-            Assert.AreEqual(userModel.Username, result.ToList().FirstOrDefault(i => i.Type == "username").Value);
-            Assert.AreEqual(userModel.Email, result.ToList().FirstOrDefault(i => i.Type == "email").Value);
-            Assert.AreEqual(userModel.FirstName, result.ToList().FirstOrDefault(i => i.Type == "first_name").Value);
-            Assert.AreEqual(userModel.LastName, result.ToList().FirstOrDefault(i => i.Type == "last_name").Value);
-            Assert.IsFalse(Convert.ToBoolean(result.ToList().FirstOrDefault(i => i.Type == "is_administrator").Value));
+            Assert.AreEqual(userModel.Username, result.ToList().FirstOrDefault(i => i.Type == AutoRenterClaimNames.Username).Value);
+            Assert.AreEqual(userModel.Email, result.ToList().FirstOrDefault(i => i.Type == AutoRenterClaimNames.Email).Value);
+            Assert.AreEqual(userModel.FirstName, result.ToList().FirstOrDefault(i => i.Type == AutoRenterClaimNames.FirstName).Value);
+            Assert.AreEqual(userModel.LastName, result.ToList().FirstOrDefault(i => i.Type == AutoRenterClaimNames.LastName).Value);
+            Assert.IsFalse(Convert.ToBoolean(result.ToList().FirstOrDefault(i => i.Type == AutoRenterClaimNames.IsAdministrator).Value));
         }
 
         [TestMethod]
@@ -135,7 +135,7 @@ namespace AutoRenter.Api.Tests.Authorization
 
             var result = mockTokenManager.Object.GetClaims(userModel);
 
-            Assert.IsTrue(Convert.ToBoolean(result.ToList().FirstOrDefault(i => i.Type == "is_administrator").Value));
+            Assert.IsTrue(Convert.ToBoolean(result.ToList().FirstOrDefault(i => i.Type == AutoRenterClaimNames.IsAdministrator).Value));
         }
     }
 }
