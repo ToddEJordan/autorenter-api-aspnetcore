@@ -21,9 +21,8 @@ namespace AutoRenter.Api.Authorization
         }
 
         public TokenManager(IOptions<AppSettings> appSettings)
+            : this(appSettings, DateTime.UtcNow)
         {
-            _appSettings = appSettings.Value;
-            UtcTime = DateTime.UtcNow;
         }
 
         public virtual string CreateToken(UserModel userModel)

@@ -1,6 +1,4 @@
-﻿using AutoRenter.Api.Settings;
-
-namespace AutoRenter.Api
+﻿namespace AutoRenter.Api
 {
     public class AppSettings
     {

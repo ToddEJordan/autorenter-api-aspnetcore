@@ -1,4 +1,4 @@
-﻿namespace AutoRenter.Api.Settings
+﻿namespace AutoRenter.Api
 {
     public class TokenSettings
     {
