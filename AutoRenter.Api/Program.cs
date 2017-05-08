@@ -2,7 +2,7 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
-namespace AutoRenter.API
+namespace AutoRenter.Api
 {
     public class Program
     {

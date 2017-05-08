@@ -1,6 +1,6 @@
-﻿using AutoRenter.Api.Features.User;
+﻿using AutoRenter.Api.Models;
 
-namespace AutoRenter.Api.Features.Login
+namespace AutoRenter.Api.Authentication
 {
     public interface IAuthenticateUser
     {

@@ -1,6 +1,7 @@
 ﻿using System;
-using AutoRenter.Api.Features.Login;
-using AutoRenter.Api.Features.User;
+using AutoRenter.Api.Models;
+using AutoRenter.Api.Controllers;
+using AutoRenter.Api.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

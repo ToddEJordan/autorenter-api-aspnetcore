@@ -1,4 +1,4 @@
-﻿namespace AutoRenter.Api.Features.User
+﻿namespace AutoRenter.Api.Models
 {
     public class UserModel
     {

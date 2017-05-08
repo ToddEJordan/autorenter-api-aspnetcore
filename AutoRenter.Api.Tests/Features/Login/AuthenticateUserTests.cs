@@ -1,6 +1,6 @@
 ﻿using AutoRenter.Api.Authorization;
-using AutoRenter.Api.Features.Login;
-using AutoRenter.Api.Features.User;
+using AutoRenter.Api.Models;
+using AutoRenter.Api.Authentication;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 

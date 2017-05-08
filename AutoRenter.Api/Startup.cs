@@ -5,7 +5,7 @@ using AutoMapper;
 using AutoRenter.Api;
 using AutoRenter.Api.Authorization;
 using AutoRenter.Api.Data;
-using AutoRenter.Api.Features.Login;
+using AutoRenter.Api.Authentication;
 using AutoRenter.Api.Infrastructure;
 using AutoRenter.Api.Services;
 using MediatR;
@@ -23,7 +23,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using Microsoft.IdentityModel.Tokens;
 
-namespace AutoRenter.API
+namespace AutoRenter.Api
 {
     public class Startup
     {

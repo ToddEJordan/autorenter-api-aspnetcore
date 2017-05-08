@@ -1,8 +1,8 @@
 ﻿using System;
 using AutoRenter.Api.Authorization;
-using AutoRenter.Api.Features.User;
+using AutoRenter.Api.Models;
 
-namespace AutoRenter.Api.Features.Login
+namespace AutoRenter.Api.Authentication
 {
     public class AuthenticateUser : IAuthenticateUser
     {

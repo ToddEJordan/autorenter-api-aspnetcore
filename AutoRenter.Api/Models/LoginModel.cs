@@ -1,4 +1,4 @@
-﻿namespace AutoRenter.Api.Features.Login
+﻿namespace AutoRenter.Api.Models
 {
     public class LoginModel
     {

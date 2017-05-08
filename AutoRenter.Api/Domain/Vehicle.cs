@@ -1,12 +1,15 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using AutoRenter.Api.Features.Vehicle;
 
 namespace AutoRenter.Api.Domain
 {
     public class Vehicle : IEntity
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Id { get; set; }
+
         public string Vin { get; set; }
         public string MakeId { get; set; }
         public string ModelId { get; set; }
@@ -20,27 +23,5 @@ namespace AutoRenter.Api.Domain
         public Guid LocationId { get; set; }
 
         public virtual Location Location { get; set; }
-
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
-
-        public void Handle(PostPut.Command message)
-        {
-            UpdateDetails(message);
-        }
-
-        private void UpdateDetails(PostPut.Command message)
-        {
-            Vin = message.Vin;
-            MakeId = message.MakeId;
-            ModelId = message.ModelId;
-            Year = message.Year;
-            Miles = message.Miles;
-            Color = message.Color;
-            IsRentToOwn = message.IsRentToOwn;
-            Image = message.Image;
-            LocationId = message.LocationId;
-        }
     }
 }

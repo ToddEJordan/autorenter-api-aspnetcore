@@ -1,8 +1,10 @@
 ﻿using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using AutoRenter.Api.Models;
+using AutoRenter.Api.Authentication;
 
-namespace AutoRenter.Api.Features.Login
+namespace AutoRenter.Api.Controllers
 {
     [Route("api/login")]
     public class LoginController : Controller
