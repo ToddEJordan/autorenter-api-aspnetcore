@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoRenter.Api.Data;
 using AutoRenter.Api.Domain;
 using AutoRenter.Api.DomainInterfaces;
+using AutoRenter.Api.Data;
 using AutoRenter.Api.Commands;
 
 namespace AutoRenter.Api.DomainServices
 {
-    public class VehicleService : IVehicleService
+    public class SkuService : ISkuService
     {
         private readonly AutoRenterContext context;
         private readonly IValidationService validationService;
-
-        public VehicleService(AutoRenterContext context, IValidationService validationService)
+        public SkuService(AutoRenterContext context, IValidationService validationService)
         {
             this.context = context;
             this.validationService = validationService;
@@ -21,7 +20,7 @@ namespace AutoRenter.Api.DomainServices
 
         public async Task<ResultCode> Delete(Guid id)
         {
-            var getCommand = CommandFactory<Vehicle>.CreateGetCommand(context);
+            var getCommand = CommandFactory<Sku>.CreateGetCommand(context);
             var getResult = await getCommand.Execute(id);
 
             if (!await validationService.IsValidDelete(getResult.Data))
@@ -29,42 +28,42 @@ namespace AutoRenter.Api.DomainServices
                 return ResultCode.BadRequest;
             }
 
-            var command = CommandFactory<Vehicle>.CreateDeleteCommand(context);
+            var command = CommandFactory<Sku>.CreateDeleteCommand(context);
             return await command.Execute(getResult.Data);
         }
 
-        public async Task<Result<Vehicle>> Get(Guid id)
+        public async Task<Result<Sku>> Get(Guid id)
         {
-            var command = CommandFactory<Vehicle>.CreateGetCommand(context);
+            var command = CommandFactory<Sku>.CreateGetCommand(context);
             return await command.Execute(id);
         }
 
-        public Result<IEnumerable<Vehicle>> GetAll()
+        public Result<IEnumerable<Sku>> GetAll()
         {
-            var command = CommandFactory<Vehicle>.CreateGetAllCommand(context);
+            var command = CommandFactory<Sku>.CreateGetAllCommand(context);
             return command.Execute();
         }
 
-        public async Task<Result<Guid>> Insert(Vehicle vehicle)
+        public async Task<Result<Guid>> Insert(Sku sku)
         {
-            if (! await validationService.IsValidInsert(vehicle))
+            if (!await validationService.IsValidInsert(sku))
             {
                 return new Result<Guid>(ResultCode.BadRequest);
             }
 
-            var command = CommandFactory<Vehicle>.CreateInsertCommand(context);
-            return await command.Execute(vehicle);
+            var command = CommandFactory<Sku>.CreateInsertCommand(context);
+            return await command.Execute(sku);
         }
 
-        public async  Task<Result<Guid>> Update(Vehicle vehicle)
+        public async Task<Result<Guid>> Update(Sku sku)
         {
-            if (! await validationService.IsValidUpdate(vehicle))
+            if (!await validationService.IsValidUpdate(sku))
             {
                 return new Result<Guid>(ResultCode.BadRequest);
             }
 
-            var command = CommandFactory<Vehicle>.CreateUpdateCommand(context);
-            return await command.Execute(vehicle);
+            var command = CommandFactory<Sku>.CreateUpdateCommand(context);
+            return await command.Execute(sku);
         }
     }
 }
