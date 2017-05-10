@@ -12,6 +12,8 @@ namespace AutoRenter.Api.Controllers
             {
                 case ResultCode.NotFound:
                     return NotFound();
+                case ResultCode.Conflict:
+                    return StatusCode(StatusCodes.Status409Conflict);
                 case ResultCode.BadRequest:
                     return BadRequest();
                 case ResultCode.Unknown:

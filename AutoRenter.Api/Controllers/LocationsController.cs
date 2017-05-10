@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using AutoRenter.Api.DomainInterfaces;
 using System.Linq;
 using AutoRenter.Api.Models;
+using AutoRenter.Api.Domain;
 
 namespace AutoRenter.Api.Controllers
 {
@@ -14,10 +15,12 @@ namespace AutoRenter.Api.Controllers
     public class LocationsController : ControllerBase
     {
         private readonly ILocationService locationService;
+        private readonly IValidationService validationService;
 
-        public LocationsController(ILocationService locationService)
+        public LocationsController(ILocationService locationService, IValidationService validationService)
         {
             this.locationService = locationService;
+            this.validationService = validationService;
         }
 
         [HttpGet]
@@ -25,11 +28,11 @@ namespace AutoRenter.Api.Controllers
         public IActionResult Get()
         {
             var result = locationService.GetAll();
-            if (result.ResultCode == Domain.ResultCode.Success)
+            if (result.ResultCode == ResultCode.Success)
             {
                 var formattedResult = new Dictionary<string, object>
                 {
-                    { "locations", result.Data.Select(x => x as Models.LocationModel) }
+                    { "locations", result.Data.Select(x => x as LocationModel) }
                 };
                 Response.Headers.Add("x-total-count", result.Data.ToString());
                 return Ok(formattedResult);
@@ -48,11 +51,11 @@ namespace AutoRenter.Api.Controllers
             }
 
             var result = await locationService.Get(id);
-            if (result.ResultCode == Domain.ResultCode.Success)
+            if (result.ResultCode == ResultCode.Success)
             {
                 var formattedResult = new Dictionary<string, object>
                 {
-                    { "location", result.Data as Models.LocationModel}
+                    { "location", result.Data as LocationModel }
                 };
                 return Ok(formattedResult);
             }
@@ -71,7 +74,7 @@ namespace AutoRenter.Api.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Post([FromBody] LocationModel location)
+        public async Task<IActionResult> Post([FromBody] Location location)
         {
             if (!ModelState.IsValid)
             {
@@ -79,7 +82,7 @@ namespace AutoRenter.Api.Controllers
             }
 
             var result = await locationService.Insert(location);
-            if (result.ResultCode == Domain.ResultCode.Success)
+            if (result.ResultCode == ResultCode.Success)
             {
                 return CreatedAtRoute("GetLocation", new { id = result.Data }, null);
             }
@@ -97,7 +100,7 @@ namespace AutoRenter.Api.Controllers
             }
 
             var result = await locationService.Delete(id);
-            if (result == Domain.ResultCode.Success)
+            if (result == ResultCode.Success)
             {
                 return NoContent();
             }
@@ -107,14 +110,15 @@ namespace AutoRenter.Api.Controllers
 
         [HttpPut("{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> Put(Guid id, [FromBody] LocationModel location)
+        public async Task<IActionResult> Put(Guid id, [FromBody] Location location)
         {
             if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
+            }
 
             var result = await locationService.Update(location);
-
-            if (result.ResultCode == Domain.ResultCode.Success)
+            if (result.ResultCode == ResultCode.Success)
             {
                 return Ok(result.Data);
             }
@@ -132,7 +136,7 @@ namespace AutoRenter.Api.Controllers
             }
 
             var vehiclesResult = await locationService.GetVehicles(locationId);
-            if (vehiclesResult.ResultCode == Domain.ResultCode.Success)
+            if (vehiclesResult.ResultCode == ResultCode.Success)
             {
                 var totalVehicles = vehiclesResult.Data.Count();
                 var formattedResult = new Dictionary<string, object>
@@ -144,6 +148,24 @@ namespace AutoRenter.Api.Controllers
             }
 
             return ProcessResultCode(vehiclesResult.ResultCode);
+        }
+
+        [HttpPost("{locationId}/vehicles")]
+        [AllowAnonymous]
+        public async Task<IActionResult> AddVehicleToLocation(Guid locationId, [FromBody] Vehicle vehicle)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await locationService.AddVehicle(locationId, vehicle);
+            if (result == ResultCode.Success)
+            {
+                return NoContent();
+            }
+
+            return ProcessResultCode(result);
         }
     }
 }
