@@ -7,7 +7,6 @@ namespace AutoRenter.Api.Validation
     {
         public LocationInsertValidator()
         {
-            RuleFor(m => m.Id).NotNull();
             RuleFor(m => m.SiteId).NotNull();
             RuleFor(m => m.Name).NotNull();
             RuleFor(m => m.City).NotNull();
@@ -19,6 +18,7 @@ namespace AutoRenter.Api.Validation
     {
         public LocationUpdateValidator()
         {
+            RuleFor(m => m.Id).NotNull();
             RuleFor(m => m.SiteId).NotNull();
             RuleFor(m => m.Name).NotNull();
             RuleFor(m => m.City).NotNull();
