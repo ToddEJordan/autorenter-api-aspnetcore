@@ -22,6 +22,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using Microsoft.IdentityModel.Tokens;
+using AutoRenter.Api.DomainInterfaces;
+using AutoRenter.Api.DomainServices;
 
 namespace AutoRenter.Api
 {
@@ -97,9 +99,9 @@ namespace AutoRenter.Api
 
         private static void ConfigureDI(IServiceCollection services)
         {
-            services.AddScoped<ILocationRepository, LocationRepository>();
-            services.AddScoped<ISkuRepository, SkuRepository>();
-            services.AddScoped<IVehicleRepository, VehicleRepository>();
+            services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<ISkuService, SkuService>();
+            services.AddScoped<IVehicleService, VehicleService>();
             services.AddTransient<IResponseConverter, ResponseConverter>();
             services.AddTransient<ITokenManager, TokenManager>();
             services.AddTransient<IAuthenticateUser, AuthenticateUser>();
