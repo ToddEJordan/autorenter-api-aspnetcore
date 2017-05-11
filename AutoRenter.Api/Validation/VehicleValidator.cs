@@ -18,6 +18,7 @@ namespace AutoRenter.Api.Validation
     {
         public VehicleUpdateValidator()
         {
+            RuleFor(m => m.Id).NotNull();
             RuleFor(m => m.Vin).NotNull();
             RuleFor(m => m.MakeId).NotNull();
             RuleFor(m => m.ModelId).NotNull();

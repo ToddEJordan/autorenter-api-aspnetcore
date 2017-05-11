@@ -27,6 +27,7 @@ namespace AutoRenter.Api.Commands
             var insertResult = await context.AddAsync(entity);
             if (insertResult.State == Microsoft.EntityFrameworkCore.EntityState.Added)
             {
+                await context.SaveChangesAsync();
                 return new Result<Guid>(ResultCode.Success, insertResult.Entity.Id);
             }
 

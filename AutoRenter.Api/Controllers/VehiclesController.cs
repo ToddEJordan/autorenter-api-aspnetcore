@@ -80,7 +80,7 @@ namespace AutoRenter.Api.Controllers
             var result = await vehicleService.Insert(vehicle);
             if (result.ResultCode == ResultCode.Success)
             {
-                return CreatedAtRoute("GetVehicle", new { id = result.Data }, null);
+                return CreatedAtRoute("GetVehicle", new { id = result.Data }, result.Data);
             }
 
             return ProcessResultCode(result.ResultCode);

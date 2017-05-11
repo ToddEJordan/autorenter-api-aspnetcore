@@ -103,12 +103,6 @@ namespace AutoRenter.Api
         {
             ConfigureDIForDomainServices(services);
 
-            //services.AddScoped(typeof(IVehicleService), typeof(VehicleService));
-            //services.AddScoped<IValidationService, ValidationService>();
-            //services.AddScoped<ILocationService, LocationService>();
-            //services.AddScoped<ISkuService, SkuService>();
-            //services.AddScoped<IVehicleService, VehicleService>();
-
             services.AddTransient<IResponseConverter, ResponseConverter>();
             services.AddTransient<ITokenManager, TokenManager>();
             services.AddTransient<IAuthenticateUser, AuthenticateUser>();

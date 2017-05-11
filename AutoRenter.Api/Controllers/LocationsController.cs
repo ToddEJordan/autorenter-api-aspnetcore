@@ -25,14 +25,14 @@ namespace AutoRenter.Api.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Get()
+        public IActionResult GetAll()
         {
             var result = locationService.GetAll();
             if (result.ResultCode == ResultCode.Success)
             {
                 var formattedResult = new Dictionary<string, object>
                 {
-                    { "locations", result.Data.Select(x => x as LocationModel) }
+                    { "locations", result.Data }
                 };
                 Response.Headers.Add("x-total-count", result.Data.ToString());
                 return Ok(formattedResult);
@@ -55,7 +55,7 @@ namespace AutoRenter.Api.Controllers
             {
                 var formattedResult = new Dictionary<string, object>
                 {
-                    { "location", result.Data as LocationModel }
+                    { "location", result.Data }
                 };
                 return Ok(formattedResult);
             }
@@ -84,7 +84,7 @@ namespace AutoRenter.Api.Controllers
             var result = await locationService.Insert(location);
             if (result.ResultCode == ResultCode.Success)
             {
-                return CreatedAtRoute("GetLocation", new { id = result.Data }, null);
+                return CreatedAtRoute("GetLocation", new { id = result.Data }, result.Data);
             }
 
             return ProcessResultCode(result.ResultCode);

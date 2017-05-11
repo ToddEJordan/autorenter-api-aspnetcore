@@ -26,6 +26,7 @@ namespace AutoRenter.Api.Commands
             var deleteResult = context.Remove(existingEntity);
             if (deleteResult.State == Microsoft.EntityFrameworkCore.EntityState.Deleted)
             {
+                await context.SaveChangesAsync();
                 return ResultCode.Success;
             }
             else

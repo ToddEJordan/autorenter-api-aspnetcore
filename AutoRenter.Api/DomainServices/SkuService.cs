@@ -23,6 +23,11 @@ namespace AutoRenter.Api.DomainServices
             var getCommand = CommandFactory<Sku>.CreateGetCommand(context);
             var getResult = await getCommand.Execute(id);
 
+            if (getResult.ResultCode == ResultCode.NotFound)
+            {
+                return ResultCode.NotFound;
+            }
+
             if (!await validationService.IsValidDelete(getResult.Data))
             {
                 return ResultCode.BadRequest;

@@ -1,9 +1,9 @@
-﻿using AutoRenter.Api.Models;
+﻿using AutoRenter.Api.Domain;
 using FluentValidation;
 
 namespace AutoRenter.Api.Validation
 {
-    public class LocationInsertValidator : AbstractValidator<LocationModel>, IValidator<LocationModel>
+    public class LocationInsertValidator : AbstractValidator<Location>, IValidator<Location>
     {
         public LocationInsertValidator()
         {
@@ -14,7 +14,7 @@ namespace AutoRenter.Api.Validation
         }
     }
 
-    public class LocationUpdateValidator : AbstractValidator<LocationModel>, IValidator<LocationModel>
+    public class LocationUpdateValidator : AbstractValidator<Location>, IValidator<Location>
     {
         public LocationUpdateValidator()
         {
@@ -26,7 +26,7 @@ namespace AutoRenter.Api.Validation
         }
     }
 
-    public class LocationDeleteValidator : AbstractValidator<LocationModel>, IValidator<LocationModel>
+    public class LocationDeleteValidator : AbstractValidator<Location>, IValidator<Location>
     {
         public LocationDeleteValidator()
         {
