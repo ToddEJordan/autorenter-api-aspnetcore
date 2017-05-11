@@ -121,8 +121,7 @@ namespace AutoRenter.Api
                 .Where(x => x.ImplementedInterfaces.Contains(typeof(IDomainService))))
             {
                 var interfaceType = ti.ImplementedInterfaces.FirstOrDefault(x => x.Name == $"I{ti.Name}");
-                Type serviceType = Assembly.GetEntryAssembly().GetType(ti.FullName);
-                //Type interfaceType = Assembly.GetEntryAssembly().GetType($"{ti.Namespace}.I{ti.Name}");
+                var serviceType = Assembly.GetEntryAssembly().GetType(ti.FullName);
                 services.AddScoped(interfaceType, serviceType);
             }
         }
