@@ -10,7 +10,7 @@ using AutoRenter.Api.DomainInterfaces;
 
 namespace AutoRenter.Api.DomainServices
 {
-    public class LocationService : ILocationService
+    public class LocationService : ILocationService, IDomainService
     {
         private readonly AutoRenterContext context;
         private readonly IVehicleService vehicleService;

@@ -1,6 +1,8 @@
 using System;
 using System.Net;
 using System.Text;
+using System.Reflection;
+using System.Linq;
 using AutoMapper;
 using AutoRenter.Api;
 using AutoRenter.Api.Authorization;
@@ -99,12 +101,30 @@ namespace AutoRenter.Api
 
         private static void ConfigureDI(IServiceCollection services)
         {
-            services.AddScoped<ILocationService, LocationService>();
-            services.AddScoped<ISkuService, SkuService>();
-            services.AddScoped<IVehicleService, VehicleService>();
+            ConfigureDIForDomainServices(services);
+
+            //services.AddScoped(typeof(IVehicleService), typeof(VehicleService));
+            //services.AddScoped<IValidationService, ValidationService>();
+            //services.AddScoped<ILocationService, LocationService>();
+            //services.AddScoped<ISkuService, SkuService>();
+            //services.AddScoped<IVehicleService, VehicleService>();
+
             services.AddTransient<IResponseConverter, ResponseConverter>();
             services.AddTransient<ITokenManager, TokenManager>();
             services.AddTransient<IAuthenticateUser, AuthenticateUser>();
+        }
+
+        private static void ConfigureDIForDomainServices(IServiceCollection services)
+        {
+            Assembly ass = Assembly.GetEntryAssembly();
+            foreach (TypeInfo ti in ass.DefinedTypes
+                .Where(x => x.ImplementedInterfaces.Contains(typeof(IDomainService))))
+            {
+                var interfaceType = ti.ImplementedInterfaces.FirstOrDefault(x => x.Name == $"I{ti.Name}");
+                Type serviceType = Assembly.GetEntryAssembly().GetType(ti.FullName);
+                //Type interfaceType = Assembly.GetEntryAssembly().GetType($"{ti.Namespace}.I{ti.Name}");
+                services.AddScoped(interfaceType, serviceType);
+            }
         }
 
         private static void ConfigureMvc(IServiceCollection services)

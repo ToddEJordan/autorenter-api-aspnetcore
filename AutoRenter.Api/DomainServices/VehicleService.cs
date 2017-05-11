@@ -8,7 +8,7 @@ using AutoRenter.Api.Commands;
 
 namespace AutoRenter.Api.DomainServices
 {
-    public class VehicleService : IVehicleService
+    public class VehicleService : IVehicleService, IDomainService
     {
         private readonly AutoRenterContext context;
         private readonly IValidationService validationService;

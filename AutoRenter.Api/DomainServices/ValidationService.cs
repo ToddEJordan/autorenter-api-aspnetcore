@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AutoRenter.Api.DomainServices
 {
-    public class ValidationService : IValidationService
+    public class ValidationService : IValidationService, IDomainService
     {
         public async Task<bool> IsValidInsert<T>(T entity)
         {

@@ -8,7 +8,7 @@ using AutoRenter.Api.Commands;
 
 namespace AutoRenter.Api.DomainServices
 {
-    public class SkuService : ISkuService
+    public class SkuService : ISkuService, IDomainService
     {
         private readonly AutoRenterContext context;
         private readonly IValidationService validationService;

@@ -1,7 +1,8 @@
-﻿using AutoRenter.Api.Domain;
-using FluentValidation;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using AutoRenter.Api.Domain;
+using FluentValidation;
+
 
 namespace AutoRenter.Api.Validation
 {

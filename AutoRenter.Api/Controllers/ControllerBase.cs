@@ -1,6 +1,6 @@
-﻿using AutoRenter.Api.Domain;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using AutoRenter.Api.Domain;
 
 namespace AutoRenter.Api.Controllers
 {
