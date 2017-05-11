@@ -8,8 +8,9 @@ using AutoRenter.Api.Commands;
 
 namespace AutoRenter.Api.DomainServices
 {
-    public class SkuService : ISkuService, IDomainService
+    public class SkuService : ISkuService, IDomainService, IDisposable
     {
+        private bool disposed = false;
         private readonly AutoRenterContext context;
         private readonly IValidationService validationService;
         public SkuService(AutoRenterContext context, IValidationService validationService)
@@ -69,6 +70,24 @@ namespace AutoRenter.Api.DomainServices
 
             var command = CommandFactory<Sku>.CreateUpdateCommand(context);
             return await command.Execute(sku);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    context.Dispose();
+                    disposed = true;
+                }
+            }
         }
     }
 }

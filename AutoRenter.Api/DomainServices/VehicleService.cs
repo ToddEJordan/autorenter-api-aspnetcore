@@ -8,8 +8,9 @@ using AutoRenter.Api.Commands;
 
 namespace AutoRenter.Api.DomainServices
 {
-    public class VehicleService : IVehicleService, IDomainService
+    public class VehicleService : IVehicleService, IDomainService, IDisposable
     {
+        private bool disposed = false;
         private readonly AutoRenterContext context;
         private readonly IValidationService validationService;
 
@@ -70,6 +71,24 @@ namespace AutoRenter.Api.DomainServices
 
             var command = CommandFactory<Vehicle>.CreateUpdateCommand(context);
             return await command.Execute(vehicle);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    context.Dispose();
+                    disposed = true;
+                }
+            }
         }
     }
 }

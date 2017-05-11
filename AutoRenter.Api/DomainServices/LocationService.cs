@@ -10,8 +10,9 @@ using AutoRenter.Api.DomainInterfaces;
 
 namespace AutoRenter.Api.DomainServices
 {
-    public class LocationService : ILocationService, IDomainService
+    public class LocationService : ILocationService, IDomainService, IDisposable
     {
+        private bool disposed = false;
         private readonly AutoRenterContext context;
         private readonly IVehicleService vehicleService;
         private readonly IValidationService validationService;
@@ -113,6 +114,24 @@ namespace AutoRenter.Api.DomainServices
             }
 
             return new Result<IEnumerable<Vehicle>>(ResultCode.Success, locationResult.Data.Vehicles);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    context.Dispose();
+                    disposed = true;
+                }
+            }
         }
     }
 }
