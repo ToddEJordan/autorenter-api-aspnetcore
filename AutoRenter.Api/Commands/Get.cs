@@ -2,10 +2,11 @@
 using AutoRenter.Api.Domain;
 using System;
 using System.Threading.Tasks;
+using AutoRenter.Api.Commands.Interfaces;
 
 namespace AutoRenter.Api.Commands
 {
-    public class Get<T>
+    public class Get<T> : IGetCommand<T>
         where T : class, IEntity
     {
         private readonly AutoRenterContext context;

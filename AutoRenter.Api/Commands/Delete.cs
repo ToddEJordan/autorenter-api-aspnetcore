@@ -1,12 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
-
+﻿using System.Threading.Tasks;
 using AutoRenter.Api.Data;
 using AutoRenter.Api.Domain;
+using AutoRenter.Api.Commands.Interfaces;
 
 namespace AutoRenter.Api.Commands
 {
-    public class Delete<T>
+    public class Delete<T> : IDeleteCommand<T>
         where T : class, IEntity
     {
         private readonly AutoRenterContext context;

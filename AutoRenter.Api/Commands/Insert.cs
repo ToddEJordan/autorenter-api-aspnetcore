@@ -1,13 +1,12 @@
-﻿using AutoRenter.Api.Data;
-using AutoRenter.Api.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
+using AutoRenter.Api.Data;
+using AutoRenter.Api.Domain;
+using AutoRenter.Api.Commands.Interfaces;
 
 namespace AutoRenter.Api.Commands
 {
-    public class Insert<T>
+    public class Insert<T> : IInsertCommand<T>
         where T : class, IEntity
     {
         private readonly AutoRenterContext context;

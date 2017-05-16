@@ -1,13 +1,13 @@
-﻿using AutoRenter.Api.Data;
-using AutoRenter.Api.Domain;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoRenter.Api.Data;
+using AutoRenter.Api.Domain;
+using AutoRenter.Api.Commands.Interfaces;
 
 namespace AutoRenter.Api.Commands
 {
-    public class GetAll<T>
+    public class GetAll<T> : IGetAllCommand<T>
         where T : class, IEntity
     {
         private readonly AutoRenterContext context;
@@ -16,7 +16,7 @@ namespace AutoRenter.Api.Commands
             this.context = context;
         }
 
-        public Result<IEnumerable<T>> Execute()
+        public async Task<Result<IEnumerable<T>>> Execute()
         {
             var all = context.Set<T>();
 
