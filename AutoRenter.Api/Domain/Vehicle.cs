@@ -11,7 +11,9 @@ namespace AutoRenter.Api.Domain
         public Guid Id { get; set; }
 
         public string Vin { get; set; }
+        //[ForeignKey("Make")]
         public string MakeId { get; set; }
+        //[ForeignKey("Model")]
         public string ModelId { get; set; }
         public int Year { get; set; }
         public int Miles { get; set; }
@@ -22,6 +24,7 @@ namespace AutoRenter.Api.Domain
         [ForeignKey("Location")]
         public Guid LocationId { get; set; }
 
-        public virtual Location Location { get; set; }
+        public virtual Make Make { get; set; }
+        public virtual Model Model { get; set; }
     }
 }
