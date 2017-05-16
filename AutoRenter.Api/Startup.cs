@@ -108,13 +108,11 @@ namespace AutoRenter.Api
 
         private static void ConfigureDIForDomainServices(IServiceCollection services)
         {
-            //Assembly ass = Assembly.GetEntryAssembly();
             Assembly ass = Assembly.Load(new AssemblyName("AutoRenter.Domain.Services"));
             foreach (TypeInfo ti in ass.DefinedTypes
                 .Where(x => x.ImplementedInterfaces.Contains(typeof(IDomainService))))
             {
                 var interfaceType = ti.ImplementedInterfaces.FirstOrDefault(x => x.Name == $"I{ti.Name}");
-                //var serviceType = Assembly.GetEntryAssembly().GetType(ti.FullName);
                 var serviceType = ass.GetType(ti.FullName);
                 services.AddScoped(interfaceType, serviceType);
             }
