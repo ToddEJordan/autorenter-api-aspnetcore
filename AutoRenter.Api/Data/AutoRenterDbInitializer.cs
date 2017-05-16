@@ -56,9 +56,9 @@ namespace AutoRenter.Api.Data
             if (!_context.Makes.Any())
             {
                 ICollection<Make> makes = new List<Make> {
-                    new Make{Id = "tsl", Name = "Tesla"},
-                    new Make{Id = "che", Name = "Chevrolet"},
-                    new Make{Id = "frd", Name = "Ford"}
+                    new Make{Id = new Guid("c9224dfe-32c5-4d77-b6fc-b14a7ed1bfb2"), ExternalId = "tsl", Name = "Tesla"},
+                    new Make{Id = new Guid("b865eb42-e21c-4288-84ea-00bd10f050ec"), ExternalId = "che", Name = "Chevrolet"},
+                    new Make{Id = new Guid("e54c86c9-7ebe-49f1-9e8a-1c54dab8ba92"), ExternalId = "frd", Name = "Ford"}
                 };
                 foreach (var make in makes)
                     _context.Makes.Add(make);
@@ -72,11 +72,11 @@ namespace AutoRenter.Api.Data
             if (!_context.Models.Any())
             {
                 ICollection<Model> models = new List<Model> {
-                    new Model{Id = "tms", Name = "Model S"},
-                    new Model{Id = "tmx", Name = "Model X"},
-                    new Model{Id = "cvt", Name = "Corvette"},
-                    new Model{Id = "fxp", Name = "Explorer"},
-                    new Model{Id = "fta", Name = "Taurus"}
+                    new Model{Id = new Guid("5bc8fd2c-0fa5-4618-9462-df1334c97958"), ExternalId = "tms", Name = "Model S"},
+                    new Model{Id = new Guid("6b0e0dc3-cf8e-4476-b156-e0d63aa2a08b"), ExternalId = "tmx", Name = "Model X"},
+                    new Model{Id = new Guid("4e1b13cc-4d42-401c-9889-b4cce23f0d73"), ExternalId = "cvt", Name = "Corvette"},
+                    new Model{Id = new Guid("8078bc4b-0af4-4ce3-9713-c148883a609d"), ExternalId = "fxp", Name = "Explorer"},
+                    new Model{Id = new Guid("f5ce77c3-95a6-41d6-81be-a4b9c2367dd3"), ExternalId = "fta", Name = "Taurus"}
                 };
                 foreach (var model in models)
                 _context.Models.Add(model);
