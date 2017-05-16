@@ -1,20 +1,20 @@
 using System;
 using System.Collections.Generic;
 using Xunit;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using AutoRenter.Domain.Models;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Api.Controllers;
 using Moq;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 namespace AutoRenter.Api.Tests
 {
     public class LocationsControllerTests
     {
         [Fact]
-        public async void GetAll_ReturnsData()
+        public async void GetAll_WhenFound()
         {
             // arrange
             var locationServiceMoq = new Mock<ILocationService>();
@@ -36,6 +36,28 @@ namespace AutoRenter.Api.Tests
             Assert.NotNull(okResult);
             Assert.Equal(200, okResult.StatusCode);
             Assert.NotEmpty(response.Values);
+        }
+
+        [Fact]
+        public async void GetAll_WhenNotFound()
+        {
+            // arrange
+            var locationServiceMoq = new Mock<ILocationService>();
+            locationServiceMoq.Setup(x => x.GetAll())
+                .ReturnsAsync(() => new Result<IEnumerable<Location>>(ResultCode.NotFound));
+            var validationServiceMoq = new Mock<IValidationService>();
+
+            var sut = new LocationsController(locationServiceMoq.Object, validationServiceMoq.Object)
+            {
+                ControllerContext = DefaultControllerContext()
+            };
+
+            // act
+            var result = await sut.GetAll();
+            var notFoundResult = result as NotFoundResult;
+            
+            // assert
+            Assert.NotNull(notFoundResult);
         }
 
         [Fact]
@@ -86,6 +108,29 @@ namespace AutoRenter.Api.Tests
             // assert
             Assert.NotNull(notFoundResult);
             Assert.Equal(404, notFoundResult.StatusCode);
+        }
+
+        [Fact]
+        public async void Get_WithBadId()
+        {
+            // arrange
+            var targetId = Guid.Empty;
+            var locationServiceMoq = new Mock<ILocationService>();
+            locationServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
+                .ReturnsAsync(() => new Result<Location>(ResultCode.Success, TestLocation()));
+            var validationServiceMoq = new Mock<IValidationService>();
+
+            var sut = new LocationsController(locationServiceMoq.Object, validationServiceMoq.Object)
+            {
+                ControllerContext = DefaultControllerContext()
+            };
+
+            // act
+            var result = await sut.Get(targetId);
+            var badRequestResult = result as BadRequestObjectResult;
+
+            // assert
+            Assert.NotNull(badRequestResult);
         }
 
         [Fact]
