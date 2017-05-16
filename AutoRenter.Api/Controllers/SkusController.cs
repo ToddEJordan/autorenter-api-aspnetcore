@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using AutoRenter.Api.DomainInterfaces;
-using AutoRenter.Api.Domain;
 using System.Linq;
+using AutoRenter.Domain.Interfaces;
+using AutoRenter.Domain.Models;
 
 namespace AutoRenter.Api.Controllers
 {

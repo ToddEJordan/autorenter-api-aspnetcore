@@ -1,29 +1,29 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿//using MediatR;
+//using Microsoft.AspNetCore.Authorization;
+//using Microsoft.AspNetCore.Mvc;
 
-namespace AutoRenter.Api.Features.Logs
-{
-    [Route("api/[controller]")]
-    public class LogController : Controller
-    {
-        private readonly IMediator _mediator;
+//namespace AutoRenter.Api.Features.Logs
+//{
+//    [Route("api/[controller]")]
+//    public class LogController : Controller
+//    {
+//        private readonly IMediator _mediator;
 
-        public LogController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+//        public LogController(IMediator mediator)
+//        {
+//            _mediator = mediator;
+//        }
 
-        [HttpPost]
-        [AllowAnonymous]
-        public IActionResult Post([FromBody] Post.Command command)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+//        [HttpPost]
+//        [AllowAnonymous]
+//        public IActionResult Post([FromBody] Post.Command command)
+//        {
+//            if (!ModelState.IsValid)
+//                return BadRequest(ModelState);
 
-            _mediator.Send(command);
+//            _mediator.Send(command);
 
-            return StatusCode(201);
-        }
-    }
-}
+//            return StatusCode(201);
+//        }
+//    }
+//}

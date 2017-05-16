@@ -2,13 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoRenter.Api.Domain;
-using AutoRenter.Api.Services;
+using AutoRenter.Domain.Models;
+using AutoRenter.Domain.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using AutoRenter.Api.DomainInterfaces;
+using AutoRenter.Domain.Interfaces;
 using System.Linq;
 
 namespace AutoRenter.Api.Controllers

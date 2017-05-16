@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using DomainLocation = AutoRenter.Api.Domain.Location;
+using DomainLocation = AutoRenter.Domain.Models.Location;
 
 namespace AutoRenter.Api.Models
 {

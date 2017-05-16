@@ -3,14 +3,6 @@ using System.Net;
 using System.Text;
 using System.Reflection;
 using System.Linq;
-using AutoMapper;
-using AutoRenter.Api;
-using AutoRenter.Api.Authorization;
-using AutoRenter.Api.Data;
-using AutoRenter.Api.Authentication;
-using AutoRenter.Api.Infrastructure;
-using AutoRenter.Api.Services;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
@@ -24,8 +16,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using Microsoft.IdentityModel.Tokens;
-using AutoRenter.Api.DomainInterfaces;
-using AutoRenter.Api.DomainServices;
+using AutoRenter.Api;
+using AutoRenter.Api.Authorization;
+using AutoRenter.Api.Data;
+using AutoRenter.Api.Authentication;
+using AutoRenter.Api.Infrastructure;
+using MediatR;
+using AutoRenter.Domain.Interfaces;
+using AutoRenter.Domain.Services;
 
 namespace AutoRenter.Api
 {
@@ -61,8 +59,8 @@ namespace AutoRenter.Api
 
         private static void ConfigureAutoMapper(IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(Startup));
-            Mapper.AssertConfigurationIsValid();
+            //services.AddAutoMapper(typeof(Startup));
+            //Mapper.AssertConfigurationIsValid();
         }
 
         private static void ConfigureMediatR(IServiceCollection services)
@@ -103,19 +101,21 @@ namespace AutoRenter.Api
         {
             ConfigureDIForDomainServices(services);
 
-            services.AddTransient<IResponseConverter, ResponseConverter>();
+            //services.AddTransient<IResponseConverter, ResponseConverter>();
             services.AddTransient<ITokenManager, TokenManager>();
             services.AddTransient<IAuthenticateUser, AuthenticateUser>();
         }
 
         private static void ConfigureDIForDomainServices(IServiceCollection services)
         {
-            Assembly ass = Assembly.GetEntryAssembly();
+            //Assembly ass = Assembly.GetEntryAssembly();
+            Assembly ass = Assembly.Load(new AssemblyName("AutoRenter.Domain.Services"));
             foreach (TypeInfo ti in ass.DefinedTypes
                 .Where(x => x.ImplementedInterfaces.Contains(typeof(IDomainService))))
             {
                 var interfaceType = ti.ImplementedInterfaces.FirstOrDefault(x => x.Name == $"I{ti.Name}");
-                var serviceType = Assembly.GetEntryAssembly().GetType(ti.FullName);
+                //var serviceType = Assembly.GetEntryAssembly().GetType(ti.FullName);
+                var serviceType = ass.GetType(ti.FullName);
                 services.AddScoped(interfaceType, serviceType);
             }
         }
