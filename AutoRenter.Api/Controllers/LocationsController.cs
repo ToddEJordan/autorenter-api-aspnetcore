@@ -25,16 +25,17 @@ namespace AutoRenter.Api.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var result = locationService.GetAll();
+            var result = await locationService.GetAll();
             if (result.ResultCode == ResultCode.Success)
             {
                 var formattedResult = new Dictionary<string, object>
                 {
                     { "locations", result.Data }
                 };
-                Response.Headers.Add("x-total-count", result.Data.ToString());
+                Response.Headers.Add("x-total-count", result.Data.Count().ToString());
+                Response.Headers.Add("Content-Length", result.Data.ToString().ToCharArray().Count().ToString());
                 return Ok(formattedResult);
             }
 

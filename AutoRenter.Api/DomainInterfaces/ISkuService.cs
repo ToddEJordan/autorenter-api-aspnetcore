@@ -7,7 +7,7 @@ namespace AutoRenter.Api.DomainInterfaces
 {
     public interface ISkuService
     {
-        Result<IEnumerable<Sku>> GetAll();
+        Task<Result<IEnumerable<Sku>>> GetAll();
         Task<Result<Sku>> Get(Guid id);
         Task<Result<Guid>> Insert(Sku sku);
         Task<Result<Guid>> Update(Sku sku);

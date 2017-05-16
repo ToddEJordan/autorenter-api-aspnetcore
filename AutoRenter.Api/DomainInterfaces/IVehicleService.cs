@@ -7,7 +7,7 @@ namespace AutoRenter.Api.DomainInterfaces
 {
     public interface IVehicleService
     {
-        Result<IEnumerable<Vehicle>> GetAll();
+        Task<Result<IEnumerable<Vehicle>>> GetAll();
         Task<Result<Vehicle>> Get(Guid id);
         Task<Result<Guid>> Insert(Vehicle vehicle);
         Task<Result<Guid>> Update(Vehicle vehicle);

@@ -13,11 +13,18 @@ namespace AutoRenter.Api.DomainServices
         private bool disposed = false;
         private readonly AutoRenterContext context;
         private readonly IValidationService validationService;
+        private readonly IMakeService makeService;
+        private readonly IModelService modelService;
 
-        public VehicleService(AutoRenterContext context, IValidationService validationService)
+        public VehicleService(AutoRenterContext context, 
+            IValidationService validationService, 
+            IMakeService makeService,
+            IModelService modelService)
         {
             this.context = context;
             this.validationService = validationService;
+            this.makeService = makeService;
+            this.modelService = modelService;
         }
 
         public async Task<ResultCode> Delete(Guid id)
@@ -42,13 +49,37 @@ namespace AutoRenter.Api.DomainServices
         public async Task<Result<Vehicle>> Get(Guid id)
         {
             var command = CommandFactory<Vehicle>.CreateGetCommand(context);
-            return await command.Execute(id);
+            var result = await command.Execute(id);
+
+            if (result.ResultCode != ResultCode.Success)
+            {
+                return result;
+            }
+
+            var makeResult = await makeService.Get(result.Data.MakeId);
+            result.Data.Make = makeResult.Data;
+
+            var modelResult = await modelService.Get(result.Data.ModelId);
+            result.Data.Model = modelResult.Data;
+
+            return result;
         }
 
-        public Result<IEnumerable<Vehicle>> GetAll()
+        public async Task<Result<IEnumerable<Vehicle>>> GetAll()
         {
             var command = CommandFactory<Vehicle>.CreateGetAllCommand(context);
-            return command.Execute();
+            var result = await command.Execute();
+
+            foreach (var vehicle in result.Data)
+            {
+                var makeResult = await makeService.Get(vehicle.MakeId);
+                vehicle.Make = makeResult.Data;
+
+                var modelResult = await modelService.Get(vehicle.ModelId);
+                vehicle.Model = modelResult.Data;
+            }
+
+            return result;
         }
 
         public async Task<Result<Guid>> Insert(Vehicle vehicle)

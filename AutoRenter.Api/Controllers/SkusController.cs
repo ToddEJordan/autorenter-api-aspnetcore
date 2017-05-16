@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using AutoRenter.Api.DomainInterfaces;
 using AutoRenter.Api.Domain;
+using System.Linq;
 
 namespace AutoRenter.Api.Controllers
 {
@@ -19,16 +20,17 @@ namespace AutoRenter.Api.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var result = skuService.GetAll();
+            var result = await skuService.GetAll();
             if (result.ResultCode == ResultCode.Success)
             {
                 var formattedResult = new Dictionary<string, object>
                 {
                     { "skus", result.Data }
                 };
-                Response.Headers.Add("x-total-count", result.Data.ToString());
+                Response.Headers.Add("x-total-count", result.Data.Count().ToString());
+                Response.Headers.Add("Content-Length", result.Data.ToString().ToCharArray().Count().ToString());
                 return Ok(formattedResult);
             }
 

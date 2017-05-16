@@ -9,6 +9,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using AutoRenter.Api.DomainInterfaces;
+using System.Linq;
 
 namespace AutoRenter.Api.Controllers
 {
@@ -23,16 +24,17 @@ namespace AutoRenter.Api.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var result = vehicleService.GetAll();
+            var result = await vehicleService.GetAll();
             if (result.ResultCode == ResultCode.Success)
             {
                 var formattedResult = new Dictionary<string, object>
                 {
                     { "vehicles", result.Data }
                 };
-                Response.Headers.Add("x-total-count", result.Data.ToString());
+                Response.Headers.Add("x-total-count", result.Data.Count().ToString());
+                Response.Headers.Add("Content-Length", result.Data.ToString().ToCharArray().Count().ToString());
                 return Ok(formattedResult);
             }
 

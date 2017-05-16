@@ -7,7 +7,7 @@ namespace AutoRenter.Api.DomainInterfaces
 {
     public interface ILocationService
     {
-        Result<IEnumerable<Location>> GetAll();
+        Task<Result<IEnumerable<Location>>> GetAll();
         Task<Result<Location>> Get(Guid id);
         Task<Result<Guid>> Insert(Location location);
         Task<Result<Guid>> Update(Location location);

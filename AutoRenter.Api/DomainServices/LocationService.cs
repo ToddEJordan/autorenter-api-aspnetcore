@@ -23,16 +23,35 @@ namespace AutoRenter.Api.DomainServices
             this.validationService = validationService;
         }
 
-        public Result<IEnumerable<Location>> GetAll()
+        public async Task<Result<IEnumerable<Location>>> GetAll()
         {
             var command = CommandFactory<Location>.CreateGetAllCommand(context);
-            return command.Execute();
+            var result = await command.Execute();
+
+            foreach (var location in result.Data)
+            {
+                var vehiclesResult = await GetVehicles(location.Id);
+                if (vehiclesResult.ResultCode == ResultCode.Success)
+                {
+                    location.Vehicles = vehiclesResult.Data.ToList();
+                }
+            }
+
+            return result;
         }
 
         public async Task<Result<Location>> Get(Guid id)
         {
             var command = CommandFactory<Location>.CreateGetCommand(context);
-            return await command.Execute(id);
+            var result = await command.Execute(id);
+
+            var vehicleResult = await GetVehicles(result.Data.Id);
+            if (vehicleResult.ResultCode == ResultCode.Success)
+            {
+                result.Data.Vehicles = vehicleResult.Data.ToList();
+            }
+
+            return result;
         }
 
         public async Task<Result<Guid>> Insert(Location location)
@@ -108,12 +127,18 @@ namespace AutoRenter.Api.DomainServices
             var locationResult = await command.Execute(locationId);
 
             if (locationResult.ResultCode != ResultCode.Success
-                || locationResult.Data == null || !locationResult.Data.Vehicles.Any())
+                || locationResult.Data == null)
             {
                 return new Result<IEnumerable<Vehicle>>(ResultCode.NotFound);
             }
 
-            return new Result<IEnumerable<Vehicle>>(ResultCode.Success, locationResult.Data.Vehicles);
+            var vehicles = context.Vehicles.Where(x => x.LocationId == locationId);
+            if (vehicles == null || !vehicles.Any())
+            {
+                return new Result<IEnumerable<Vehicle>>(ResultCode.NotFound);
+            }
+
+            return new Result<IEnumerable<Vehicle>>(ResultCode.Success, vehicles.ToList());
         }
 
         public void Dispose()
