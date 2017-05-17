@@ -12,5 +12,6 @@ namespace AutoRenter.Domain.Interfaces
         Task<Result<Guid>> Insert(Vehicle vehicle);
         Task<Result<Guid>> Update(Vehicle vehicle);
         Task<ResultCode> Delete(Guid id);
+        Task<Result<IEnumerable<Vehicle>>> GetByLocationId(Guid locationId);
     }
 }

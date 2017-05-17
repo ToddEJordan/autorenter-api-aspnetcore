@@ -6,6 +6,7 @@ using AutoRenter.Api.Data;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Domain.Services.Commands;
 using AutoRenter.Domain.Models;
+using System.Diagnostics;
 
 namespace AutoRenter.Domain.Services
 {
@@ -27,9 +28,14 @@ namespace AutoRenter.Domain.Services
             var command = CommandFactory<Location>.CreateGetAllCommand(context);
             var result = await command.Execute();
 
+            if (result.ResultCode != ResultCode.Success)
+            {
+                return result;
+            }
+
             foreach (var location in result.Data)
             {
-                var vehiclesResult = await GetVehicles(location.Id);
+                var vehiclesResult = await vehicleService.GetByLocationId(location.Id);
                 if (vehiclesResult.ResultCode == ResultCode.Success)
                 {
                     location.Vehicles = vehiclesResult.Data.ToList();
@@ -44,7 +50,12 @@ namespace AutoRenter.Domain.Services
             var command = CommandFactory<Location>.CreateGetCommand(context);
             var result = await command.Execute(id);
 
-            var vehicleResult = await GetVehicles(result.Data.Id);
+            if (result.ResultCode != ResultCode.Success)
+            {
+                return result;
+            }
+
+            var vehicleResult = await vehicleService.GetByLocationId(id);
             if (vehicleResult.ResultCode == ResultCode.Success)
             {
                 result.Data.Vehicles = vehicleResult.Data.ToList();
@@ -122,22 +133,7 @@ namespace AutoRenter.Domain.Services
 
         public async Task<Result<IEnumerable<Vehicle>>> GetVehicles(Guid locationId)
         {
-            var command = CommandFactory<Location>.CreateGetCommand(context);
-            var locationResult = await command.Execute(locationId);
-
-            if (locationResult.ResultCode != ResultCode.Success
-                || locationResult.Data == null)
-            {
-                return new Result<IEnumerable<Vehicle>>(ResultCode.NotFound);
-            }
-
-            var vehicles = context.Vehicles.Where(x => x.LocationId == locationId);
-            if (vehicles == null || !vehicles.Any())
-            {
-                return new Result<IEnumerable<Vehicle>>(ResultCode.NotFound);
-            }
-
-            return new Result<IEnumerable<Vehicle>>(ResultCode.Success, vehicles.ToList());
+            return await vehicleService.GetByLocationId(locationId);
         }
 
         public void Dispose()

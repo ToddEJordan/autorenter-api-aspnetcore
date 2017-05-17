@@ -5,6 +5,7 @@ using AutoRenter.Api.Data;
 using AutoRenter.Domain.Models;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Domain.Services.Commands;
+using System.Linq;
 
 namespace AutoRenter.Domain.Services
 {
@@ -63,6 +64,26 @@ namespace AutoRenter.Domain.Services
             result.Data.Model = modelResult.Data;
 
             return result;
+        }
+
+        public async Task<Result<IEnumerable<Vehicle>>> GetByLocationId(Guid locationId)
+        {
+            var command = CommandFactory<Location>.CreateGetCommand(context);
+            var locationResult = await command.Execute(locationId);
+
+            if (locationResult.ResultCode != ResultCode.Success
+                || locationResult.Data == null)
+            {
+                return new Result<IEnumerable<Vehicle>>(ResultCode.NotFound);
+            }
+
+            var vehicles = context.Vehicles.Where(x => x.LocationId == locationId);
+            if (vehicles == null || !vehicles.Any())
+            {
+                return new Result<IEnumerable<Vehicle>>(ResultCode.NotFound);
+            }
+
+            return new Result<IEnumerable<Vehicle>>(ResultCode.Success, vehicles.ToList());
         }
 
         public async Task<Result<IEnumerable<Vehicle>>> GetAll()
