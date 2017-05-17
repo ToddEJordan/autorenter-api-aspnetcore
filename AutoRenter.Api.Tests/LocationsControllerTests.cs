@@ -33,9 +33,7 @@ namespace AutoRenter.Api.Tests
             var response = okResult.Value as Dictionary<string, object>;
 
             // assert
-            Assert.NotNull(okResult);
             Assert.Equal(200, okResult.StatusCode);
-            Assert.NotEmpty(response.Values);
         }
 
         [Fact]
@@ -61,6 +59,29 @@ namespace AutoRenter.Api.Tests
         }
 
         [Fact]
+        public async void GetAll_ReturnsData()
+        {
+            // arrange
+            var locationServiceMoq = new Mock<ILocationService>();
+            locationServiceMoq.Setup(x => x.GetAll())
+                .ReturnsAsync(() => new Result<IEnumerable<Location>>(ResultCode.Success, TestLocations()));
+            var validationServiceMoq = new Mock<IValidationService>();
+
+            var sut = new LocationsController(locationServiceMoq.Object, validationServiceMoq.Object)
+            {
+                ControllerContext = DefaultControllerContext()
+            };
+
+            // act
+            var result = await sut.GetAll();
+            var okResult = result as OkObjectResult;
+            var response = okResult.Value as Dictionary<string, object>;
+
+            // assert
+            Assert.NotNull(response.Values);
+        }
+
+        [Fact]
         public async void Get_WhenFound()
         {
             // arrange
@@ -81,9 +102,7 @@ namespace AutoRenter.Api.Tests
             var response = okResult.Value as Dictionary<string, object>;
 
             // assert
-            Assert.NotNull(okResult);
             Assert.Equal(200, okResult.StatusCode);
-            Assert.NotNull(response.Values.FirstOrDefault());
         }
 
         [Fact]
@@ -106,7 +125,6 @@ namespace AutoRenter.Api.Tests
             var notFoundResult = result as NotFoundResult;
 
             // assert
-            Assert.NotNull(notFoundResult);
             Assert.Equal(404, notFoundResult.StatusCode);
         }
 
@@ -131,6 +149,30 @@ namespace AutoRenter.Api.Tests
 
             // assert
             Assert.NotNull(badRequestResult);
+        }
+
+        [Fact]
+        public async void Get_ReturnsData()
+        {
+            // arrange
+            var targetId = new Guid("a341dc33-fe65-4c8d-a7b5-16be1741c02e");
+            var locationServiceMoq = new Mock<ILocationService>();
+            locationServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
+                .ReturnsAsync(() => new Result<Location>(ResultCode.Success, TestLocation()));
+            var validationServiceMoq = new Mock<IValidationService>();
+
+            var sut = new LocationsController(locationServiceMoq.Object, validationServiceMoq.Object)
+            {
+                ControllerContext = DefaultControllerContext()
+            };
+
+            // act
+            var result = await sut.Get(targetId);
+            var okResult = result as OkObjectResult;
+            var response = okResult.Value as Dictionary<string, object>;
+
+            // assert
+            Assert.NotNull(response.Values);
         }
 
         [Fact]
@@ -182,6 +224,31 @@ namespace AutoRenter.Api.Tests
         }
 
         [Fact]
+        public async void Post_WhenConflict()
+        {
+            // arrange
+            var testLocation = TestLocation();
+            var locationServiceMoq = new Mock<ILocationService>();
+            locationServiceMoq.Setup(x => x.Insert(It.IsAny<Location>()))
+                .ReturnsAsync(() => new Result<Guid>(ResultCode.Conflict, testLocation.Id));
+            var validationServiceMoq = new Mock<IValidationService>();
+            validationServiceMoq.Setup(x => x.IsValidUpdate(It.IsAny<Location>()))
+                .ReturnsAsync(() => true);
+
+            var sut = new LocationsController(locationServiceMoq.Object, validationServiceMoq.Object)
+            {
+                ControllerContext = DefaultControllerContext()
+            };
+
+            // act
+            var result = await sut.Post(testLocation);
+            var conflictResult = result as StatusCodeResult;
+
+            // assert
+            Assert.Equal(409, conflictResult.StatusCode);
+        }
+
+        [Fact]
         public async void Put_WhenValid()
         {
             // arrange
@@ -204,7 +271,6 @@ namespace AutoRenter.Api.Tests
 
             // assert
             Assert.NotNull(okResult);
-            Assert.NotNull(okResult.Value);
         }
 
         [Fact]
@@ -230,32 +296,6 @@ namespace AutoRenter.Api.Tests
 
             // assert
             Assert.NotNull(badRequestResult);
-        }
-
-        [Fact]
-        public async void Put_WhenConflict()
-        {
-            // arrange
-            var testLocation = TestLocation();
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Update(It.IsAny<Location>()))
-                .ReturnsAsync(() => new Result<Guid>(ResultCode.Conflict, testLocation.Id));
-            var validationServiceMoq = new Mock<IValidationService>();
-            validationServiceMoq.Setup(x => x.IsValidUpdate(It.IsAny<Location>()))
-                .ReturnsAsync(() => true);
-
-            var sut = new LocationsController(locationServiceMoq.Object, validationServiceMoq.Object)
-            {
-                ControllerContext = DefaultControllerContext()
-            };
-
-            // act
-            var result = await sut.Put(testLocation.Id, testLocation);
-            var conflictResult = result as StatusCodeResult;
-
-            // assert
-            Assert.NotNull(conflictResult);
-            Assert.Equal(409, conflictResult.StatusCode);
         }
 
         [Fact]

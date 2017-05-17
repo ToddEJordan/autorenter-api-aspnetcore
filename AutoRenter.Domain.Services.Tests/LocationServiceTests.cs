@@ -6,9 +6,13 @@ namespace AutoRenter.Domain.Services.Tests
     public class LocationServiceTests
     {
         [Fact]
-        public void Test1()
+        public void GetAll_ReturnsData()
         {
+            // arrange
 
+            // act
+
+            // assert
         }
     }
 }
