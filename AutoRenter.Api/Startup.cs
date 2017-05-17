@@ -114,7 +114,7 @@ namespace AutoRenter.Api
             {
                 var interfaceType = ti.ImplementedInterfaces.FirstOrDefault(x => x.Name == $"I{ti.Name}");
                 var serviceType = ass.GetType(ti.FullName);
-                services.AddScoped(interfaceType, serviceType);
+                services.AddTransient(interfaceType, serviceType);
             }
         }
 
