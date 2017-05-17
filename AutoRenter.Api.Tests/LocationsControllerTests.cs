@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Xunit;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+using Xunit;
+using Moq;
 using AutoRenter.Domain.Models;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Api.Controllers;
-using Moq;
 
 namespace AutoRenter.Api.Tests
 {

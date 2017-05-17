@@ -12,6 +12,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\**" />
+    <Compile Remove="Interfaces\**" />
+    <Content Remove="Data\**" />
+    <Content Remove="Interfaces\**" />
+    <EmbeddedResource Remove="Data\**" />
+    <EmbeddedResource Remove="Interfaces\**" />
+    <None Remove="Data\**" />
+    <None Remove="Interfaces\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="wwwroot;**\*.cshtml;appsettings.json;web.config">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -40,7 +51,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="1.1.2" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="2.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink.Loader" Version="14.1.0" />
-    <PackageReference Include="moq" Version="4.7.10" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.1.3" />
   </ItemGroup>
 
@@ -50,11 +60,6 @@
     <ProjectReference Include="..\AutoRenter.Domain.Interfaces\AutoRenter.Domain.Interfaces.csproj" />
     <ProjectReference Include="..\AutoRenter.Domain.Models\AutoRenter.Domain.Models.csproj" />
     <ProjectReference Include="..\AutoRenter.Domain.Services\AutoRenter.Domain.Services.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Data\" />
-    <Folder Include="Interfaces\" />
   </ItemGroup>
 
 </Project>
