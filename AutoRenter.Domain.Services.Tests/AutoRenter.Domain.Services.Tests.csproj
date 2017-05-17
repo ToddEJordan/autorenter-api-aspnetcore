@@ -5,12 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="1.1.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    <PackageReference Include="Moq" Version="4.7.10" />
     <PackageReference Include="xunit" Version="2.2.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AutoRenter.Api.Data\AutoRenter.Api.Data.csproj" />
+    <ProjectReference Include="..\AutoRenter.Domain.Models\AutoRenter.Domain.Models.csproj" />
     <ProjectReference Include="..\AutoRenter.Domain.Services\AutoRenter.Domain.Services.csproj" />
   </ItemGroup>
 
