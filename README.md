@@ -23,14 +23,16 @@ These instructions will cover usage information for the API and the optional dev
 
 ## How To
 
-- Unless otherwise noted, all terminal commands must be issued from the project's root directory.
+- Unless otherwise noted, all terminal commands must be issued from the solution's root directory.
 
 ### Local Development
 
-1. Open the project folder in your favorite text editor (preferably VS Code)
-1. Run `dotnet restore` from the command line
-   1. Optionally run `dotnet build` if you prefer to build before running. Running will also build.
-1. Run `dotnet run` from the command line
+1. Open the project folder in your favorite text editor (preferably VS Code).
+1. Run `dotnet restore` from the command line to restore dependencies.
+1. Run `dotnet build` to build the solution.
+   1. Note: running will also build.
+1. To run tests, navigate to a test folder (e.g., `./AutoRenter.Api.Tests`) and run `dotnet test'.
+1. To run the app, navigate to the `AutoRenter.Api` folder and run `dotnet run`.
 
 ### Browse the app
 
