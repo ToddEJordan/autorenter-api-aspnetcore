@@ -6,7 +6,7 @@ using AutoRenter.Domain.Services.Commands.Interfaces;
 
 namespace AutoRenter.Domain.Services.Commands
 {
-    public class Update<T> : IUpdateCommand<T>
+    internal class Update<T> : IUpdateCommand<T>
         where T : class, IEntity
     {
         private readonly AutoRenterContext context;

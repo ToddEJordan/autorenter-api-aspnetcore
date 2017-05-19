@@ -6,7 +6,7 @@ using AutoRenter.Domain.Services.Commands.Interfaces;
 
 namespace AutoRenter.Domain.Services.Commands
 {
-    public class Insert<T> : IInsertCommand<T>
+    internal class Insert<T> : IInsertCommand<T>
         where T : class, IEntity
     {
         private readonly AutoRenterContext context;

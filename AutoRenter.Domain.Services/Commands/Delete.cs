@@ -5,7 +5,7 @@ using AutoRenter.Domain.Services.Commands.Interfaces;
 
 namespace AutoRenter.Domain.Services.Commands
 {
-    public class Delete<T> : IDeleteCommand<T>
+    internal class Delete<T> : IDeleteCommand<T>
         where T : class, IEntity
     {
         private readonly AutoRenterContext context;

@@ -6,7 +6,6 @@ using AutoRenter.Api.Data;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Domain.Services.Commands;
 using AutoRenter.Domain.Models;
-using System.Diagnostics;
 
 namespace AutoRenter.Domain.Services
 {

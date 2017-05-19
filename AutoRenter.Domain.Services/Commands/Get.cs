@@ -6,7 +6,7 @@ using AutoRenter.Domain.Services.Commands.Interfaces;
 
 namespace AutoRenter.Domain.Services.Commands
 {
-    public class Get<T> : IGetCommand<T>
+    internal class Get<T> : IGetCommand<T>
         where T : class, IEntity
     {
         private readonly AutoRenterContext context;

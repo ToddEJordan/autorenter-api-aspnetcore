@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AutoRenter.Api.Data\AutoRenter.Api.Data.csproj" />
+    <ProjectReference Include="..\AutoRenter.Domain.Interfaces\AutoRenter.Domain.Interfaces.csproj" />
     <ProjectReference Include="..\AutoRenter.Domain.Models\AutoRenter.Domain.Models.csproj" />
     <ProjectReference Include="..\AutoRenter.Domain.Services\AutoRenter.Domain.Services.csproj" />
   </ItemGroup>

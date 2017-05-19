@@ -7,7 +7,7 @@ using AutoRenter.Domain.Services.Commands.Interfaces;
 
 namespace AutoRenter.Domain.Services.Commands
 {
-    public class GetAll<T> : IGetAllCommand<T>
+    internal class GetAll<T> : IGetAllCommand<T>
         where T : class, IEntity
     {
         private readonly AutoRenterContext context;
