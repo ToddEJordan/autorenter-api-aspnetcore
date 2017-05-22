@@ -6,7 +6,7 @@
     <AssemblyName>AutoRenter.Api</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>autorenter-api-aspnetcore</PackageId>
-    <RuntimeFrameworkVersion>1.1.0</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion>1.1.2</RuntimeFrameworkVersion>
     <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net45+win8</PackageTargetFallback>
     <RootNamespace>AutoRenter.Api</RootNamespace>
   </PropertyGroup>
