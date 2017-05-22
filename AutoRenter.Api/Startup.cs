@@ -20,6 +20,7 @@ using AutoRenter.Api.Authorization;
 using AutoRenter.Api.Data;
 using AutoRenter.Api.Authentication;
 using AutoRenter.Api.Infrastructure;
+using AutoRenter.Api.Services;
 using MediatR;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Domain.Services;
@@ -89,6 +90,7 @@ namespace AutoRenter.Api
             ConfigureDIForDomainServices(services);
             ConfigureDIForFactories(services);
 
+            services.AddTransient<IResultCodeProcessor, ResultCodeProcessor>();
             services.AddTransient<ITokenManager, TokenManager>();
             services.AddTransient<IAuthenticateUser, AuthenticateUser>();
         }
@@ -108,7 +110,7 @@ namespace AutoRenter.Api
         private static void ConfigureDIForFactories(IServiceCollection services)
         {
             services.AddTransient(typeof(ICommandFactory<>), typeof(CommandFactory<>));
-            services.AddTransient(typeof(IValidatorFactory), typeof(ValidatorFactory));
+            services.AddTransient<IValidatorFactory, ValidatorFactory>();
         }
 
         private static void ConfigureMvc(IServiceCollection services)

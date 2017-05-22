@@ -7,6 +7,7 @@ using Moq;
 using AutoRenter.Domain.Models;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Api.Controllers;
+using AutoRenter.Api.Services;
 
 namespace AutoRenter.Api.OldTests.Controllers
 {
@@ -17,6 +18,7 @@ namespace AutoRenter.Api.OldTests.Controllers
         public async void GetAllReturnsData()
         {
             // arrange
+            var resultCodeProcessor = new ResultCodeProcessor();
             var goodLocations = GoodArrangement();
             var moqResult = new Result<IEnumerable<Location>>(ResultCode.Success, goodLocations);
 
@@ -24,7 +26,7 @@ namespace AutoRenter.Api.OldTests.Controllers
             locationServiceMoq.Setup(x => x.GetAll())
                 .ReturnsAsync(() => moqResult);
 
-            var locationsController = new LocationsController(locationServiceMoq.Object);
+            var locationsController = new LocationsController(locationServiceMoq.Object, resultCodeProcessor);
 
             // act
             var result = await locationsController.GetAll();

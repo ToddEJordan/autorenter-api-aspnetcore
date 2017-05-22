@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AutoRenter.Domain.Models;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Api.Data;
-using AutoRenter.Domain.Services.Commands;
 
 namespace AutoRenter.Domain.Services
 {

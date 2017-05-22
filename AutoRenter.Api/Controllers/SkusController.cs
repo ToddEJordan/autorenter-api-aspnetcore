@@ -1,21 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+using AutoRenter.Api.Services;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Domain.Models;
 
 namespace AutoRenter.Api.Controllers
 {
     [Route("api/skus")]
-    public class SkusController : ControllerBase
+    public class SkusController : Controller
     {
         private readonly ISkuService skuService;
-        public SkusController(ISkuService skuService)
+        private readonly IResultCodeProcessor resultCodeProcessor;
+        public SkusController(ISkuService skuService, IResultCodeProcessor resultCodeProcessor)
         {
             this.skuService = skuService;
+            this.resultCodeProcessor = resultCodeProcessor;
         }
 
         [HttpGet]
@@ -34,7 +37,7 @@ namespace AutoRenter.Api.Controllers
                 return Ok(formattedResult);
             }
 
-            return ProcessResultCode(result.ResultCode);
+            return resultCodeProcessor.Process(result.ResultCode);
         }
 
         [HttpGet("{id:Guid}", Name = "GetSku")]
@@ -51,7 +54,7 @@ namespace AutoRenter.Api.Controllers
                 return Ok(formattedResult);
             }
 
-            return ProcessResultCode(result.ResultCode);
+            return resultCodeProcessor.Process(result.ResultCode);
         }
 
         [HttpPut("{id}")]
@@ -69,7 +72,7 @@ namespace AutoRenter.Api.Controllers
                 return Ok(result.Data);
             }
 
-            return ProcessResultCode(result.ResultCode);
+            return resultCodeProcessor.Process(result.ResultCode);
         }
 
         [HttpPost]
@@ -87,7 +90,7 @@ namespace AutoRenter.Api.Controllers
                 return CreatedAtRoute("GetSku", new { id = result.Data }, result.Data);
             }
 
-            return ProcessResultCode(result.ResultCode);
+            return resultCodeProcessor.Process(result.ResultCode);
         }
 
         [HttpDelete("{id}")]
@@ -100,7 +103,7 @@ namespace AutoRenter.Api.Controllers
                 return NoContent();
             }
 
-            return ProcessResultCode(result);
+            return resultCodeProcessor.Process(result);
         }
     }
 }

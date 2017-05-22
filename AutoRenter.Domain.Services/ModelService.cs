@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
-using AutoRenter.Domain.Services.Commands;
 using AutoRenter.Api.Data;
 using AutoRenter.Domain.Models;
 using AutoRenter.Domain.Interfaces;

@@ -2,24 +2,24 @@
 using Microsoft.AspNetCore.Mvc;
 using AutoRenter.Domain.Models;
 
-namespace AutoRenter.Api.Controllers
+namespace AutoRenter.Api.Services
 {
-    public abstract class ControllerBase : Controller
+    public class ResultCodeProcessor : IResultCodeProcessor
     {
-        internal IActionResult ProcessResultCode(ResultCode resultCode)
+        public IActionResult Process(ResultCode resultCode)
         {
             switch (resultCode)
             {
                 case ResultCode.NotFound:
-                    return NotFound();
+                    return new NotFoundResult();
                 case ResultCode.Conflict:
-                    return StatusCode(StatusCodes.Status409Conflict);
+                    return new StatusCodeResult(StatusCodes.Status409Conflict);
                 case ResultCode.BadRequest:
-                    return BadRequest();
+                    return new BadRequestResult();
                 case ResultCode.Unknown:
                 case ResultCode.Failed:
                 default:
-                    return StatusCode(StatusCodes.Status500InternalServerError);
+                    return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
     }
