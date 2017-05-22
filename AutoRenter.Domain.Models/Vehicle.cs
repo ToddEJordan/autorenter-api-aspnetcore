@@ -11,9 +11,7 @@ namespace AutoRenter.Domain.Models
         public Guid Id { get; set; }
 
         public string Vin { get; set; }
-        //[ForeignKey("Make")]
         public string MakeId { get; set; }
-        //[ForeignKey("Model")]
         public string ModelId { get; set; }
         public int Year { get; set; }
         public int Miles { get; set; }
