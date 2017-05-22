@@ -19,9 +19,8 @@ namespace AutoRenter.Api.Tests
             var locationServiceMoq = new Mock<ILocationService>();
             locationServiceMoq.Setup(x => x.GetAll())
                 .ReturnsAsync(() => new Result<IEnumerable<Location>>(ResultCode.Success, TestLocations()));
-            var validationServiceMoq = new Mock<IValidationService>();
 
-            var sut = new LocationsController(locationServiceMoq.Object, validationServiceMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -42,9 +41,8 @@ namespace AutoRenter.Api.Tests
             var locationServiceMoq = new Mock<ILocationService>();
             locationServiceMoq.Setup(x => x.GetAll())
                 .ReturnsAsync(() => new Result<IEnumerable<Location>>(ResultCode.NotFound));
-            var validationServiceMoq = new Mock<IValidationService>();
 
-            var sut = new LocationsController(locationServiceMoq.Object, validationServiceMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -64,9 +62,8 @@ namespace AutoRenter.Api.Tests
             var locationServiceMoq = new Mock<ILocationService>();
             locationServiceMoq.Setup(x => x.GetAll())
                 .ReturnsAsync(() => new Result<IEnumerable<Location>>(ResultCode.Success, TestLocations()));
-            var validationServiceMoq = new Mock<IValidationService>();
 
-            var sut = new LocationsController(locationServiceMoq.Object, validationServiceMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -88,9 +85,8 @@ namespace AutoRenter.Api.Tests
             var locationServiceMoq = new Mock<ILocationService>();
             locationServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<Location>(ResultCode.Success, TestLocation()));
-            var validationServiceMoq = new Mock<IValidationService>();
 
-            var sut = new LocationsController(locationServiceMoq.Object, validationServiceMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -112,9 +108,8 @@ namespace AutoRenter.Api.Tests
             var locationServiceMoq = new Mock<ILocationService>();
             locationServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<Location>(ResultCode.NotFound));
-            var validationServiceMoq = new Mock<IValidationService>();
 
-            var sut = new LocationsController(locationServiceMoq.Object, validationServiceMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -135,9 +130,8 @@ namespace AutoRenter.Api.Tests
             var locationServiceMoq = new Mock<ILocationService>();
             locationServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<Location>(ResultCode.Success, TestLocation()));
-            var validationServiceMoq = new Mock<IValidationService>();
 
-            var sut = new LocationsController(locationServiceMoq.Object, validationServiceMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -158,9 +152,8 @@ namespace AutoRenter.Api.Tests
             var locationServiceMoq = new Mock<ILocationService>();
             locationServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<Location>(ResultCode.Success, TestLocation()));
-            var validationServiceMoq = new Mock<IValidationService>();
 
-            var sut = new LocationsController(locationServiceMoq.Object, validationServiceMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -181,11 +174,8 @@ namespace AutoRenter.Api.Tests
             var locationServiceMoq = new Mock<ILocationService>();
             locationServiceMoq.Setup(x => x.Insert(It.IsAny<Location>()))
                 .ReturnsAsync(() => new Result<Guid>(ResultCode.Success, TestLocation().Id));
-            var validationServiceMoq = new Mock<IValidationService>();
-            validationServiceMoq.Setup(x => x.IsValidInsert(It.IsAny<Location>()))
-                .ReturnsAsync(() => true);
 
-            var sut = new LocationsController(locationServiceMoq.Object, validationServiceMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -205,11 +195,8 @@ namespace AutoRenter.Api.Tests
             var locationServiceMoq = new Mock<ILocationService>();
             locationServiceMoq.Setup(x => x.Insert(It.IsAny<Location>()))
                 .ReturnsAsync(() => new Result<Guid>(ResultCode.BadRequest, TestLocation().Id));
-            var validationServiceMoq = new Mock<IValidationService>();
-            validationServiceMoq.Setup(x => x.IsValidInsert(It.IsAny<Location>()))
-                .ReturnsAsync(() => false);
 
-            var sut = new LocationsController(locationServiceMoq.Object, validationServiceMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -230,11 +217,8 @@ namespace AutoRenter.Api.Tests
             var locationServiceMoq = new Mock<ILocationService>();
             locationServiceMoq.Setup(x => x.Insert(It.IsAny<Location>()))
                 .ReturnsAsync(() => new Result<Guid>(ResultCode.Conflict, testLocation.Id));
-            var validationServiceMoq = new Mock<IValidationService>();
-            validationServiceMoq.Setup(x => x.IsValidUpdate(It.IsAny<Location>()))
-                .ReturnsAsync(() => true);
 
-            var sut = new LocationsController(locationServiceMoq.Object, validationServiceMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -255,11 +239,8 @@ namespace AutoRenter.Api.Tests
             var locationServiceMoq = new Mock<ILocationService>();
             locationServiceMoq.Setup(x => x.Update(It.IsAny<Location>()))
                 .ReturnsAsync(() => new Result<Guid>(ResultCode.Success, testLocation.Id));
-            var validationServiceMoq = new Mock<IValidationService>();
-            validationServiceMoq.Setup(x => x.IsValidUpdate(It.IsAny<Location>()))
-                .ReturnsAsync(() => true);
 
-            var sut = new LocationsController(locationServiceMoq.Object, validationServiceMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -281,10 +262,8 @@ namespace AutoRenter.Api.Tests
             locationServiceMoq.Setup(x => x.Update(It.IsAny<Location>()))
                 .ReturnsAsync(() => new Result<Guid>(ResultCode.BadRequest, testLocation.Id));
             var validationServiceMoq = new Mock<IValidationService>();
-            validationServiceMoq.Setup(x => x.IsValidUpdate(It.IsAny<Location>()))
-                .ReturnsAsync(() => false);
 
-            var sut = new LocationsController(locationServiceMoq.Object, validationServiceMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -304,11 +283,8 @@ namespace AutoRenter.Api.Tests
             var locationServiceMoq = new Mock<ILocationService>();
             locationServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
                 .ReturnsAsync(() => ResultCode.Success);
-            var validationServiceMoq = new Mock<IValidationService>();
-            validationServiceMoq.Setup(x => x.IsValidDelete(It.IsAny<Location>()))
-                .ReturnsAsync(() => true);
 
-            var sut = new LocationsController(locationServiceMoq.Object, validationServiceMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -328,11 +304,8 @@ namespace AutoRenter.Api.Tests
             var locationServiceMoq = new Mock<ILocationService>();
             locationServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
                 .ReturnsAsync(() => ResultCode.BadRequest);
-            var validationServiceMoq = new Mock<IValidationService>();
-            validationServiceMoq.Setup(x => x.IsValidDelete(It.IsAny<Location>()))
-                .ReturnsAsync(() => false);
 
-            var sut = new LocationsController(locationServiceMoq.Object, validationServiceMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -352,11 +325,8 @@ namespace AutoRenter.Api.Tests
             var locationServiceMoq = new Mock<ILocationService>();
             locationServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
                 .ReturnsAsync(() => ResultCode.NotFound);
-            var validationServiceMoq = new Mock<IValidationService>();
-            validationServiceMoq.Setup(x => x.IsValidDelete(It.IsAny<Location>()))
-                .ReturnsAsync(() => true);
 
-            var sut = new LocationsController(locationServiceMoq.Object, validationServiceMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -409,7 +379,7 @@ namespace AutoRenter.Api.Tests
             {
                 new Vehicle()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = vehicleId,
                     Color = "blue",
                     IsRentToOwn = false,
                     LocationId = locationId,

@@ -1,27 +1,34 @@
 ﻿using System.Threading.Tasks;
 using FluentValidation;
-using AutoRenter.Api.Validation;
 using AutoRenter.Domain.Interfaces;
+using IValidatorFactory = AutoRenter.Api.Validation.IValidatorFactory;
 
 namespace AutoRenter.Domain.Services
 {
     public class ValidationService : IValidationService, IDomainService
     {
+        private readonly IValidatorFactory validatorFactory;
+
+        public ValidationService(IValidatorFactory validatorFactory)
+        {
+            this.validatorFactory = validatorFactory;
+        }
+
         public async Task<bool> IsValidInsert<T>(T entity)
         {
-            var validator = ValidatorFactory.GetInsertInstance<T>();
+            var validator = validatorFactory.GetInsertInstance<T>();
             return await IsValid(validator, entity);
         }
 
         public async Task<bool> IsValidUpdate<T>(T entity)
         {
-            var validator = ValidatorFactory.GetUpdateInstance<T>();
+            var validator = validatorFactory.GetUpdateInstance<T>();
             return await IsValid(validator, entity);
         }
 
         public async Task<bool> IsValidDelete<T>(T entity)
         {
-            var validator = ValidatorFactory.GetDeleteInstance<T>();
+            var validator = validatorFactory.GetDeleteInstance<T>();
             return await IsValid(validator, entity);
         }
 

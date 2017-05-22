@@ -4,9 +4,13 @@ using AutoRenter.Domain.Models;
 
 namespace AutoRenter.Domain.Services.Commands
 {
-    public class CommandFactory<T> : ICommandFactory<T>, IDomainService
+    public class CommandFactory<T> : ICommandFactory<T>
         where T : class, IEntity
     {
+        public CommandFactory()
+        {
+        }
+
         public IGetCommand<T> CreateGetCommand(AutoRenterContext context)
         {
             return new Get<T>(context);

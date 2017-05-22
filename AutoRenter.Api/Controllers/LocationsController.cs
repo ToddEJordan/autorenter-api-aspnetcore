@@ -14,12 +14,10 @@ namespace AutoRenter.Api.Controllers
     public class LocationsController : ControllerBase
     {
         private readonly ILocationService locationService;
-        private readonly IValidationService validationService;
 
-        public LocationsController(ILocationService locationService, IValidationService validationService)
+        public LocationsController(ILocationService locationService)
         {
             this.locationService = locationService;
-            this.validationService = validationService;
         }
 
         [HttpGet]

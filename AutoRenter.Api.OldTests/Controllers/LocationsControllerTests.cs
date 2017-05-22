@@ -24,9 +24,7 @@ namespace AutoRenter.Api.OldTests.Controllers
             locationServiceMoq.Setup(x => x.GetAll())
                 .ReturnsAsync(() => moqResult);
 
-            var validationServiceMoq = new Mock<IValidationService>();
-
-            var locationsController = new LocationsController(locationServiceMoq.Object, validationServiceMoq.Object);
+            var locationsController = new LocationsController(locationServiceMoq.Object);
 
             // act
             var result = await locationsController.GetAll();

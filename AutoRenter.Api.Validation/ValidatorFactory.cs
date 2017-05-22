@@ -6,7 +6,7 @@ using AutoRenter.Domain.Interfaces;
 
 namespace AutoRenter.Api.Validation
 {
-    public class ValidatorFactory : IValidatorFactory, IDomainService
+    public class ValidatorFactory : IValidatorFactory
     {
         private readonly Dictionary<Type, IValidator> insertValidators = new Dictionary<Type, IValidator>
         {

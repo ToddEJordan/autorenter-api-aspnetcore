@@ -16,7 +16,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using Microsoft.IdentityModel.Tokens;
-using AutoRenter.Api;
 using AutoRenter.Api.Authorization;
 using AutoRenter.Api.Data;
 using AutoRenter.Api.Authentication;
@@ -24,6 +23,8 @@ using AutoRenter.Api.Infrastructure;
 using MediatR;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Domain.Services;
+using AutoRenter.Domain.Services.Commands;
+using AutoRenter.Api.Validation;
 
 namespace AutoRenter.Api
 {
@@ -51,16 +52,9 @@ namespace AutoRenter.Api
             ConfigureData(services);
             ConfigureCompression(services);
             ConfigureCors(services);
-            ConfigureAutoMapper(services);
             ConfigureMvc(services);
             ConfigureMediatR(services);
             ConfigureDI(services);
-        }
-
-        private static void ConfigureAutoMapper(IServiceCollection services)
-        {
-            //services.AddAutoMapper(typeof(Startup));
-            //Mapper.AssertConfigurationIsValid();
         }
 
         private static void ConfigureMediatR(IServiceCollection services)
@@ -70,14 +64,7 @@ namespace AutoRenter.Api
 
         private void ConfigureData(IServiceCollection services)
         {
-            try
-            {
-                _useInMemoryProvider = bool.Parse(Configuration["AppSettings:InMemoryProvider"]);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            _useInMemoryProvider = bool.Parse(Configuration["AppSettings:InMemoryProvider"]);
 
             services.AddDbContext<AutoRenterContext>(options =>
             {
@@ -100,8 +87,8 @@ namespace AutoRenter.Api
         private static void ConfigureDI(IServiceCollection services)
         {
             ConfigureDIForDomainServices(services);
+            ConfigureDIForFactories(services);
 
-            //services.AddTransient<IResponseConverter, ResponseConverter>();
             services.AddTransient<ITokenManager, TokenManager>();
             services.AddTransient<IAuthenticateUser, AuthenticateUser>();
         }
@@ -116,6 +103,12 @@ namespace AutoRenter.Api
                 var serviceType = ass.GetType(ti.FullName);
                 services.AddTransient(interfaceType, serviceType);
             }
+        }
+
+        private static void ConfigureDIForFactories(IServiceCollection services)
+        {
+            services.AddTransient(typeof(ICommandFactory<>), typeof(CommandFactory<>));
+            services.AddTransient(typeof(IValidatorFactory), typeof(ValidatorFactory));
         }
 
         private static void ConfigureMvc(IServiceCollection services)

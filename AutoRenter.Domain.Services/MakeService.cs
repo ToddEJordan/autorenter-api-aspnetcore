@@ -19,6 +19,7 @@ namespace AutoRenter.Domain.Services
             IValidationService validationService)
         {
             this.context = context;
+            this.commandFactory = commandFactory;
             this.validationService = validationService;
         }
 
