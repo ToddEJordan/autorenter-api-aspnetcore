@@ -1,34 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using AutoRenter.Domain.Models;
 using FluentValidation;
+using AutoRenter.Domain.Models;
+using AutoRenter.Domain.Interfaces;
 
 namespace AutoRenter.Api.Validation
 {
-    public static class ValidatorFactory
+    public class ValidatorFactory : IValidatorFactory, IDomainService
     {
-        private static readonly Dictionary<Type, IValidator> insertValidators = new Dictionary<Type, IValidator>()
+        private readonly Dictionary<Type, IValidator> insertValidators = new Dictionary<Type, IValidator>
         {
-            { typeof(Location), new LocationInsertValidator() as IValidator },
-            { typeof(Vehicle), new VehicleInsertValidator() as IValidator },
-            { typeof(Sku), new SkuInsertValidator() as IValidator },
+            { typeof(Location), new LocationInsertValidator() },
+            { typeof(Vehicle), new VehicleInsertValidator() },
+            { typeof(Sku), new SkuInsertValidator() }
         };
 
-        private static readonly Dictionary<Type, IValidator> updateValidators = new Dictionary<Type, IValidator>()
+        private readonly Dictionary<Type, IValidator> updateValidators = new Dictionary<Type, IValidator>
         {
-            { typeof(Location), new LocationUpdateValidator() as IValidator },
-            { typeof(Vehicle), new VehicleUpdateValidator() as IValidator },
-            { typeof(Sku), new SkuUpdateValidator() as IValidator }
+            { typeof(Location), new LocationUpdateValidator() },
+            { typeof(Vehicle), new VehicleUpdateValidator() },
+            { typeof(Sku), new SkuUpdateValidator() }
         };
 
-        private static readonly Dictionary<Type, IValidator> deleteValidators = new Dictionary<Type, IValidator>()
+        private readonly Dictionary<Type, IValidator> deleteValidators = new Dictionary<Type, IValidator>
         {
-            { typeof(Location), new LocationDeleteValidator() as IValidator },
-            { typeof(Vehicle), new VehicleDeleteValidator() as IValidator },
-            { typeof(Sku), new SkuDeleteValidator() as IValidator }
+            { typeof(Location), new LocationDeleteValidator() },
+            { typeof(Vehicle), new VehicleDeleteValidator() },
+            { typeof(Sku), new SkuDeleteValidator() }
         };
 
-        public static IValidator GetInsertInstance<T>()
+        public IValidator GetInsertInstance<T>()
         {
             if (!insertValidators.ContainsKey(typeof(T)))
             {
@@ -38,7 +39,7 @@ namespace AutoRenter.Api.Validation
             return insertValidators[typeof(T)];
         }
 
-        public static IValidator GetUpdateInstance<T>()
+        public IValidator GetUpdateInstance<T>()
         {
             if (!updateValidators.ContainsKey(typeof(T)))
             {
@@ -48,14 +49,14 @@ namespace AutoRenter.Api.Validation
             return updateValidators[typeof(T)];
         }
 
-        public static IValidator GetDeleteInstance<T>()
+        public IValidator GetDeleteInstance<T>()
         {
-            if (!updateValidators.ContainsKey(typeof(T)))
+            if (!deleteValidators.ContainsKey(typeof(T)))
             {
                 return null;
             }
 
-            return updateValidators[typeof(T)];
+            return deleteValidators[typeof(T)];
         }
     }
 }
