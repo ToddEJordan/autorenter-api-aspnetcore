@@ -1,7 +1,7 @@
-﻿using AutoRenter.Domain.Interfaces;
-using AutoRenter.Api.Validation;
+﻿using System.Threading.Tasks;
 using FluentValidation;
-using System.Threading.Tasks;
+using AutoRenter.Api.Validation;
+using AutoRenter.Domain.Interfaces;
 
 namespace AutoRenter.Domain.Services
 {

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoRenter.Api.Data;
 using AutoRenter.Domain.Models;
 using AutoRenter.Domain.Interfaces;
-using AutoRenter.Domain.Services.Commands;
-using System.Linq;
 
 namespace AutoRenter.Domain.Services
 {
@@ -13,16 +12,22 @@ namespace AutoRenter.Domain.Services
     {
         private bool disposed = false;
         private readonly AutoRenterContext context;
+        private readonly ICommandFactory<Vehicle> commandFactory;
+        private readonly ICommandFactory<Location> locationCommandFactory;
         private readonly IValidationService validationService;
         private readonly IMakeService makeService;
         private readonly IModelService modelService;
 
         public VehicleService(AutoRenterContext context, 
+            ICommandFactory<Vehicle> commandFactory,
+            ICommandFactory<Location> locationCommandFactory,
             IValidationService validationService, 
             IMakeService makeService,
             IModelService modelService)
         {
             this.context = context;
+            this.commandFactory = commandFactory;
+            this.locationCommandFactory = locationCommandFactory;
             this.validationService = validationService;
             this.makeService = makeService;
             this.modelService = modelService;
@@ -30,7 +35,7 @@ namespace AutoRenter.Domain.Services
 
         public async Task<ResultCode> Delete(Guid id)
         {
-            var getCommand = CommandFactory<Vehicle>.CreateGetCommand(context);
+            var getCommand = commandFactory.CreateGetCommand(context);
             var getResult = await getCommand.Execute(id);
 
             if (getResult.ResultCode == ResultCode.NotFound)
@@ -43,13 +48,13 @@ namespace AutoRenter.Domain.Services
                 return ResultCode.BadRequest;
             }
 
-            var command = CommandFactory<Vehicle>.CreateDeleteCommand(context);
+            var command = commandFactory.CreateDeleteCommand(context);
             return await command.Execute(getResult.Data);
         }
 
         public async Task<Result<Vehicle>> Get(Guid id)
         {
-            var command = CommandFactory<Vehicle>.CreateGetCommand(context);
+            var command = commandFactory.CreateGetCommand(context);
             var result = await command.Execute(id);
 
             if (result.ResultCode != ResultCode.Success)
@@ -68,7 +73,7 @@ namespace AutoRenter.Domain.Services
 
         public async Task<Result<IEnumerable<Vehicle>>> GetByLocationId(Guid locationId)
         {
-            var command = CommandFactory<Location>.CreateGetCommand(context);
+            var command = locationCommandFactory.CreateGetCommand(context);
             var locationResult = await command.Execute(locationId);
 
             if (locationResult.ResultCode != ResultCode.Success
@@ -88,7 +93,7 @@ namespace AutoRenter.Domain.Services
 
         public async Task<Result<IEnumerable<Vehicle>>> GetAll()
         {
-            var command = CommandFactory<Vehicle>.CreateGetAllCommand(context);
+            var command = commandFactory.CreateGetAllCommand(context);
             var result = await command.Execute();
 
             foreach (var vehicle in result.Data)
@@ -110,7 +115,7 @@ namespace AutoRenter.Domain.Services
                 return new Result<Guid>(ResultCode.BadRequest);
             }
 
-            var command = CommandFactory<Vehicle>.CreateInsertCommand(context);
+            var command = commandFactory.CreateInsertCommand(context);
             return await command.Execute(vehicle);
         }
 
@@ -121,7 +126,7 @@ namespace AutoRenter.Domain.Services
                 return new Result<Guid>(ResultCode.BadRequest);
             }
 
-            var command = CommandFactory<Vehicle>.CreateUpdateCommand(context);
+            var command = commandFactory.CreateUpdateCommand(context);
             return await command.Execute(vehicle);
         }
 
@@ -133,7 +138,7 @@ namespace AutoRenter.Domain.Services
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposed)
+            if (!disposed)
             {
                 if (disposing)
                 {

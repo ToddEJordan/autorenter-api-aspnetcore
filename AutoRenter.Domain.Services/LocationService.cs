@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoRenter.Api.Data;
 using AutoRenter.Domain.Interfaces;
-using AutoRenter.Domain.Services.Commands;
 using AutoRenter.Domain.Models;
 
 namespace AutoRenter.Domain.Services
@@ -13,18 +12,23 @@ namespace AutoRenter.Domain.Services
     {
         private bool disposed = false;
         private readonly AutoRenterContext context;
+        private readonly ICommandFactory<Location> commandFactory;
         private readonly IVehicleService vehicleService;
         private readonly IValidationService validationService;
-        public LocationService(AutoRenterContext context, IVehicleService vehicleService, IValidationService validationService)
+        public LocationService(AutoRenterContext context, 
+            ICommandFactory<Location> commandFactory, 
+            IVehicleService vehicleService, 
+            IValidationService validationService)
         {
             this.context = context;
+            this.commandFactory = commandFactory;
             this.vehicleService = vehicleService;
             this.validationService = validationService;
         }
 
         public async Task<Result<IEnumerable<Location>>> GetAll()
         {
-            var command = CommandFactory<Location>.CreateGetAllCommand(context);
+            var command = commandFactory.CreateGetAllCommand(context);
             var result = await command.Execute();
 
             if (result.ResultCode != ResultCode.Success)
@@ -46,7 +50,7 @@ namespace AutoRenter.Domain.Services
 
         public async Task<Result<Location>> Get(Guid id)
         {
-            var command = CommandFactory<Location>.CreateGetCommand(context);
+            var command = commandFactory.CreateGetCommand(context);
             var result = await command.Execute(id);
 
             if (result.ResultCode != ResultCode.Success)
@@ -70,13 +74,13 @@ namespace AutoRenter.Domain.Services
                 return new Result<Guid>(ResultCode.BadRequest);
             }
 
-            var command = CommandFactory<Location>.CreateInsertCommand(context);
+            var command = commandFactory.CreateInsertCommand(context);
             return await command.Execute(location);
         }
 
         public async Task<ResultCode> Delete(Guid id)
         {
-            var getCommand = CommandFactory<Location>.CreateGetCommand(context);
+            var getCommand = commandFactory.CreateGetCommand(context);
             var getResult = await getCommand.Execute(id);
 
             if (getResult.ResultCode == ResultCode.NotFound)
@@ -89,7 +93,7 @@ namespace AutoRenter.Domain.Services
                 return ResultCode.BadRequest;
             }
 
-            var command = CommandFactory<Location>.CreateDeleteCommand(context);
+            var command = commandFactory.CreateDeleteCommand(context);
             return await command.Execute(getResult.Data);
         }
 
@@ -100,7 +104,7 @@ namespace AutoRenter.Domain.Services
                 return new Result<Guid>(ResultCode.BadRequest);
             }
 
-            var command = CommandFactory<Location>.CreateUpdateCommand(context);
+            var command = commandFactory.CreateUpdateCommand(context);
             return await command.Execute(location);
         }
 
@@ -143,7 +147,7 @@ namespace AutoRenter.Domain.Services
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposed)
+            if (!disposed)
             {
                 if (disposing)
                 {

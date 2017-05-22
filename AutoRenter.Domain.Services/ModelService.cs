@@ -14,16 +14,20 @@ namespace AutoRenter.Domain.Services
     {
         private bool disposed = false;
         private readonly AutoRenterContext context;
+        private readonly ICommandFactory<Model> commandFactory;
         private readonly IValidationService validationService;
-        public ModelService(AutoRenterContext context, IValidationService validationService)
+        public ModelService(AutoRenterContext context, 
+            ICommandFactory<Model> commandFactory, 
+            IValidationService validationService)
         {
             this.context = context;
+            this.commandFactory = commandFactory;
             this.validationService = validationService;
         }
 
         public async Task<ResultCode> Delete(Guid id)
         {
-            var getCommand = CommandFactory<Model>.CreateGetCommand(context);
+            var getCommand = commandFactory.CreateGetCommand(context);
             var getResult = await getCommand.Execute(id);
 
             if (getResult.ResultCode == ResultCode.NotFound)
@@ -36,13 +40,13 @@ namespace AutoRenter.Domain.Services
                 return ResultCode.BadRequest;
             }
 
-            var command = CommandFactory<Model>.CreateDeleteCommand(context);
+            var command = commandFactory.CreateDeleteCommand(context);
             return await command.Execute(getResult.Data);
         }
 
         public async Task<Result<Model>> Get(Guid id)
         {
-            var command = CommandFactory<Model>.CreateGetCommand(context);
+            var command = commandFactory.CreateGetCommand(context);
             return await command.Execute(id);
         }
 
@@ -59,7 +63,7 @@ namespace AutoRenter.Domain.Services
 
         public async Task<Result<IEnumerable<Model>>> GetAll()
         {
-            var command = CommandFactory<Model>.CreateGetAllCommand(context);
+            var command = commandFactory.CreateGetAllCommand(context);
             return await command.Execute();
         }
 
@@ -70,7 +74,7 @@ namespace AutoRenter.Domain.Services
                 return new Result<Guid>(ResultCode.BadRequest);
             }
 
-            var command = CommandFactory<Model>.CreateInsertCommand(context);
+            var command = commandFactory.CreateInsertCommand(context);
             return await command.Execute(Model);
         }
 
@@ -81,7 +85,7 @@ namespace AutoRenter.Domain.Services
                 return new Result<Guid>(ResultCode.BadRequest);
             }
 
-            var command = CommandFactory<Model>.CreateUpdateCommand(context);
+            var command = commandFactory.CreateUpdateCommand(context);
             return await command.Execute(Model);
         }
 
@@ -93,7 +97,7 @@ namespace AutoRenter.Domain.Services
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposed)
+            if (!disposed)
             {
                 if (disposing)
                 {

@@ -7,6 +7,7 @@ using Xunit;
 using AutoRenter.Api.Data;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Domain.Models;
+using AutoRenter.Domain.Services.Commands;
 
 namespace AutoRenter.Domain.Services.Tests
 {
@@ -30,11 +31,14 @@ namespace AutoRenter.Domain.Services.Tests
         public async void GetAll_ReturnsData()
         {
             // arrange
+            ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
             var validationServiceMoq = new Mock<IValidationService>();
+
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.GetByLocationId(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.NotFound));
-            var sut = new LocationService(context, vehicleServiceMoq.Object, validationServiceMoq.Object);
+
+            var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
             
             // act
             var result = await sut.GetAll();
@@ -47,13 +51,17 @@ namespace AutoRenter.Domain.Services.Tests
         public async void GetAll_WhenNotFoundReturnsNotFound()
         {
             // arrange
+            var allLocation = await context.Set<Location>().ToListAsync();
+
+            ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
             var validationServiceMoq = new Mock<IValidationService>();
+
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.GetByLocationId(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.NotFound));
-            var sut = new LocationService(context, vehicleServiceMoq.Object, validationServiceMoq.Object);
 
-            var allLocation = await context.Set<Location>().ToListAsync();
+            var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
+
             context.Locations.RemoveRange(allLocation);
             await context.SaveChangesAsync();
 
@@ -70,11 +78,14 @@ namespace AutoRenter.Domain.Services.Tests
             // arrange
             var vehicle = await context.Vehicles.FirstAsync();
 
+            ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
             var validationServiceMoq = new Mock<IValidationService>();
+
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.GetByLocationId(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.Success, new[] { vehicle }));
-            var sut = new LocationService(context, vehicleServiceMoq.Object, validationServiceMoq.Object);
+
+            var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
 
             // act
             var result = await sut.GetAll();
@@ -87,11 +98,14 @@ namespace AutoRenter.Domain.Services.Tests
         public async void Get_ReturnsData()
         {
             // arrange
+            ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
             var validationServiceMoq = new Mock<IValidationService>();
+
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.GetByLocationId(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.NotFound));
-            var sut = new LocationService(context, vehicleServiceMoq.Object, validationServiceMoq.Object);
+
+            var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
 
             // act
             var result = await sut.Get(new Guid("c0b694ec-3352-43e3-9f22-77c87fe83d48"));
@@ -105,14 +119,17 @@ namespace AutoRenter.Domain.Services.Tests
         {
             // arrange
             var targetId = new Guid("c0b694ec-3352-43e3-9f22-77c87fe83d48");
+            var targetEntity = await context.FindAsync<Location>(targetId);
+
+            ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
             var validationServiceMoq = new Mock<IValidationService>();
+
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.GetByLocationId(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.NotFound));
                 
-            var sut = new LocationService(context, vehicleServiceMoq.Object, validationServiceMoq.Object);
-
-            var targetEntity = await context.FindAsync<Location>(targetId);
+            var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
+            
             var removeResult = context.Remove(targetEntity);
             await context.SaveChangesAsync();
 
@@ -127,13 +144,15 @@ namespace AutoRenter.Domain.Services.Tests
         public async void Get_ReturnsVehicles()
         {
             // arrange
-            var vehicle = await context.Vehicles.FirstAsync();
-
+            ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
             var validationServiceMoq = new Mock<IValidationService>();
+
+            var vehicle = await context.Vehicles.FirstAsync();
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.GetByLocationId(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.Success, new[] { vehicle }));
-            var sut = new LocationService(context, vehicleServiceMoq.Object, validationServiceMoq.Object);
+
+            var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
 
             // act
             var result = await sut.GetAll();
@@ -146,13 +165,17 @@ namespace AutoRenter.Domain.Services.Tests
         public async void Insert_Succeeds()
         {
             // arrange
+            var location = context.Locations.First();
+
+            ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
+
             var validationServiceMoq = new Mock<IValidationService>();
             validationServiceMoq.Setup(x => x.IsValidInsert(It.IsAny<Location>()))
                 .ReturnsAsync(() => true);
-            var vehicleServiceMoq = new Mock<IVehicleService>();
-            var sut = new LocationService(context, vehicleServiceMoq.Object, validationServiceMoq.Object);
 
-            var location = context.Locations.First();
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+            var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
+
             context.Locations.Remove(location);
             await context.SaveChangesAsync();
 
@@ -167,13 +190,16 @@ namespace AutoRenter.Domain.Services.Tests
         public async void Insert_WhenDuplicateReturnsConflict()
         {
             // arrange
+            var location = context.Locations.First();
+
+            ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+
             var validationServiceMoq = new Mock<IValidationService>();
             validationServiceMoq.Setup(x => x.IsValidInsert(It.IsAny<Location>()))
                 .ReturnsAsync(() => true);
-            var vehicleServiceMoq = new Mock<IVehicleService>();
-            var sut = new LocationService(context, vehicleServiceMoq.Object, validationServiceMoq.Object);
-
-            var location = context.Locations.First();
+            
+            var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
 
             // act
             var result = await sut.Insert(location);
@@ -186,13 +212,17 @@ namespace AutoRenter.Domain.Services.Tests
         public async void Insert_ReturnsId()
         {
             // arrange
+            var location = context.Locations.First();
+
+            ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+
             var validationServiceMoq = new Mock<IValidationService>();
             validationServiceMoq.Setup(x => x.IsValidInsert(It.IsAny<Location>()))
                 .ReturnsAsync(() => true);
-            var vehicleServiceMoq = new Mock<IVehicleService>();
-            var sut = new LocationService(context, vehicleServiceMoq.Object, validationServiceMoq.Object);
-
-            var location = context.Locations.First();
+            
+            var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
+            
             context.Locations.Remove(location);
             await context.SaveChangesAsync();
 
@@ -207,13 +237,17 @@ namespace AutoRenter.Domain.Services.Tests
         public async void Insert_InvalidReturnsBadRequest()
         {
             // arrange
+            var location = context.Locations.First();
+
+            ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+
             var validationServiceMoq = new Mock<IValidationService>();
             validationServiceMoq.Setup(x => x.IsValidInsert(It.IsAny<Location>()))
                 .ReturnsAsync(() => false);
-            var vehicleServiceMoq = new Mock<IVehicleService>();
-            var sut = new LocationService(context, vehicleServiceMoq.Object, validationServiceMoq.Object);
 
-            var location = context.Locations.First();
+            var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
+            
             context.Locations.Remove(location);
             await context.SaveChangesAsync();
 
@@ -228,14 +262,17 @@ namespace AutoRenter.Domain.Services.Tests
         public async void Update_Succeeds()
         {
             // arrange
+            var location = context.Locations.First();
+            location.City = "New Orleans";
+
+            ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+
             var validationServiceMoq = new Mock<IValidationService>();
             validationServiceMoq.Setup(x => x.IsValidUpdate(It.IsAny<Location>()))
                 .ReturnsAsync(() => true);
-            var vehicleServiceMoq = new Mock<IVehicleService>();
-            var sut = new LocationService(context, vehicleServiceMoq.Object, validationServiceMoq.Object);
-
-            var location = context.Locations.First();
-            location.City = "New Orleans";
+            
+            var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
 
             // act
             var result = await sut.Update(location);
@@ -248,14 +285,17 @@ namespace AutoRenter.Domain.Services.Tests
         public async void Update_ReturnsId()
         {
             // arrange
+            var location = context.Locations.First();
+            location.City = "New Orleans";
+
+            ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+
             var validationServiceMoq = new Mock<IValidationService>();
             validationServiceMoq.Setup(x => x.IsValidUpdate(It.IsAny<Location>()))
                 .ReturnsAsync(() => true);
-            var vehicleServiceMoq = new Mock<IVehicleService>();
-            var sut = new LocationService(context, vehicleServiceMoq.Object, validationServiceMoq.Object);
 
-            var location = context.Locations.First();
-            location.City = "New Orleans";
+            var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
 
             // act
             var result = await sut.Update(location);
@@ -268,14 +308,17 @@ namespace AutoRenter.Domain.Services.Tests
         public async void Update_InvalidReturnsBadRequest()
         {
             // arrange
+            var location = context.Locations.First();
+            location.City = "New Orleans";
+
+            ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+
             var validationServiceMoq = new Mock<IValidationService>();
             validationServiceMoq.Setup(x => x.IsValidUpdate(It.IsAny<Location>()))
                 .ReturnsAsync(() => false);
-            var vehicleServiceMoq = new Mock<IVehicleService>();
-            var sut = new LocationService(context, vehicleServiceMoq.Object, validationServiceMoq.Object);
-
-            var location = context.Locations.First();
-            location.City = "New Orleans";
+            
+            var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
 
             // act
             var result = await sut.Insert(location);
@@ -288,13 +331,16 @@ namespace AutoRenter.Domain.Services.Tests
         public async void Delete_Succeeds()
         {
             // arrange
+            var location = context.Locations.First();
+
+            ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+
             var validationServiceMoq = new Mock<IValidationService>();
             validationServiceMoq.Setup(x => x.IsValidDelete(It.IsAny<Location>()))
                 .ReturnsAsync(() => true);
-            var vehicleServiceMoq = new Mock<IVehicleService>();
-            var sut = new LocationService(context, vehicleServiceMoq.Object, validationServiceMoq.Object);
-
-            var location = context.Locations.First();
+            
+            var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
 
             // act
             var result = await sut.Delete(location.Id);
@@ -307,13 +353,17 @@ namespace AutoRenter.Domain.Services.Tests
         public async void Delete_NotFoundWhenNotFound()
         {
             // arrange
+            var location = context.Locations.First();
+
+            ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+
             var validationServiceMoq = new Mock<IValidationService>();
             validationServiceMoq.Setup(x => x.IsValidDelete(It.IsAny<Location>()))
                 .ReturnsAsync(() => true);
-            var vehicleServiceMoq = new Mock<IVehicleService>();
-            var sut = new LocationService(context, vehicleServiceMoq.Object, validationServiceMoq.Object);
-
-            var location = context.Locations.First();
+            
+            var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
+            
             context.Locations.Remove(location);
             await context.SaveChangesAsync();
 
@@ -328,13 +378,16 @@ namespace AutoRenter.Domain.Services.Tests
         public async void Delete_InvalidReturnsBadRequest()
         {
             // arrange
+            var location = context.Locations.First();
+
+            ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+
             var validationServiceMoq = new Mock<IValidationService>();
             validationServiceMoq.Setup(x => x.IsValidDelete(It.IsAny<Location>()))
                 .ReturnsAsync(() => false);
-            var vehicleServiceMoq = new Mock<IVehicleService>();
-            var sut = new LocationService(context, vehicleServiceMoq.Object, validationServiceMoq.Object);
-
-            var location = context.Locations.First();
+            
+            var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
 
             // act
             var result = await sut.Delete(location.Id);
@@ -347,18 +400,20 @@ namespace AutoRenter.Domain.Services.Tests
         public async void AddVehicle_Succeeds()
         {
             // arrange
-            var validationServiceMoq = new Mock<IValidationService>();
-            var vehicleServiceMoq = new Mock<IVehicleService>();
-            
-            var sut = new LocationService(context, vehicleServiceMoq.Object, validationServiceMoq.Object);
-
             var location = context.Locations.First();
             var vehicle = location.Vehicles.First();
-            location.Vehicles.Remove(vehicle);
-            await context.SaveChangesAsync();
 
+            ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
+            var validationServiceMoq = new Mock<IValidationService>();
+
+            var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.GetByLocationId(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.Success, location.Vehicles));
+
+            var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
+
+            location.Vehicles.Remove(vehicle);
+            await context.SaveChangesAsync();
 
             // act
             var result = await sut.AddVehicle(location.Id, vehicle);
@@ -371,18 +426,20 @@ namespace AutoRenter.Domain.Services.Tests
         public async void AddVehicle_NotFoundWhenLocationNotFound()
         {
             // arrange
-            var validationServiceMoq = new Mock<IValidationService>();
-            var vehicleServiceMoq = new Mock<IVehicleService>();
-
-            var sut = new LocationService(context, vehicleServiceMoq.Object, validationServiceMoq.Object);
-
             var location = context.Locations.First();
             var vehicle = location.Vehicles.First();
-            location.Vehicles.Remove(vehicle);
-            await context.SaveChangesAsync();
 
+            ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
+            var validationServiceMoq = new Mock<IValidationService>();
+
+            var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.GetByLocationId(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.NotFound));
+
+            var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
+            
+            location.Vehicles.Remove(vehicle);
+            await context.SaveChangesAsync();
 
             // act
             var result = await sut.AddVehicle(Guid.NewGuid(), vehicle);
@@ -395,16 +452,17 @@ namespace AutoRenter.Domain.Services.Tests
         public async void AddVehicle_ConflictWhenDuplicate()
         {
             // arrange
-            var validationServiceMoq = new Mock<IValidationService>();
-            var vehicleServiceMoq = new Mock<IVehicleService>();
-
-            var sut = new LocationService(context, vehicleServiceMoq.Object, validationServiceMoq.Object);
-
             var location = context.Locations.First();
             var vehicle = location.Vehicles.First();
 
+            ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
+            var validationServiceMoq = new Mock<IValidationService>();
+
+            var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.GetByLocationId(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.Success, new[] { vehicle }));
+
+            var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
 
             // act
             var result = await sut.AddVehicle(location.Id, vehicle);
@@ -417,15 +475,16 @@ namespace AutoRenter.Domain.Services.Tests
         public async void GetVehicles_Succeeds()
         {
             // arrange
-            var validationServiceMoq = new Mock<IValidationService>();
-            var vehicleServiceMoq = new Mock<IVehicleService>();
-
-            var sut = new LocationService(context, vehicleServiceMoq.Object, validationServiceMoq.Object);
-
             var location = context.Locations.First();
 
+            ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
+            var validationServiceMoq = new Mock<IValidationService>();
+
+            var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.GetByLocationId(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.Success, location.Vehicles));
+
+            var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
 
             // act
             var result = await sut.GetVehicles(location.Id);
@@ -438,15 +497,16 @@ namespace AutoRenter.Domain.Services.Tests
         public async void GetVehicles_ReturnsVehicles()
         {
             // arrange
-            var validationServiceMoq = new Mock<IValidationService>();
-            var vehicleServiceMoq = new Mock<IVehicleService>();
-
-            var sut = new LocationService(context, vehicleServiceMoq.Object, validationServiceMoq.Object);
-
             var location = context.Locations.First();
 
+            ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
+            var validationServiceMoq = new Mock<IValidationService>();
+
+            var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.GetByLocationId(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.Success, location.Vehicles));
+
+            var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
 
             // act
             var result = await sut.GetVehicles(location.Id);
@@ -459,15 +519,16 @@ namespace AutoRenter.Domain.Services.Tests
         public async void GetVehicles_InvalidLocationReturnsNotFound()
         {
             // arrange
-            var validationServiceMoq = new Mock<IValidationService>();
-            var vehicleServiceMoq = new Mock<IVehicleService>();
-
-            var sut = new LocationService(context, vehicleServiceMoq.Object, validationServiceMoq.Object);
-
             var location = context.Locations.First();
 
+            ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
+            var validationServiceMoq = new Mock<IValidationService>();
+
+            var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.GetByLocationId(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.NotFound));
+
+            var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
 
             // act
             var result = await sut.GetVehicles(Guid.NewGuid());

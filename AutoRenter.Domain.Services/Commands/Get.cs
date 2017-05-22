@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using AutoRenter.Api.Data;
 using AutoRenter.Domain.Models;
-using AutoRenter.Domain.Services.Commands.Interfaces;
+using AutoRenter.Domain.Interfaces;
 
 namespace AutoRenter.Domain.Services.Commands
 {

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using AutoRenter.Domain.Models;
 
-namespace AutoRenter.Domain.Services.Commands.Interfaces
+namespace AutoRenter.Domain.Interfaces
 {
     public interface IDeleteCommand<T>
         where T : class, IEntity

@@ -12,16 +12,19 @@ namespace AutoRenter.Domain.Services
     {
         private bool disposed = false;
         private readonly AutoRenterContext context;
+        private readonly ICommandFactory<Sku> commandFactory;
         private readonly IValidationService validationService;
         private readonly IMakeService makeService;
         private readonly IModelService modelService;
 
         public SkuService(AutoRenterContext context, 
+            ICommandFactory<Sku> commandFactory,
             IValidationService validationService,
             IMakeService makeService,
             IModelService modelService)
         {
             this.context = context;
+            this.commandFactory = commandFactory;
             this.validationService = validationService;
             this.makeService = makeService;
             this.modelService = modelService;
@@ -29,7 +32,7 @@ namespace AutoRenter.Domain.Services
 
         public async Task<ResultCode> Delete(Guid id)
         {
-            var getCommand = CommandFactory<Sku>.CreateGetCommand(context);
+            var getCommand = commandFactory.CreateGetCommand(context);
             var getResult = await getCommand.Execute(id);
 
             if (getResult.ResultCode == ResultCode.NotFound)
@@ -42,13 +45,13 @@ namespace AutoRenter.Domain.Services
                 return ResultCode.BadRequest;
             }
 
-            var command = CommandFactory<Sku>.CreateDeleteCommand(context);
+            var command = commandFactory.CreateDeleteCommand(context);
             return await command.Execute(getResult.Data);
         }
 
         public async Task<Result<Sku>> Get(Guid id)
         {
-            var command = CommandFactory<Sku>.CreateGetCommand(context);
+            var command = commandFactory.CreateGetCommand(context);
             var result = await command.Execute(id);
 
             if (result.ResultCode != ResultCode.Success)
@@ -67,7 +70,7 @@ namespace AutoRenter.Domain.Services
 
         public async Task<Result<IEnumerable<Sku>>> GetAll()
         {
-            var command = CommandFactory<Sku>.CreateGetAllCommand(context);
+            var command = commandFactory.CreateGetAllCommand(context);
             var result = await command.Execute();
 
             foreach (var sku in result.Data)
@@ -89,7 +92,7 @@ namespace AutoRenter.Domain.Services
                 return new Result<Guid>(ResultCode.BadRequest);
             }
 
-            var command = CommandFactory<Sku>.CreateInsertCommand(context);
+            var command = commandFactory.CreateInsertCommand(context);
             return await command.Execute(sku);
         }
 
@@ -100,7 +103,7 @@ namespace AutoRenter.Domain.Services
                 return new Result<Guid>(ResultCode.BadRequest);
             }
 
-            var command = CommandFactory<Sku>.CreateUpdateCommand(context);
+            var command = commandFactory.CreateUpdateCommand(context);
             return await command.Execute(sku);
         }
 
@@ -112,7 +115,7 @@ namespace AutoRenter.Domain.Services
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposed)
+            if (!disposed)
             {
                 if (disposing)
                 {

@@ -2,10 +2,10 @@
 using System.Threading.Tasks;
 using AutoRenter.Domain.Models;
 
-namespace AutoRenter.Domain.Services.Commands.Interfaces
+namespace AutoRenter.Domain.Interfaces
 {
-    public interface IUpdateCommand<T>
-        where T : class, IEntity
+    public interface IInsertCommand<T>
+        where T: class, IEntity
     {
         Task<Result<Guid>> Execute(T entity);
     }
