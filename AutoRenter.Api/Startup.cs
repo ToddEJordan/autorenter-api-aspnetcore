@@ -14,16 +14,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Serialization;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Serialization;
 using AutoRenter.Api.Authorization;
 using AutoRenter.Api.Data;
 using AutoRenter.Api.Authentication;
 using AutoRenter.Api.Infrastructure;
 using AutoRenter.Api.Services;
-using MediatR;
 using AutoRenter.Domain.Interfaces;
-using AutoRenter.Domain.Services;
 using AutoRenter.Domain.Services.Commands;
 using AutoRenter.Api.Validation;
 
@@ -54,13 +52,7 @@ namespace AutoRenter.Api
             ConfigureCompression(services);
             ConfigureCors(services);
             ConfigureMvc(services);
-            ConfigureMediatR(services);
             ConfigureDI(services);
-        }
-
-        private static void ConfigureMediatR(IServiceCollection services)
-        {
-            services.AddMediatR(typeof(Startup));
         }
 
         private void ConfigureData(IServiceCollection services)
