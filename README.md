@@ -11,15 +11,15 @@ These instructions will cover usage information for the API and the optional dev
 - ASP.NET Core
 - Entity Framework Core
 - Unity
-- Automapper
 - FluentValidation
 - Global exception handler
 - Cors
 - xUnit
+- Moq
 
 ## Prerequisites
 
-- 
+- Download and install [.NET Core 1.0](https://dot.net/core)
 
 ## How To
 
@@ -73,11 +73,12 @@ Make sure you have the correct version of ASP.NET Core:
 dotnet --version
 ```
 
-The supported version is 1.1.2
+The supported version is 1.0.4
 
 ### The project does not load in Visual Studio
 
-The [Microsoft Documentation](https://www.microsoft.com/net/core#windowsvs2017) says that this will work with Visual Studio Update 3. Not so. The project file format has been changed from a JSON-based format to an XML-based format (allegedly to maintain compatibility with MSBuild). However, VS Update 3 does not yet support this new format.
+The [Microsoft Documentation](https://www.microsoft.com/net/core#windowsvs2015) says that this will work with Visual Studio Update 3. Not so. The project file format has been changed from a JSON-based format to an XML-based format (allegedly to maintain compatibility with MSBuild). However, VS Update 3 does not yet support this new format.
+Consider using [Visual Studio 2017](https://www.microsoft.com/net/core#windowsvs2017) or [Visual Studio Code](https://code.visualstudio.com/download).
 
 ## Contributing
 
