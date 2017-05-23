@@ -10,16 +10,16 @@ These instructions will cover usage information for the API and the optional dev
 
 - ASP.NET Core
 - Entity Framework Core
-- Repository Pattern
+- Unity
 - Automapper
 - FluentValidation
-- CQS Pattern - MediatR
 - Global exception handler
 - Cors
+- xUnit
 
 ## Prerequisites
 
-- Download and run the [.NET Core 1.0 RC4 SDK Installer](https://github.com/dotnet/core/blob/master/release-notes/rc4-download.md).
+- 
 
 ## How To
 
@@ -28,11 +28,11 @@ These instructions will cover usage information for the API and the optional dev
 ### Local Development
 
 1. Open the project folder in your favorite text editor (preferably VS Code).
-1. Run `dotnet restore` from the command line to restore dependencies.
-1. Run `dotnet build` to build the solution.
-   1. Note: running will also build.
-1. To run tests, navigate to a test folder (e.g., `./AutoRenter.Api.Tests`) and run `dotnet test'.
-1. To run the app, navigate to the `AutoRenter.Api` folder and run `dotnet run`.
+2. Run `dotnet restore` from the command line to restore dependencies.
+3. Run `dotnet build` to build the solution.
+   a. Note: running will also build.
+4. To run api tests, navigate to a test folder (e.g., `./AutoRenter.Api.Tests`) and run `dotnet test'.
+5. To run the app, navigate to the `AutoRenter.Api` folder and run `dotnet run`.
 
 ### Browse the app
 
@@ -73,11 +73,11 @@ Make sure you have the correct version of ASP.NET Core:
 dotnet --version
 ```
 
-The supported version is 1.0.0-rc4-*.
+The supported version is 1.1.2
 
 ### The project does not load in Visual Studio
 
-The [Microsoft Documentation](https://www.microsoft.com/net/core#windowsvs2015) says that this will work with Visual Studio Update 3. Not so. The project file format has been changed from a JSON-based format to an XML-based format (allegedly to maintain compatibility with MSBuild). However, VS Update 3 does not yet support this new format.
+The [Microsoft Documentation](https://www.microsoft.com/net/core#windowsvs2017) says that this will work with Visual Studio Update 3. Not so. The project file format has been changed from a JSON-based format to an XML-based format (allegedly to maintain compatibility with MSBuild). However, VS Update 3 does not yet support this new format.
 
 ## Contributing
 
