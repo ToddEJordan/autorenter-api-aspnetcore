@@ -120,13 +120,19 @@ namespace AutoRenter.Domain.Services
                 return ResultCode.NotFound;
             }
 
-            if (locationResult.Data.Vehicles.Contains(vehicle))
+            var vehicles = await vehicleService.GetByLocationId(locationId);
+            if (vehicles.Data.Any(x => x.Id == vehicle.Id))
             {
                 return ResultCode.Conflict;
             }
 
             try
             {
+                if (locationResult.Data.Vehicles == null)
+                {
+                    locationResult.Data.Vehicles = new List<Vehicle>();
+                }
+
                 locationResult.Data.Vehicles.Add(vehicle);
             }
             catch
