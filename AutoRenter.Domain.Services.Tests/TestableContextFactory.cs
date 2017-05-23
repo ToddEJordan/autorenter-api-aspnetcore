@@ -131,11 +131,11 @@ namespace AutoRenter.Domain.Services.Tests
             if (!context.States.Any())
             {
                 ICollection<State> states = new List<State> {
-                    new State{StateCode = "AZ", Name = "Arizona"},
-                    new State{StateCode = "CA", Name = "California"},
-                    new State{StateCode = "HI", Name = "Hawaii"},
-                    new State{StateCode = "IN", Name = "Indiana"},
-                    new State{StateCode = "WA", Name = "Washington"}
+                    new State{Id = new Guid("e94b5f55-77c9-4b71-b2b3-6ee1a9eded2b"), StateCode = "AZ", Name = "Arizona"},
+                    new State{Id = new Guid("70780b56-1ae3-4777-8bf8-c57626a5b4ef"), StateCode = "CA", Name = "California"},
+                    new State{Id = new Guid("bb14da69-9398-4ab8-8881-f35c65d287a7"), StateCode = "HI", Name = "Hawaii"},
+                    new State{Id = new Guid("7a9f7ecc-c19f-49bb-af00-46902688e4c4"), StateCode = "IN", Name = "Indiana"},
+                    new State{Id = new Guid("b15c1e60-1ae3-4d63-bae8-7f20e647fab5"), StateCode = "WA", Name = "Washington"}
                 };
 
                 foreach (var state in states)
