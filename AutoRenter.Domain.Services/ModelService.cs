@@ -53,10 +53,10 @@ namespace AutoRenter.Domain.Services
             var Model = context.Models.FirstOrDefault(x => x.ExternalId == id);
             if (Model != null)
             {
-                return new Result<Model>(ResultCode.Success, Model);
+                return await Task.FromResult(new Result<Model>(ResultCode.Success, Model));
             }
 
-            return new Result<Model>(ResultCode.NotFound);
+            return await Task.FromResult(new Result<Model>(ResultCode.NotFound));
         }
 
         public async Task<Result<IEnumerable<Model>>> GetAll()

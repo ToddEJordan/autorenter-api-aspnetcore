@@ -53,10 +53,10 @@ namespace AutoRenter.Domain.Services
             var make = context.Makes.FirstOrDefault(x => x.ExternalId == id);
             if (make != null)
             {
-                return new Result<Make>(ResultCode.Success, make);
+                return await Task.FromResult(new Result<Make>(ResultCode.Success, make));
             }
 
-            return new Result<Make>(ResultCode.NotFound);
+            return await Task.FromResult(new Result<Make>(ResultCode.NotFound));
         }
 
         public async Task<Result<IEnumerable<Make>>> GetAll()

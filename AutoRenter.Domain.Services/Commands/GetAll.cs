@@ -22,10 +22,10 @@ namespace AutoRenter.Domain.Services.Commands
 
             if (all == null || !all.Any())
             {
-                return new Result<IEnumerable<T>>(ResultCode.NotFound);
+                return await Task.FromResult(new Result<IEnumerable<T>>(ResultCode.NotFound));
             }
 
-            return new Result<IEnumerable<T>>(ResultCode.Success, all);
+            return await Task.FromResult(new Result<IEnumerable<T>>(ResultCode.Success, all));
         }
     }
 }
