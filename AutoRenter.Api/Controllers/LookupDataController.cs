@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoRenter.Api.Models;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -13,12 +16,14 @@ namespace AutoRenter.Api.Controllers
     [Route("api/lookup-data")]
     public class LookupDataController : Controller
     {
+        private readonly IMapper mapper;
         private readonly IMakeService makeService;
         private readonly IModelService modelService;
         private readonly IStateService stateService;
 
-        public LookupDataController(IMakeService makeService, IModelService modelService, IStateService stateService)
+        public LookupDataController(IMapper mapper, IMakeService makeService, IModelService modelService, IStateService stateService)
         {
+            this.mapper = mapper;
             this.makeService = makeService;
             this.modelService = modelService;
             this.stateService = stateService;
@@ -39,47 +44,65 @@ namespace AutoRenter.Api.Controllers
             return Ok(formattedResult);
         }
 
-        private async Task<Dictionary<string, object>> GetData(IQueryCollection lookupTypes)
+        private async Task<ConcurrentDictionary<string, object>> GetData(IQueryCollection lookupTypes)
         {
-            Dictionary<string, object> lookupData = new Dictionary<string, object>();
+            ConcurrentDictionary<string, object> lookupData = new ConcurrentDictionary<string, object>();
+
             if (lookupTypes.ContainsKey("makes"))
             {
-                var makesResult = await makeService.GetAll();
-                if (makesResult.ResultCode == ResultCode.Success)
-                {
-                    lookupData.Add("makes", makesResult.Data
-                        .ToList()
-                        .OrderBy(x => x.ExternalId)
-                    );
-                }
+                await GetMakes(lookupData);
             }
 
             if (lookupTypes.ContainsKey("models"))
             {
-                var modelsResult = await modelService.GetAll();
-                if (modelsResult.ResultCode == ResultCode.Success)
-                {
-                    lookupData.Add("models", modelsResult.Data
-                        .ToList()
-                        .OrderBy(x => x.ExternalId)
-                    );
-                }
-                
+                await GetModels(lookupData);
             }
 
             if (lookupTypes.ContainsKey("states"))
             {
-                var statesResult = await stateService.GetAll();
-                if (statesResult.ResultCode == ResultCode.Success)
-                {
-                    lookupData.Add("states", statesResult.Data
-                        .ToList()
-                        .OrderBy(x => x.StateCode)
-                    );
-                }
+                await GetStates(lookupData);
             }
 
             return lookupData;
+        }
+
+        private async Task GetStates(ConcurrentDictionary<string, object> lookupData)
+        {
+            var statesResult = await stateService.GetAll();
+            if (statesResult.ResultCode == ResultCode.Success)
+            {
+                var data = statesResult.Data.OrderBy(x => x.StateCode).ToList();
+                lookupData.AddOrUpdate("states", data,
+                    (key, oldValue) => data);
+            }
+        }
+
+        private async Task GetModels(ConcurrentDictionary<string, object> lookupData)
+        {
+            var modelsResult = await modelService.GetAll();
+            if (modelsResult.ResultCode == ResultCode.Success)
+            {
+                var data = modelsResult.Data
+                    .Select(model => mapper.Map<ModelModel>(model))
+                    .OrderBy(x => x.Id)
+                    .ToList();
+                lookupData.AddOrUpdate("models", data,
+                    (key, oldValue) => data);
+            }
+        }
+
+        private async Task GetMakes(ConcurrentDictionary<string, object> lookupData)
+        {
+            var makesResult = await makeService.GetAll();
+            if (makesResult.ResultCode == ResultCode.Success)
+            {
+                var data = makesResult.Data
+                    .Select(make => mapper.Map<MakeModel>(make))
+                    .OrderBy(x => x.Id)
+                    .ToList();
+                lookupData.AddOrUpdate("makes", data,
+                        (key, oldValue) => data);
+            }
         }
     }
 }

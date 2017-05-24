@@ -15,15 +15,18 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using AutoMapper;
 using Newtonsoft.Json.Serialization;
 using AutoRenter.Api.Authorization;
 using AutoRenter.Api.Data;
 using AutoRenter.Api.Authentication;
 using AutoRenter.Api.Infrastructure;
+using AutoRenter.Api.Models;
 using AutoRenter.Api.Services;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Domain.Services.Commands;
 using AutoRenter.Api.Validation;
+using AutoRenter.Domain.Models;
 
 namespace AutoRenter.Api
 {
@@ -81,6 +84,7 @@ namespace AutoRenter.Api
         {
             ConfigureDIForDomainServices(services);
             ConfigureDIForFactories(services);
+            ConfigureDIForAutoMapper(services);
 
             services.AddTransient<IResultCodeProcessor, ResultCodeProcessor>();
             services.AddTransient<ITokenManager, TokenManager>();
@@ -205,6 +209,22 @@ namespace AutoRenter.Api
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero
             };
+        }
+
+        private static void ConfigureDIForAutoMapper(IServiceCollection services)
+        {
+            var config = new MapperConfiguration(x =>
+            {
+                x.CreateMap<Make, MakeModel>()
+                    .ForMember(dest => dest.Id,
+                                opts => opts.MapFrom(src => src.ExternalId));
+
+                x.CreateMap<Model, ModelModel>()
+                    .ForMember(dest => dest.Id,
+                        opts => opts.MapFrom(src => src.ExternalId));
+            });
+
+            services.AddSingleton(typeof(IMapper), new Mapper(config));
         }
     }
 }
