@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using FluentValidation;
 using AutoRenter.Domain.Models;
-using AutoRenter.Domain.Interfaces;
 
 namespace AutoRenter.Api.Validation
 {

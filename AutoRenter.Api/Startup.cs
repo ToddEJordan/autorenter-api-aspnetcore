@@ -64,13 +64,9 @@ namespace AutoRenter.Api
 
             services.AddDbContext<AutoRenterContext>(options =>
             {
-                switch (_useInMemoryProvider)
+                if (_useInMemoryProvider)
                 {
-                    case true:
-                        options.UseInMemoryDatabase();
-                        break;
-                    default:
-                        break;
+                    options.UseInMemoryDatabase();
                 }
             });
         }

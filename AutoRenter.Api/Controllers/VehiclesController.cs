@@ -46,7 +46,7 @@ namespace AutoRenter.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Get([Required] Guid id)
         {
-            if (id == null || id == Guid.Empty)
+            if (id == Guid.Empty)
             {
                 return BadRequest(id);
             }
@@ -54,8 +54,10 @@ namespace AutoRenter.Api.Controllers
             var result = await vehicleService.Get(id);
             if (result.ResultCode == ResultCode.Success)
             {
-                var formattedResult = new Dictionary<string, object>();
-                formattedResult.Add("vehicle", result.Data);
+                var formattedResult = new Dictionary<string, object>
+                {
+                    {"vehicle", result.Data}
+                };
                 return Ok(formattedResult);
             }
 
