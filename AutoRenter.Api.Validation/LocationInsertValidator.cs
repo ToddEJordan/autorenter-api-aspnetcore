@@ -9,8 +9,6 @@ namespace AutoRenter.Api.Validation
         {
             RuleFor(m => m.SiteId).NotNull();
             RuleFor(m => m.Name).NotNull();
-            RuleFor(m => m.City).NotNull();
-            RuleFor(m => m.StateCode).NotNull();
         }
     }
 }
