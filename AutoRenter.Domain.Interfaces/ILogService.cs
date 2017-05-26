@@ -1,9 +1,10 @@
-﻿using AutoRenter.Domain.Models;
+﻿using System.Threading.Tasks;
+using AutoRenter.Domain.Models;
 
 namespace AutoRenter.Domain.Interfaces
 {
     public interface ILogService
     {
-        Result<object> Log(string message, string level);
+        Task<Result<object>> Log(LogEntry logEntry);
     }
 }

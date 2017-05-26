@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using AutoRenter.Api.Models;
 using AutoRenter.Api.Services;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Domain.Models;
@@ -21,17 +21,17 @@ namespace AutoRenter.Api.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult Post([FromBody] LogModel log)
+        public async Task<IActionResult> Post([FromBody] LogEntry log)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = logService.Log(log.Message, log.Level);
+            var result = await logService.Log(log);
             if (result.ResultCode == ResultCode.Success)
             {
-                return NoContent();
+                return Created(string.Empty, log.Message);
             }
 
             return resultCodeProcessor.Process(result.ResultCode);

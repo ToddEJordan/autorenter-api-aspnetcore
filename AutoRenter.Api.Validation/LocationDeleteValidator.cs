@@ -1,5 +1,5 @@
-﻿using AutoRenter.Domain.Models;
-using FluentValidation;
+﻿using FluentValidation;
+using AutoRenter.Domain.Models;
 
 namespace AutoRenter.Api.Validation
 {

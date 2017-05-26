@@ -11,7 +11,8 @@ namespace AutoRenter.Api.Validation
         {
             { typeof(Location), new LocationInsertValidator() },
             { typeof(Vehicle), new VehicleInsertValidator() },
-            { typeof(Sku), new SkuInsertValidator() }
+            { typeof(Sku), new SkuInsertValidator() },
+            { typeof(LogEntry), new LogValidator() }
         };
 
         private readonly Dictionary<Type, IValidator> updateValidators = new Dictionary<Type, IValidator>
