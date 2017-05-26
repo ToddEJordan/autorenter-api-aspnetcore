@@ -44,6 +44,11 @@ namespace AutoRenter.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Get(Guid id)
         {
+            if (id == Guid.Empty)
+            {
+                return BadRequest(id);
+            }
+
             var result = await skuService.Get(id);
             if (result.ResultCode == ResultCode.Success)
             {
