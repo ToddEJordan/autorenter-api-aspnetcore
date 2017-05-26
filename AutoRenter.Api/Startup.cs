@@ -1,8 +1,8 @@
 using System;
-using System.Net;
-using System.Text;
-using System.Reflection;
 using System.Linq;
+using System.Net;
+using System.Reflection;
+using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
@@ -17,23 +17,22 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using AutoMapper;
 using Newtonsoft.Json.Serialization;
+using AutoRenter.Api.Authentication;
 using AutoRenter.Api.Authorization;
 using AutoRenter.Api.Data;
-using AutoRenter.Api.Authentication;
-using AutoRenter.Api.Infrastructure;
 using AutoRenter.Api.Models;
 using AutoRenter.Api.Services;
-using AutoRenter.Domain.Interfaces;
-using AutoRenter.Domain.Services.Commands;
 using AutoRenter.Api.Validation;
+using AutoRenter.Domain.Interfaces;
 using AutoRenter.Domain.Models;
+using AutoRenter.Domain.Services.Commands;
 
 namespace AutoRenter.Api
 {
     public class Startup
     {
         private const string CorsPolicyName = "AllowAll";
-        private bool _useInMemoryProvider = true;
+        private bool useInMemoryProvider = true;
 
         public Startup(IHostingEnvironment env)
         {
@@ -60,11 +59,11 @@ namespace AutoRenter.Api
 
         private void ConfigureData(IServiceCollection services)
         {
-            _useInMemoryProvider = bool.Parse(Configuration["AppSettings:InMemoryProvider"]);
+            useInMemoryProvider = bool.Parse(Configuration["AppSettings:InMemoryProvider"]);
 
             services.AddDbContext<AutoRenterContext>(options =>
             {
-                if (_useInMemoryProvider)
+                if (useInMemoryProvider)
                 {
                     options.UseInMemoryDatabase();
                 }
@@ -107,7 +106,7 @@ namespace AutoRenter.Api
 
         private static void ConfigureMvc(IServiceCollection services)
         {
-            services.AddMvc(options => { options.Conventions.Add(new FeatureConvention()); })
+            services.AddMvc()
                 .AddJsonOptions(a => 
                 {
                     a.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -167,7 +166,6 @@ namespace AutoRenter.Api
                             var error = context.Features.Get<IExceptionHandlerFeature>();
                             if (error != null)
                             {
-                                context.Response.AddApplicationError(error.Error.Message);
                                 await context.Response.WriteAsync(error.Error.Message).ConfigureAwait(false);
                             }
                         });
