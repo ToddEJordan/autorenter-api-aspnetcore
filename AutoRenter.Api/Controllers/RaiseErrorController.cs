@@ -11,7 +11,7 @@ namespace AutoRenter.Api.Controllers
         [Route("api/raise-error")]
         public IActionResult Get()
         {
-            throw new Exception("An exception was intentionally raised by an api call to raise-error");
+            throw new Exception("An exception was intentionally raised by an api call to api/raise-error");
         }
     }
 }
