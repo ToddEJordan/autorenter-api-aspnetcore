@@ -66,10 +66,10 @@ namespace AutoRenter.Api.Tests
 
             // act
             var result = sut.Process(value);
-            var conflictResult = result as StatusCodeResult;
+            var codedResult = result as StatusCodeResult;
 
             // assert
-            Assert.Equal(expected, conflictResult.StatusCode);
+            Assert.Equal(expected, codedResult.StatusCode);
         }
     }
 }

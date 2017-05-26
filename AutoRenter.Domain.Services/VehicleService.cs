@@ -88,7 +88,7 @@ namespace AutoRenter.Domain.Services
                 return new Result<IEnumerable<Vehicle>>(ResultCode.NotFound);
             }
 
-            return new Result<IEnumerable<Vehicle>>(ResultCode.Success, vehicles.ToList());
+            return new Result<IEnumerable<Vehicle>>(ResultCode.Success, vehicles.OrderBy(x => x.Vin).ToList());
         }
 
         public async Task<Result<IEnumerable<Vehicle>>> GetAll()
