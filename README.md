@@ -10,7 +10,6 @@ These instructions will cover usage information for the API and the optional dev
 
 - ASP.NET Core
 - Entity Framework Core
-- Unity
 - FluentValidation
 - AutoMapper
 - Global exception handler
