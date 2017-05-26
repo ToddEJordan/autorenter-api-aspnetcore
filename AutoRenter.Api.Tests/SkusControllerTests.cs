@@ -1,16 +1,17 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 using AutoRenter.Api.Controllers;
 using AutoRenter.Api.Services;
+using AutoRenter.Api.Tests.Helpers;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Domain.Models;
 
 namespace AutoRenter.Api.Tests
 {
-    public class LocationsControllerTests
+    public class SkusControllerTests
     {
         [Fact]
         public async void GetAll_WhenFound()
@@ -18,11 +19,11 @@ namespace AutoRenter.Api.Tests
             // arrange
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.GetAll())
-                .ReturnsAsync(() => new Result<IEnumerable<Location>>(ResultCode.Success, TestLocations()));
+            var skuServiceMoq = new Mock<ISkuService>();
+            skuServiceMoq.Setup(x => x.GetAll())
+                .ReturnsAsync(() => new Result<IEnumerable<Sku>>(ResultCode.Success, TestSkus()));
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -42,11 +43,11 @@ namespace AutoRenter.Api.Tests
             // arrange
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.GetAll())
-                .ReturnsAsync(() => new Result<IEnumerable<Location>>(ResultCode.NotFound));
+            var skuServiceMoq = new Mock<ISkuService>();
+            skuServiceMoq.Setup(x => x.GetAll())
+                .ReturnsAsync(() => new Result<IEnumerable<Sku>>(ResultCode.NotFound));
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -54,7 +55,7 @@ namespace AutoRenter.Api.Tests
             // act
             var result = await sut.GetAll();
             var notFoundResult = result as NotFoundResult;
-            
+
             // assert
             Assert.NotNull(notFoundResult);
         }
@@ -65,11 +66,11 @@ namespace AutoRenter.Api.Tests
             // arrange
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.GetAll())
-                .ReturnsAsync(() => new Result<IEnumerable<Location>>(ResultCode.Success, TestLocations()));
+            var skuServiceMoq = new Mock<ISkuService>();
+            skuServiceMoq.Setup(x => x.GetAll())
+                .ReturnsAsync(() => new Result<IEnumerable<Sku>>(ResultCode.Success, TestSkus()));
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -88,12 +89,12 @@ namespace AutoRenter.Api.Tests
         {
             // arrange
             var resultCodeProcessor = new ResultCodeProcessor();
-            var targetId = new Guid("a341dc33-fe65-4c8d-a7b5-16be1741c02e");
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
-                .ReturnsAsync(() => new Result<Location>(ResultCode.Success, TestLocation()));
+            var targetId = new IdentifierHelper().SkuId;
+            var skuServiceMoq = new Mock<ISkuService>();
+            skuServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
+                .ReturnsAsync(() => new Result<Sku>(ResultCode.Success, TestSku()));
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -111,14 +112,14 @@ namespace AutoRenter.Api.Tests
         public async void Get_WhenNotFound()
         {
             // arrange
-            var targetId = new Guid("b341dc33-fe65-4c8d-a7b5-16be1741c02e");
+            var targetId = new IdentifierHelper().SkuId;
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
-                .ReturnsAsync(() => new Result<Location>(ResultCode.NotFound));
+            var skuServiceMoq = new Mock<ISkuService>();
+            skuServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
+                .ReturnsAsync(() => new Result<Sku>(ResultCode.NotFound));
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -138,11 +139,11 @@ namespace AutoRenter.Api.Tests
             var targetId = Guid.Empty;
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
-                .ReturnsAsync(() => new Result<Location>(ResultCode.Success, TestLocation()));
+            var skuServiceMoq = new Mock<ISkuService>();
+            skuServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
+                .ReturnsAsync(() => new Result<Sku>(ResultCode.Success, TestSku()));
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -159,14 +160,14 @@ namespace AutoRenter.Api.Tests
         public async void Get_ReturnsData()
         {
             // arrange
-            var targetId = new Guid("a341dc33-fe65-4c8d-a7b5-16be1741c02e");
+            var targetId = new IdentifierHelper().SkuId;
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
-                .ReturnsAsync(() => new Result<Location>(ResultCode.Success, TestLocation()));
+            var skuServiceMoq = new Mock<ISkuService>();
+            skuServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
+                .ReturnsAsync(() => new Result<Sku>(ResultCode.Success, TestSku()));
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -186,17 +187,17 @@ namespace AutoRenter.Api.Tests
             // arrange
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Insert(It.IsAny<Location>()))
-                .ReturnsAsync(() => new Result<Guid>(ResultCode.Success, TestLocation().Id));
+            var skuServiceMoq = new Mock<ISkuService>();
+            skuServiceMoq.Setup(x => x.Insert(It.IsAny<Sku>()))
+                .ReturnsAsync(() => new Result<Guid>(ResultCode.Success, TestSku().Id));
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
 
             // act
-            var result = await sut.Post(TestLocation());
+            var result = await sut.Post(TestSku());
             var createdAtRouteResult = result as CreatedAtRouteResult;
 
             // assert
@@ -209,17 +210,17 @@ namespace AutoRenter.Api.Tests
             // arrange
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Insert(It.IsAny<Location>()))
-                .ReturnsAsync(() => new Result<Guid>(ResultCode.BadRequest, TestLocation().Id));
+            var skuServiceMoq = new Mock<ISkuService>();
+            skuServiceMoq.Setup(x => x.Insert(It.IsAny<Sku>()))
+                .ReturnsAsync(() => new Result<Guid>(ResultCode.BadRequest, TestSku().Id));
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
 
             // act
-            var result = await sut.Post(TestLocation());
+            var result = await sut.Post(TestSku());
             var badRequestResult = result as BadRequestResult;
 
             // assert
@@ -230,20 +231,20 @@ namespace AutoRenter.Api.Tests
         public async void Post_WhenConflict()
         {
             // arrange
-            var testLocation = TestLocation();
+            var testSku = TestSku();
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Insert(It.IsAny<Location>()))
-                .ReturnsAsync(() => new Result<Guid>(ResultCode.Conflict, testLocation.Id));
+            var skuServiceMoq = new Mock<ISkuService>();
+            skuServiceMoq.Setup(x => x.Insert(It.IsAny<Sku>()))
+                .ReturnsAsync(() => new Result<Guid>(ResultCode.Conflict, testSku.Id));
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
 
             // act
-            var result = await sut.Post(testLocation);
+            var result = await sut.Post(testSku);
             var conflictResult = result as StatusCodeResult;
 
             // assert
@@ -254,20 +255,20 @@ namespace AutoRenter.Api.Tests
         public async void Put_WhenValid()
         {
             // arrange
-            var testLocation = TestLocation();
+            var testSku = TestSku();
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Update(It.IsAny<Location>()))
-                .ReturnsAsync(() => new Result<Guid>(ResultCode.Success, testLocation.Id));
+            var skuServiceMoq = new Mock<ISkuService>();
+            skuServiceMoq.Setup(x => x.Update(It.IsAny<Sku>()))
+                .ReturnsAsync(() => new Result<Guid>(ResultCode.Success, testSku.Id));
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
 
             // act
-            var result = await sut.Put(testLocation.Id, testLocation);
+            var result = await sut.Put(testSku.Id, testSku);
             var okResult = result as OkObjectResult;
 
             // assert
@@ -278,21 +279,20 @@ namespace AutoRenter.Api.Tests
         public async void Put_WhenNotValid()
         {
             // arrange
-            var testLocation = TestLocation();
+            var testSku = TestSku();
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Update(It.IsAny<Location>()))
-                .ReturnsAsync(() => new Result<Guid>(ResultCode.BadRequest, testLocation.Id));
-            var validationServiceMoq = new Mock<IValidationService>();
+            var skuServiceMoq = new Mock<ISkuService>();
+            skuServiceMoq.Setup(x => x.Update(It.IsAny<Sku>()))
+                .ReturnsAsync(() => new Result<Guid>(ResultCode.BadRequest, testSku.Id));
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
 
             // act
-            var result = await sut.Put(testLocation.Id, testLocation);
+            var result = await sut.Put(testSku.Id, testSku);
             var badRequestResult = result as BadRequestResult;
 
             // assert
@@ -305,17 +305,17 @@ namespace AutoRenter.Api.Tests
             // arrange
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
+            var skuServiceMoq = new Mock<ISkuService>();
+            skuServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
                 .ReturnsAsync(() => ResultCode.Success);
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
 
             // act
-            var result = await sut.Delete(TestLocation().Id);
+            var result = await sut.Delete(TestSku().Id);
             var noContentResult = result as NoContentResult;
 
             // assert
@@ -328,17 +328,17 @@ namespace AutoRenter.Api.Tests
             // arrange
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
+            var skuServiceMoq = new Mock<ISkuService>();
+            skuServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
                 .ReturnsAsync(() => ResultCode.BadRequest);
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
 
             // act
-            var result = await sut.Delete(TestLocation().Id);
+            var result = await sut.Delete(TestSku().Id);
             var badRequestResult = result as BadRequestResult;
 
             // assert
@@ -351,17 +351,17 @@ namespace AutoRenter.Api.Tests
             // arrange
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
+            var skuServiceMoq = new Mock<ISkuService>();
+            skuServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
                 .ReturnsAsync(() => ResultCode.NotFound);
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
 
             // act
-            var result = await sut.Delete(TestLocation().Id);
+            var result = await sut.Delete(TestSku().Id);
             var notFoundResult = result as NotFoundResult;
 
             // assert
@@ -370,17 +370,17 @@ namespace AutoRenter.Api.Tests
 
         private ControllerContext DefaultControllerContext()
         {
-            return new Helpers.ControllerContextHelper().GetContext();
+            return new ControllerContextHelper().GetContext();
         }
 
-        private Location TestLocation()
+        private Sku TestSku()
         {
-            return new Helpers.LocationHelper().Get();
+            return new SkuHelper().Get();
         }
 
-        private IEnumerable<Location> TestLocations()
+        private IEnumerable<Sku> TestSkus()
         {
-            return new Helpers.LocationHelper().GetMany();
+            return new SkuHelper().GetMany();
         }
     }
 }

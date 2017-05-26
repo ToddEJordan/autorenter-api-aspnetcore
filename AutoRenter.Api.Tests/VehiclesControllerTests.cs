@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -10,7 +10,7 @@ using AutoRenter.Domain.Models;
 
 namespace AutoRenter.Api.Tests
 {
-    public class LocationsControllerTests
+    public class VehiclesControllerTests
     {
         [Fact]
         public async void GetAll_WhenFound()
@@ -18,11 +18,11 @@ namespace AutoRenter.Api.Tests
             // arrange
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.GetAll())
-                .ReturnsAsync(() => new Result<IEnumerable<Location>>(ResultCode.Success, TestLocations()));
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+            vehicleServiceMoq.Setup(x => x.GetAll())
+                .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.Success, TestVehicles()));
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -42,11 +42,11 @@ namespace AutoRenter.Api.Tests
             // arrange
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.GetAll())
-                .ReturnsAsync(() => new Result<IEnumerable<Location>>(ResultCode.NotFound));
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+            vehicleServiceMoq.Setup(x => x.GetAll())
+                .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.NotFound));
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -54,7 +54,7 @@ namespace AutoRenter.Api.Tests
             // act
             var result = await sut.GetAll();
             var notFoundResult = result as NotFoundResult;
-            
+
             // assert
             Assert.NotNull(notFoundResult);
         }
@@ -65,11 +65,11 @@ namespace AutoRenter.Api.Tests
             // arrange
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.GetAll())
-                .ReturnsAsync(() => new Result<IEnumerable<Location>>(ResultCode.Success, TestLocations()));
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+            vehicleServiceMoq.Setup(x => x.GetAll())
+                .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.Success, TestVehicles()));
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -88,12 +88,12 @@ namespace AutoRenter.Api.Tests
         {
             // arrange
             var resultCodeProcessor = new ResultCodeProcessor();
-            var targetId = new Guid("a341dc33-fe65-4c8d-a7b5-16be1741c02e");
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
-                .ReturnsAsync(() => new Result<Location>(ResultCode.Success, TestLocation()));
+            var targetId = new Guid("52731074-43be-4e67-8374-17ee4ec3369d");
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+            vehicleServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
+                .ReturnsAsync(() => new Result<Vehicle>(ResultCode.Success, TestVehicle()));
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -111,14 +111,14 @@ namespace AutoRenter.Api.Tests
         public async void Get_WhenNotFound()
         {
             // arrange
-            var targetId = new Guid("b341dc33-fe65-4c8d-a7b5-16be1741c02e");
+            var targetId = new Guid("a2731074-43be-4e67-8374-17ee4ec3369d");
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
-                .ReturnsAsync(() => new Result<Location>(ResultCode.NotFound));
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+            vehicleServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
+                .ReturnsAsync(() => new Result<Vehicle>(ResultCode.NotFound));
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -138,11 +138,11 @@ namespace AutoRenter.Api.Tests
             var targetId = Guid.Empty;
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
-                .ReturnsAsync(() => new Result<Location>(ResultCode.Success, TestLocation()));
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+            vehicleServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
+                .ReturnsAsync(() => new Result<Vehicle>(ResultCode.Success, TestVehicle()));
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -159,14 +159,14 @@ namespace AutoRenter.Api.Tests
         public async void Get_ReturnsData()
         {
             // arrange
-            var targetId = new Guid("a341dc33-fe65-4c8d-a7b5-16be1741c02e");
+            var targetId = new Guid("52731074-43be-4e67-8374-17ee4ec3369d");
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
-                .ReturnsAsync(() => new Result<Location>(ResultCode.Success, TestLocation()));
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+            vehicleServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
+                .ReturnsAsync(() => new Result<Vehicle>(ResultCode.Success, TestVehicle()));
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -186,17 +186,17 @@ namespace AutoRenter.Api.Tests
             // arrange
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Insert(It.IsAny<Location>()))
-                .ReturnsAsync(() => new Result<Guid>(ResultCode.Success, TestLocation().Id));
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+            vehicleServiceMoq.Setup(x => x.Insert(It.IsAny<Vehicle>()))
+                .ReturnsAsync(() => new Result<Guid>(ResultCode.Success, TestVehicle().Id));
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
 
             // act
-            var result = await sut.Post(TestLocation());
+            var result = await sut.Post(TestVehicle());
             var createdAtRouteResult = result as CreatedAtRouteResult;
 
             // assert
@@ -209,17 +209,17 @@ namespace AutoRenter.Api.Tests
             // arrange
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Insert(It.IsAny<Location>()))
-                .ReturnsAsync(() => new Result<Guid>(ResultCode.BadRequest, TestLocation().Id));
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+            vehicleServiceMoq.Setup(x => x.Insert(It.IsAny<Vehicle>()))
+                .ReturnsAsync(() => new Result<Guid>(ResultCode.BadRequest, TestVehicle().Id));
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
 
             // act
-            var result = await sut.Post(TestLocation());
+            var result = await sut.Post(TestVehicle());
             var badRequestResult = result as BadRequestResult;
 
             // assert
@@ -230,20 +230,20 @@ namespace AutoRenter.Api.Tests
         public async void Post_WhenConflict()
         {
             // arrange
-            var testLocation = TestLocation();
+            var testVehicle = TestVehicle();
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Insert(It.IsAny<Location>()))
-                .ReturnsAsync(() => new Result<Guid>(ResultCode.Conflict, testLocation.Id));
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+            vehicleServiceMoq.Setup(x => x.Insert(It.IsAny<Vehicle>()))
+                .ReturnsAsync(() => new Result<Guid>(ResultCode.Conflict, testVehicle.Id));
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
 
             // act
-            var result = await sut.Post(testLocation);
+            var result = await sut.Post(testVehicle);
             var conflictResult = result as StatusCodeResult;
 
             // assert
@@ -254,20 +254,20 @@ namespace AutoRenter.Api.Tests
         public async void Put_WhenValid()
         {
             // arrange
-            var testLocation = TestLocation();
+            var testVehicle = TestVehicle();
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Update(It.IsAny<Location>()))
-                .ReturnsAsync(() => new Result<Guid>(ResultCode.Success, testLocation.Id));
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+            vehicleServiceMoq.Setup(x => x.Update(It.IsAny<Vehicle>()))
+                .ReturnsAsync(() => new Result<Guid>(ResultCode.Success, testVehicle.Id));
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
 
             // act
-            var result = await sut.Put(testLocation.Id, testLocation);
+            var result = await sut.Put(testVehicle.Id, testVehicle);
             var okResult = result as OkObjectResult;
 
             // assert
@@ -278,21 +278,21 @@ namespace AutoRenter.Api.Tests
         public async void Put_WhenNotValid()
         {
             // arrange
-            var testLocation = TestLocation();
+            var testVehicle = TestVehicle();
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Update(It.IsAny<Location>()))
-                .ReturnsAsync(() => new Result<Guid>(ResultCode.BadRequest, testLocation.Id));
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+            vehicleServiceMoq.Setup(x => x.Update(It.IsAny<Vehicle>()))
+                .ReturnsAsync(() => new Result<Guid>(ResultCode.BadRequest, testVehicle.Id));
             var validationServiceMoq = new Mock<IValidationService>();
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
 
             // act
-            var result = await sut.Put(testLocation.Id, testLocation);
+            var result = await sut.Put(testVehicle.Id, testVehicle);
             var badRequestResult = result as BadRequestResult;
 
             // assert
@@ -305,17 +305,17 @@ namespace AutoRenter.Api.Tests
             // arrange
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+            vehicleServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
                 .ReturnsAsync(() => ResultCode.Success);
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
 
             // act
-            var result = await sut.Delete(TestLocation().Id);
+            var result = await sut.Delete(TestVehicle().Id);
             var noContentResult = result as NoContentResult;
 
             // assert
@@ -328,17 +328,17 @@ namespace AutoRenter.Api.Tests
             // arrange
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+            vehicleServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
                 .ReturnsAsync(() => ResultCode.BadRequest);
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
 
             // act
-            var result = await sut.Delete(TestLocation().Id);
+            var result = await sut.Delete(TestVehicle().Id);
             var badRequestResult = result as BadRequestResult;
 
             // assert
@@ -351,36 +351,36 @@ namespace AutoRenter.Api.Tests
             // arrange
             var resultCodeProcessor = new ResultCodeProcessor();
 
-            var locationServiceMoq = new Mock<ILocationService>();
-            locationServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
+            var vehicleServiceMoq = new Mock<IVehicleService>();
+            vehicleServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
                 .ReturnsAsync(() => ResultCode.NotFound);
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
             {
                 ControllerContext = DefaultControllerContext()
             };
 
             // act
-            var result = await sut.Delete(TestLocation().Id);
+            var result = await sut.Delete(TestVehicle().Id);
             var notFoundResult = result as NotFoundResult;
 
             // assert
             Assert.NotNull(notFoundResult);
         }
 
+        private Vehicle TestVehicle()
+        {
+            return new Helpers.VehicleHelper().Get();
+        }
+
+        private IEnumerable<Vehicle> TestVehicles()
+        {
+            return new Helpers.VehicleHelper().GetMany();
+        }
+
         private ControllerContext DefaultControllerContext()
         {
             return new Helpers.ControllerContextHelper().GetContext();
-        }
-
-        private Location TestLocation()
-        {
-            return new Helpers.LocationHelper().Get();
-        }
-
-        private IEnumerable<Location> TestLocations()
-        {
-            return new Helpers.LocationHelper().GetMany();
         }
     }
 }
