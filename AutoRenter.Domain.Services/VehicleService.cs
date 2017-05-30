@@ -96,6 +96,11 @@ namespace AutoRenter.Domain.Services
             var command = commandFactory.CreateGetAllCommand(context);
             var result = await command.Execute();
 
+            if (result.ResultCode != ResultCode.Success)
+            {
+                return result;
+            }
+
             foreach (var vehicle in result.Data)
             {
                 var makeResult = await makeService.Get(vehicle.MakeId);
@@ -104,7 +109,6 @@ namespace AutoRenter.Domain.Services
                 var modelResult = await modelService.Get(vehicle.ModelId);
                 vehicle.Model = modelResult.Data;
             }
-
             return result;
         }
 
