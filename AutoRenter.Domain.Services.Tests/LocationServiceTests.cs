@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Moq;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using Xunit;
 using AutoRenter.Api.Data;
 using AutoRenter.Domain.Interfaces;
@@ -76,6 +76,7 @@ namespace AutoRenter.Domain.Services.Tests
         public async void Get_ReturnsData()
         {
             // arrange
+            var targetId = context.Locations.FirstOrDefault().Id;
             ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
             var validationServiceMoq = new Mock<IValidationService>();
 
@@ -86,7 +87,7 @@ namespace AutoRenter.Domain.Services.Tests
             var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
 
             // act
-            var result = await sut.Get(new Guid("c0b694ec-3352-43e3-9f22-77c87fe83d48"));
+            var result = await sut.Get(targetId);
 
             // assert
             Assert.NotNull(result.Data);
@@ -96,7 +97,7 @@ namespace AutoRenter.Domain.Services.Tests
         public async void Get_WhenNotFoundReturnsNotFound()
         {
             // arrange
-            var targetId = new Guid("c0b694ec-3352-43e3-9f22-77c87fe83d48");
+            var targetId = context.Locations.FirstOrDefault().Id;
             var targetEntity = await context.FindAsync<Location>(targetId);
 
             ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
