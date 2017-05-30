@@ -18,7 +18,7 @@ namespace AutoRenter.Api.Controllers
             {
                 { "data", apiInfo }
             };
-            return Ok(formattedResult);
+            return await Task.FromResult(Ok(formattedResult));
         }
 
         private ApiInfoModel GetApiInfo()
