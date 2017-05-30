@@ -92,6 +92,68 @@ namespace AutoRenter.Domain.Services.Tests
         }
 
         [Fact]
+        public async void GetAll_ReturnsMake()
+        {
+            // arrange
+            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
+            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            var validationServiceMoq = new Mock<IValidationService>();
+
+            var makeServiceMoq = new Mock<IMakeService>();
+            makeServiceMoq.Setup(x => x.Get(It.IsAny<string>()))
+                .ReturnsAsync(new Result<Make>(ResultCode.Success, context.Makes.First()));
+
+            var modelServiceMoq = new Mock<IModelService>();
+            modelServiceMoq.Setup(x => x.Get(It.IsAny<string>()))
+                .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
+
+            var sut = new VehicleService(context,
+                vehicleCommandFactory,
+                locationCommandFactory,
+                validationServiceMoq.Object,
+                makeServiceMoq.Object,
+                modelServiceMoq.Object);
+
+            // act
+            var result = await sut.GetAll();
+            var sample = result.Data.FirstOrDefault();
+
+            // assert
+            Assert.NotNull(sample.Make);
+        }
+
+        [Fact]
+        public async void GetAll_ReturnsModel()
+        {
+            // arrange
+            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
+            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            var validationServiceMoq = new Mock<IValidationService>();
+
+            var makeServiceMoq = new Mock<IMakeService>();
+            makeServiceMoq.Setup(x => x.Get(It.IsAny<string>()))
+                .ReturnsAsync(new Result<Make>(ResultCode.Success, context.Makes.First()));
+
+            var modelServiceMoq = new Mock<IModelService>();
+            modelServiceMoq.Setup(x => x.Get(It.IsAny<string>()))
+                .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
+
+            var sut = new VehicleService(context,
+                vehicleCommandFactory,
+                locationCommandFactory,
+                validationServiceMoq.Object,
+                makeServiceMoq.Object,
+                modelServiceMoq.Object);
+
+            // act
+            var result = await sut.GetAll();
+            var sample = result.Data.FirstOrDefault();
+
+            // assert
+            Assert.NotNull(sample.Model);
+        }
+
+        [Fact]
         public async void Get_ReturnsData()
         {
             // arrange
@@ -156,6 +218,68 @@ namespace AutoRenter.Domain.Services.Tests
 
             // assert
             Assert.Equal(ResultCode.NotFound, result.ResultCode);
+        }
+
+        [Fact]
+        public async void Get_ReturnsMake()
+        {
+            // arrange
+            var targetId = context.Vehicles.FirstOrDefault().Id;
+            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
+            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            var validationServiceMoq = new Mock<IValidationService>();
+
+            var makeServiceMoq = new Mock<IMakeService>();
+            makeServiceMoq.Setup(x => x.Get(It.IsAny<string>()))
+                .ReturnsAsync(new Result<Make>(ResultCode.Success, context.Makes.First()));
+
+            var modelServiceMoq = new Mock<IModelService>();
+            modelServiceMoq.Setup(x => x.Get(It.IsAny<string>()))
+                .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
+
+            var sut = new VehicleService(context,
+                vehicleCommandFactory,
+                locationCommandFactory,
+                validationServiceMoq.Object,
+                makeServiceMoq.Object,
+                modelServiceMoq.Object);
+
+            // act
+            var result = await sut.Get(targetId);
+
+            // assert
+            Assert.NotNull(result.Data.Make);
+        }
+
+        [Fact]
+        public async void Get_ReturnsModel()
+        {
+            // arrange
+            var targetId = context.Vehicles.FirstOrDefault().Id;
+            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
+            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            var validationServiceMoq = new Mock<IValidationService>();
+
+            var makeServiceMoq = new Mock<IMakeService>();
+            makeServiceMoq.Setup(x => x.Get(It.IsAny<string>()))
+                .ReturnsAsync(new Result<Make>(ResultCode.Success, context.Makes.First()));
+
+            var modelServiceMoq = new Mock<IModelService>();
+            modelServiceMoq.Setup(x => x.Get(It.IsAny<string>()))
+                .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
+
+            var sut = new VehicleService(context,
+                vehicleCommandFactory,
+                locationCommandFactory,
+                validationServiceMoq.Object,
+                makeServiceMoq.Object,
+                modelServiceMoq.Object);
+
+            // act
+            var result = await sut.Get(targetId);
+
+            // assert
+            Assert.NotNull(result.Data.Model);
         }
 
         [Fact]
@@ -521,6 +645,72 @@ namespace AutoRenter.Domain.Services.Tests
 
             // assert
             Assert.Equal(ResultCode.BadRequest, result);
+        }
+
+        [Fact]
+        public async void GetByLocationId_ReturnsData()
+        {
+            // arrange
+            var targetId = context.Locations.FirstOrDefault().Id;
+            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
+            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            var validationServiceMoq = new Mock<IValidationService>();
+
+            var makeServiceMoq = new Mock<IMakeService>();
+            makeServiceMoq.Setup(x => x.Get(It.IsAny<string>()))
+                .ReturnsAsync(new Result<Make>(ResultCode.Success, context.Makes.First()));
+
+            var modelServiceMoq = new Mock<IModelService>();
+            modelServiceMoq.Setup(x => x.Get(It.IsAny<string>()))
+                .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
+
+            var sut = new VehicleService(context,
+                vehicleCommandFactory,
+                locationCommandFactory,
+                validationServiceMoq.Object,
+                makeServiceMoq.Object,
+                modelServiceMoq.Object);
+
+            // act
+            var result = await sut.GetByLocationId(targetId);
+
+            // assert
+            Assert.NotEmpty(result.Data);
+        }
+
+        [Fact]
+        public async void GetByLocationId_WhenNotFoundReturnsNotFound()
+        {
+            // arrange
+            var targetId = context.Locations.FirstOrDefault().Id;
+            var targetVehicles = context.Vehicles.Where(x => x.LocationId == targetId);
+            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
+            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            var validationServiceMoq = new Mock<IValidationService>();
+
+            var makeServiceMoq = new Mock<IMakeService>();
+            makeServiceMoq.Setup(x => x.Get(It.IsAny<string>()))
+                .ReturnsAsync(new Result<Make>(ResultCode.Success, context.Makes.First()));
+
+            var modelServiceMoq = new Mock<IModelService>();
+            modelServiceMoq.Setup(x => x.Get(It.IsAny<string>()))
+                .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
+
+            var sut = new VehicleService(context,
+                vehicleCommandFactory,
+                locationCommandFactory,
+                validationServiceMoq.Object,
+                makeServiceMoq.Object,
+                modelServiceMoq.Object);
+
+            context.Vehicles.RemoveRange(targetVehicles);
+            await context.SaveChangesAsync();
+
+            // act
+            var result = await sut.GetByLocationId(targetId);
+
+            // assert
+            Assert.Equal(ResultCode.NotFound, result.ResultCode);
         }
     }
 }
