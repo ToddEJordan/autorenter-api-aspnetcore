@@ -72,6 +72,11 @@ namespace AutoRenter.Domain.Services
             var command = commandFactory.CreateGetAllCommand(context);
             var result = await command.Execute();
 
+            if (result.ResultCode != ResultCode.Success)
+            {
+                return result;
+            }
+
             foreach (var sku in result.Data)
             {
                 var makeResult = await makeService.Get(sku.MakeId);
