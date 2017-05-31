@@ -33,7 +33,6 @@ namespace AutoRenter.Api.Controllers
                     { "skus", result.Data }
                 };
                 Response.Headers.Add("x-total-count", result.Data.Count().ToString());
-                Response.Headers.Add("Content-Length", result.Data.ToString().ToCharArray().Count().ToString());
                 return Ok(formattedResult);
             }
 
