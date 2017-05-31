@@ -73,22 +73,13 @@ namespace AutoRenter.Domain.Services
 
         public async Task<Result<IEnumerable<Vehicle>>> GetByLocationId(Guid locationId)
         {
-            var command = locationCommandFactory.CreateGetCommand(context);
-            var locationResult = await command.Execute(locationId);
-
-            if (locationResult.ResultCode != ResultCode.Success
-                || locationResult.Data == null)
-            {
-                return new Result<IEnumerable<Vehicle>>(ResultCode.NotFound);
-            }
-
             var vehicles = context.Vehicles.Where(x => x.LocationId == locationId);
             if (vehicles == null || !vehicles.Any())
             {
                 return new Result<IEnumerable<Vehicle>>(ResultCode.NotFound);
             }
 
-            return new Result<IEnumerable<Vehicle>>(ResultCode.Success, vehicles.OrderBy(x => x.Vin).ToList());
+            return new Result<IEnumerable<Vehicle>>(ResultCode.Success, vehicles.OrderBy(x => x.Vin));
         }
 
         public async Task<Result<IEnumerable<Vehicle>>> GetAll()

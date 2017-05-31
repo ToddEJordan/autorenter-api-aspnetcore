@@ -35,7 +35,6 @@ namespace AutoRenter.Api.Controllers
                     { "locations", result.Data }
                 };
                 Response.Headers.Add("x-total-count", result.Data.Count().ToString());
-                Response.Headers.Add("Content-Length", result.Data.ToString().ToCharArray().Count().ToString());
                 return Ok(formattedResult);
             }
 
@@ -136,19 +135,19 @@ namespace AutoRenter.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var vehiclesResult = await locationService.GetVehicles(locationId);
-            if (vehiclesResult.ResultCode == ResultCode.Success)
+            var result = await locationService.GetVehicles(locationId);
+            if (result.ResultCode == ResultCode.Success)
             {
-                var totalVehicles = vehiclesResult.Data.Count();
+                var totalVehicles = result.Data.Count();
                 var formattedResult = new Dictionary<string, object>
                 {
-                    { "vehicles", vehiclesResult.Data }
+                    { "vehicles", result.Data }
                 };
                 Response.Headers.Add("x-total-count", totalVehicles.ToString());
                 return Ok(formattedResult);
             }
 
-            return resultCodeProcessor.Process(vehiclesResult.ResultCode);
+            return resultCodeProcessor.Process(result.ResultCode);
         }
 
         [HttpPost("{locationId}/vehicles")]
@@ -161,12 +160,12 @@ namespace AutoRenter.Api.Controllers
             }
 
             var result = await locationService.AddVehicle(locationId, vehicle);
-            if (result == ResultCode.Success)
+            if (result.ResultCode == ResultCode.Success)
             {
-                return NoContent();
+                return Created("GetVehicle", result.Data);
             }
 
-            return resultCodeProcessor.Process(result);
+            return resultCodeProcessor.Process(result.ResultCode);
         }
     }
 }

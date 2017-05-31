@@ -355,11 +355,13 @@ namespace AutoRenter.Domain.Services.Tests
         }
 
         [Fact]
-        public async void AddVehicle_Succeeds()
+        public async void AddVehicle_NewSucceeds()
         {
             // arrange
             var location = context.Locations.First();
             var vehicle = context.Vehicles.FirstOrDefault(x => x.LocationId == location.Id);
+            vehicle.LocationId = Guid.Empty;
+            context.SaveChanges();
             var vehicles = context.Vehicles.Where(x => x.LocationId == location.Id && x.Id != vehicle.Id);
 
             ICommandFactory<Location> commandFactory = new CommandFactory<Location>();
@@ -368,6 +370,10 @@ namespace AutoRenter.Domain.Services.Tests
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.GetByLocationId(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.Success, vehicles));
+            vehicleServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
+                .ReturnsAsync(() => new Result<Vehicle>(ResultCode.Success, vehicle));
+            vehicleServiceMoq.Setup(x => x.Insert(It.IsAny<Vehicle>()))
+                .ReturnsAsync(() => new Result<Guid>(ResultCode.Success, vehicle.Id));
 
             var sut = new LocationService(context, commandFactory, vehicleServiceMoq.Object, validationServiceMoq.Object);
 
@@ -378,7 +384,7 @@ namespace AutoRenter.Domain.Services.Tests
             var result = await sut.AddVehicle(location.Id, vehicle);
 
             // assert
-            Assert.Equal(ResultCode.Success, result);
+            Assert.Equal(ResultCode.Success, result.ResultCode);
         }
 
         [Fact]
@@ -404,7 +410,7 @@ namespace AutoRenter.Domain.Services.Tests
             var result = await sut.AddVehicle(Guid.NewGuid(), vehicle);
 
             // assert
-            Assert.Equal(ResultCode.NotFound, result);
+            Assert.Equal(ResultCode.NotFound, result.ResultCode);
         }
 
         [Fact]
@@ -427,7 +433,7 @@ namespace AutoRenter.Domain.Services.Tests
             var result = await sut.AddVehicle(location.Id, vehicle);
 
             // assert
-            Assert.Equal(ResultCode.Conflict, result);
+            Assert.Equal(ResultCode.Conflict, result.ResultCode);
         }
 
         [Fact]

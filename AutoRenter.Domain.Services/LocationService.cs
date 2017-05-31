@@ -66,8 +66,6 @@ namespace AutoRenter.Domain.Services
                 result.Data.VehicleCount = vehicleResult.Data.Count();
             }
 
-            result.Data.Vehicles = null;
-
             return result;
         }
 
@@ -112,40 +110,50 @@ namespace AutoRenter.Domain.Services
             return await command.Execute(location);
         }
 
-        public async Task<ResultCode> AddVehicle(Guid locationId, Vehicle vehicle)
+        public async Task<Result<Guid>> AddVehicle(Guid locationId, Vehicle vehicle)
         {
             var locationResult = await Get(locationId);
             if (locationResult.ResultCode == ResultCode.NotFound)
             {
-                return ResultCode.NotFound;
+                return new Result<Guid>(ResultCode.NotFound);
             }
 
-            var vehicles = await vehicleService.GetByLocationId(locationId);
-            if (vehicles.Data.Any(x => x.Id == vehicle.Id))
+            var vehiclesResult = await vehicleService.GetByLocationId(locationId);
+            if (vehiclesResult.Data.Any(x => x.Id == vehicle.Id))
             {
-                return ResultCode.Conflict;
+                return new Result<Guid>(ResultCode.Conflict);
             }
 
-            try
+            var insertResult = await vehicleService.Insert(vehicle);
+            if (insertResult.ResultCode != ResultCode.Success)
             {
-                if (locationResult.Data.Vehicles == null)
-                {
-                    locationResult.Data.Vehicles = new List<Vehicle>();
-                }
-
-                locationResult.Data.Vehicles.Add(vehicle);
+                return insertResult;
             }
-            catch
+
+            var addedVehicle = await vehicleService.Get(insertResult.Data);
+            if (addedVehicle.ResultCode != ResultCode.Success)
             {
-                return ResultCode.Failed;
+                return new Result<Guid>(ResultCode.Failed);
             }
 
+            var existingVehicles = vehiclesResult.Data.ToList();
+            existingVehicles.Add(addedVehicle.Data);
+            locationResult.Data.Vehicles = existingVehicles;
             await context.SaveChangesAsync();
-            return ResultCode.Success;
+
+            return new Result<Guid>(ResultCode.Success, addedVehicle.Data.Id);
         }
 
         public async Task<Result<IEnumerable<Vehicle>>> GetVehicles(Guid locationId)
         {
+            var locationResult = await Get(locationId);
+
+            if (locationResult.ResultCode != ResultCode.Success
+                || locationResult.Data == null)
+            {
+                return new Result<IEnumerable<Vehicle>>(ResultCode.NotFound);
+            }
+
             return await vehicleService.GetByLocationId(locationId);
         }
 

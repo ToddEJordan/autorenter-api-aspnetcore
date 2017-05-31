@@ -19,7 +19,6 @@ namespace AutoRenter.Domain.Models
         public bool IsRentToOwn { get; set; }
         public string Image { get; set;}
 
-        [ForeignKey("Location")]
         public Guid LocationId { get; set; }
 
         public virtual Make Make { get; set; }
