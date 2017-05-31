@@ -76,10 +76,10 @@ namespace AutoRenter.Domain.Services
             var vehicles = context.Vehicles.Where(x => x.LocationId == locationId);
             if (vehicles == null || !vehicles.Any())
             {
-                return new Result<IEnumerable<Vehicle>>(ResultCode.NotFound);
+                return await Task.FromResult(new Result<IEnumerable<Vehicle>>(ResultCode.NotFound));
             }
 
-            return new Result<IEnumerable<Vehicle>>(ResultCode.Success, vehicles.OrderBy(x => x.Vin));
+            return await Task.FromResult(new Result<IEnumerable<Vehicle>>(ResultCode.Success, vehicles.OrderBy(x => x.Vin)));
         }
 
         public async Task<Result<IEnumerable<Vehicle>>> GetAll()

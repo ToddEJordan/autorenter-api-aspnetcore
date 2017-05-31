@@ -11,7 +11,7 @@ namespace AutoRenter.Api.Validation
             RuleFor(m => m.Vin).NotNull();
             RuleFor(m => m.MakeId).NotNull();
             RuleFor(m => m.ModelId).NotNull();
-            RuleFor(m => m.Color).NotNull();
+            RuleFor(m => m.Year).NotNull();
         }
     }
 }
