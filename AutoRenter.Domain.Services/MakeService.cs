@@ -23,25 +23,6 @@ namespace AutoRenter.Domain.Services
             this.validationService = validationService;
         }
 
-        public async Task<ResultCode> Delete(Guid id)
-        {
-            var getCommand = commandFactory.CreateGetCommand(context);
-            var getResult = await getCommand.Execute(id);
-
-            if (getResult.ResultCode == ResultCode.NotFound)
-            {
-                return ResultCode.NotFound;
-            }
-
-            if (!await validationService.IsValidDelete(getResult.Data))
-            {
-                return ResultCode.BadRequest;
-            }
-
-            var command = commandFactory.CreateDeleteCommand(context);
-            return await command.Execute(getResult.Data);
-        }
-
         public async Task<Result<Make>> Get(Guid id)
         {
             var command = commandFactory.CreateGetCommand(context);
@@ -63,28 +44,6 @@ namespace AutoRenter.Domain.Services
         {
             var command = commandFactory.CreateGetAllCommand(context);
             return await command.Execute();
-        }
-
-        public async Task<Result<Guid>> Insert(Make make)
-        {
-            if (!await validationService.IsValidInsert(make))
-            {
-                return new Result<Guid>(ResultCode.BadRequest);
-            }
-
-            var command = commandFactory.CreateInsertCommand(context);
-            return await command.Execute(make);
-        }
-
-        public async Task<Result<Guid>> Update(Make make)
-        {
-            if (!await validationService.IsValidUpdate(make))
-            {
-                return new Result<Guid>(ResultCode.BadRequest);
-            }
-
-            var command = commandFactory.CreateUpdateCommand(context);
-            return await command.Execute(make);
         }
 
         public void Dispose()

@@ -63,15 +63,6 @@ namespace AutoRenter.Api.Controllers
             return resultCodeProcessor.Process(result.ResultCode);
         }
 
-        [HttpGet("{name}")]
-        [AllowAnonymous]
-        public IActionResult GetByName([Required] string name)
-        {
-            Response.Headers.Add("x-status-reason",
-                $"The value '{name}' is not recognize as a valid guid to uniquely identify a resource.");
-            return BadRequest();
-        }
-
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] Location location)

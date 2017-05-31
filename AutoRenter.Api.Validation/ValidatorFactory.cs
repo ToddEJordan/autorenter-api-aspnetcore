@@ -11,22 +11,19 @@ namespace AutoRenter.Api.Validation
         {
             { typeof(Location), new LocationInsertValidator() },
             { typeof(Vehicle), new VehicleInsertValidator() },
-            { typeof(Sku), new SkuInsertValidator() },
             { typeof(LogEntry), new LogValidator() }
         };
 
         private readonly Dictionary<Type, IValidator> updateValidators = new Dictionary<Type, IValidator>
         {
             { typeof(Location), new LocationUpdateValidator() },
-            { typeof(Vehicle), new VehicleUpdateValidator() },
-            { typeof(Sku), new SkuUpdateValidator() }
+            { typeof(Vehicle), new VehicleUpdateValidator() }
         };
 
         private readonly Dictionary<Type, IValidator> deleteValidators = new Dictionary<Type, IValidator>
         {
             { typeof(Location), new LocationDeleteValidator() },
-            { typeof(Vehicle), new VehicleDeleteValidator() },
-            { typeof(Sku), new SkuDeleteValidator() }
+            { typeof(Vehicle), new VehicleDeleteValidator() }
         };
 
         public IValidator GetInsertInstance<T>()

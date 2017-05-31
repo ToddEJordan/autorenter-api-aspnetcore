@@ -18,13 +18,6 @@ namespace AutoRenter.Domain.Services
             this.context = context;
             this.commandFactory = commandFactory;
         }
-
-        public async Task<Result<State>> Get(Guid id)
-        {
-            var command = commandFactory.CreateGetCommand(context);
-            return await command.Execute(id);
-        }
-
         public async Task<Result<IEnumerable<State>>> GetAll()
         {
             var command = commandFactory.CreateGetAllCommand(context);

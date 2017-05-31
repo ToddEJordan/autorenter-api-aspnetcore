@@ -29,44 +29,6 @@ namespace AutoRenter.Domain.Services
             this.modelService = modelService;
         }
 
-        public async Task<ResultCode> Delete(Guid id)
-        {
-            var getCommand = commandFactory.CreateGetCommand(context);
-            var getResult = await getCommand.Execute(id);
-
-            if (getResult.ResultCode == ResultCode.NotFound)
-            {
-                return ResultCode.NotFound;
-            }
-
-            if (!await validationService.IsValidDelete(getResult.Data))
-            {
-                return ResultCode.BadRequest;
-            }
-
-            var command = commandFactory.CreateDeleteCommand(context);
-            return await command.Execute(getResult.Data);
-        }
-
-        public async Task<Result<Sku>> Get(Guid id)
-        {
-            var command = commandFactory.CreateGetCommand(context);
-            var result = await command.Execute(id);
-
-            if (result.ResultCode != ResultCode.Success)
-            {
-                return result;
-            }
-
-            var makeResult = await makeService.Get(result.Data.MakeId);
-            result.Data.Make = makeResult.Data;
-
-            var modelResult = await modelService.Get(result.Data.ModelId);
-            result.Data.Model = modelResult.Data;
-
-            return result;
-        }
-
         public async Task<Result<IEnumerable<Sku>>> GetAll()
         {
             var command = commandFactory.CreateGetAllCommand(context);
@@ -87,28 +49,6 @@ namespace AutoRenter.Domain.Services
             }
 
             return result;
-        }
-
-        public async Task<Result<Guid>> Insert(Sku sku)
-        {
-            if (!await validationService.IsValidInsert(sku))
-            {
-                return new Result<Guid>(ResultCode.BadRequest);
-            }
-
-            var command = commandFactory.CreateInsertCommand(context);
-            return await command.Execute(sku);
-        }
-
-        public async Task<Result<Guid>> Update(Sku sku)
-        {
-            if (!await validationService.IsValidUpdate(sku))
-            {
-                return new Result<Guid>(ResultCode.BadRequest);
-            }
-
-            var command = commandFactory.CreateUpdateCommand(context);
-            return await command.Execute(sku);
         }
 
         public void Dispose()

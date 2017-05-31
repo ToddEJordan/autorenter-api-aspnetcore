@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoRenter.Domain.Models;
 
 namespace AutoRenter.Domain.Interfaces
@@ -10,8 +10,5 @@ namespace AutoRenter.Domain.Interfaces
         Task<Result<IEnumerable<Model>>> GetAll();
         Task<Result<Model>> Get(Guid id);
         Task<Result<Model>> Get(string id);
-        Task<Result<Guid>> Insert(Model Model);
-        Task<Result<Guid>> Update(Model Model);
-        Task<ResultCode> Delete(Guid id);
     }
 }
