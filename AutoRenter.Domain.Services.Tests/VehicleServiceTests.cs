@@ -31,8 +31,7 @@ namespace AutoRenter.Domain.Services.Tests
         public async void GetAll_ReturnsData()
         {
             // arrange
-            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
-            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            ICommandFactory<Vehicle> commandFactory = new CommandFactory<Vehicle>();
             var validationServiceMoq = new Mock<IValidationService>();
 
             var makeServiceMoq = new Mock<IMakeService>();
@@ -44,8 +43,7 @@ namespace AutoRenter.Domain.Services.Tests
                 .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
             
             var sut = new VehicleService(context, 
-                vehicleCommandFactory, 
-                locationCommandFactory, 
+                commandFactory, 
                 validationServiceMoq.Object, 
                 makeServiceMoq.Object, 
                 modelServiceMoq.Object);
@@ -62,8 +60,7 @@ namespace AutoRenter.Domain.Services.Tests
         {
             // arrange
             var allVehicle = await context.Set<Vehicle>().ToListAsync();
-            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
-            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            ICommandFactory<Vehicle> commandFactory = new CommandFactory<Vehicle>();
             var validationServiceMoq = new Mock<IValidationService>();
 
             var makeServiceMoq = new Mock<IMakeService>();
@@ -75,8 +72,7 @@ namespace AutoRenter.Domain.Services.Tests
                 .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
 
             var sut = new VehicleService(context,
-                vehicleCommandFactory,
-                locationCommandFactory,
+                commandFactory,
                 validationServiceMoq.Object,
                 makeServiceMoq.Object,
                 modelServiceMoq.Object);
@@ -95,8 +91,7 @@ namespace AutoRenter.Domain.Services.Tests
         public async void GetAll_ReturnsMake()
         {
             // arrange
-            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
-            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            ICommandFactory<Vehicle> commandFactory = new CommandFactory<Vehicle>();
             var validationServiceMoq = new Mock<IValidationService>();
 
             var makeServiceMoq = new Mock<IMakeService>();
@@ -108,8 +103,7 @@ namespace AutoRenter.Domain.Services.Tests
                 .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
 
             var sut = new VehicleService(context,
-                vehicleCommandFactory,
-                locationCommandFactory,
+                commandFactory,
                 validationServiceMoq.Object,
                 makeServiceMoq.Object,
                 modelServiceMoq.Object);
@@ -126,8 +120,7 @@ namespace AutoRenter.Domain.Services.Tests
         public async void GetAll_ReturnsModel()
         {
             // arrange
-            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
-            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            ICommandFactory<Vehicle> commandFactory = new CommandFactory<Vehicle>();
             var validationServiceMoq = new Mock<IValidationService>();
 
             var makeServiceMoq = new Mock<IMakeService>();
@@ -139,8 +132,7 @@ namespace AutoRenter.Domain.Services.Tests
                 .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
 
             var sut = new VehicleService(context,
-                vehicleCommandFactory,
-                locationCommandFactory,
+                commandFactory,
                 validationServiceMoq.Object,
                 makeServiceMoq.Object,
                 modelServiceMoq.Object);
@@ -158,8 +150,7 @@ namespace AutoRenter.Domain.Services.Tests
         {
             // arrange
             var targetId = context.Vehicles.FirstOrDefault().Id;
-            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
-            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            ICommandFactory<Vehicle> commandFactory = new CommandFactory<Vehicle>();
             var validationServiceMoq = new Mock<IValidationService>();
 
             var makeServiceMoq = new Mock<IMakeService>();
@@ -171,8 +162,7 @@ namespace AutoRenter.Domain.Services.Tests
                 .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
 
             var sut = new VehicleService(context,
-                vehicleCommandFactory,
-                locationCommandFactory,
+                commandFactory,
                 validationServiceMoq.Object,
                 makeServiceMoq.Object,
                 modelServiceMoq.Object);
@@ -191,8 +181,7 @@ namespace AutoRenter.Domain.Services.Tests
             var targetId = context.Vehicles.FirstOrDefault().Id;
             var targetEntity = await context.FindAsync<Vehicle>(targetId);
 
-            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
-            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            ICommandFactory<Vehicle> commandFactory = new CommandFactory<Vehicle>();
             var validationServiceMoq = new Mock<IValidationService>();
 
             var makeServiceMoq = new Mock<IMakeService>();
@@ -204,8 +193,7 @@ namespace AutoRenter.Domain.Services.Tests
                 .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
 
             var sut = new VehicleService(context,
-                vehicleCommandFactory,
-                locationCommandFactory,
+                commandFactory,
                 validationServiceMoq.Object,
                 makeServiceMoq.Object,
                 modelServiceMoq.Object);
@@ -225,8 +213,7 @@ namespace AutoRenter.Domain.Services.Tests
         {
             // arrange
             var targetId = context.Vehicles.FirstOrDefault().Id;
-            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
-            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            ICommandFactory<Vehicle> commandFactory = new CommandFactory<Vehicle>();
             var validationServiceMoq = new Mock<IValidationService>();
 
             var makeServiceMoq = new Mock<IMakeService>();
@@ -238,8 +225,7 @@ namespace AutoRenter.Domain.Services.Tests
                 .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
 
             var sut = new VehicleService(context,
-                vehicleCommandFactory,
-                locationCommandFactory,
+                commandFactory,
                 validationServiceMoq.Object,
                 makeServiceMoq.Object,
                 modelServiceMoq.Object);
@@ -256,8 +242,7 @@ namespace AutoRenter.Domain.Services.Tests
         {
             // arrange
             var targetId = context.Vehicles.FirstOrDefault().Id;
-            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
-            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            ICommandFactory<Vehicle> commandFactory = new CommandFactory<Vehicle>();
             var validationServiceMoq = new Mock<IValidationService>();
 
             var makeServiceMoq = new Mock<IMakeService>();
@@ -269,8 +254,7 @@ namespace AutoRenter.Domain.Services.Tests
                 .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
 
             var sut = new VehicleService(context,
-                vehicleCommandFactory,
-                locationCommandFactory,
+                commandFactory,
                 validationServiceMoq.Object,
                 makeServiceMoq.Object,
                 modelServiceMoq.Object);
@@ -288,8 +272,7 @@ namespace AutoRenter.Domain.Services.Tests
             // arrange
             var vehicle = context.Vehicles.First();
 
-            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
-            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            ICommandFactory<Vehicle> commandFactory = new CommandFactory<Vehicle>();
 
             var validationServiceMoq = new Mock<IValidationService>();
             validationServiceMoq.Setup(x => x.IsValidInsert(It.IsAny<Vehicle>()))
@@ -304,8 +287,7 @@ namespace AutoRenter.Domain.Services.Tests
                 .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
 
             var sut = new VehicleService(context,
-                vehicleCommandFactory,
-                locationCommandFactory,
+                commandFactory,
                 validationServiceMoq.Object,
                 makeServiceMoq.Object,
                 modelServiceMoq.Object);
@@ -326,8 +308,7 @@ namespace AutoRenter.Domain.Services.Tests
             // arrange
             var vehicle = context.Vehicles.First();
 
-            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
-            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            ICommandFactory<Vehicle> commandFactory = new CommandFactory<Vehicle>();
 
             var validationServiceMoq = new Mock<IValidationService>();
             validationServiceMoq.Setup(x => x.IsValidInsert(It.IsAny<Vehicle>()))
@@ -342,8 +323,7 @@ namespace AutoRenter.Domain.Services.Tests
                 .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
 
             var sut = new VehicleService(context,
-                vehicleCommandFactory,
-                locationCommandFactory,
+                commandFactory,
                 validationServiceMoq.Object,
                 makeServiceMoq.Object,
                 modelServiceMoq.Object);
@@ -361,8 +341,7 @@ namespace AutoRenter.Domain.Services.Tests
             // arrange
             var vehicle = context.Vehicles.First();
 
-            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
-            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            ICommandFactory<Vehicle> commandFactory = new CommandFactory<Vehicle>();
 
             var validationServiceMoq = new Mock<IValidationService>();
             validationServiceMoq.Setup(x => x.IsValidInsert(It.IsAny<Vehicle>()))
@@ -377,8 +356,7 @@ namespace AutoRenter.Domain.Services.Tests
                 .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
 
             var sut = new VehicleService(context,
-                vehicleCommandFactory,
-                locationCommandFactory,
+                commandFactory,
                 validationServiceMoq.Object,
                 makeServiceMoq.Object,
                 modelServiceMoq.Object);
@@ -399,8 +377,7 @@ namespace AutoRenter.Domain.Services.Tests
             // arrange
             var vehicle = context.Vehicles.First();
 
-            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
-            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            ICommandFactory<Vehicle> commandFactory = new CommandFactory<Vehicle>();
 
             var validationServiceMoq = new Mock<IValidationService>();
             validationServiceMoq.Setup(x => x.IsValidInsert(It.IsAny<Vehicle>()))
@@ -415,8 +392,7 @@ namespace AutoRenter.Domain.Services.Tests
                 .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
 
             var sut = new VehicleService(context,
-                vehicleCommandFactory,
-                locationCommandFactory,
+                commandFactory,
                 validationServiceMoq.Object,
                 makeServiceMoq.Object,
                 modelServiceMoq.Object);
@@ -438,8 +414,7 @@ namespace AutoRenter.Domain.Services.Tests
             var vehicle = context.Vehicles.First();
             vehicle.Color = "Orange";
 
-            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
-            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            ICommandFactory<Vehicle> commandFactory = new CommandFactory<Vehicle>();
 
             var validationServiceMoq = new Mock<IValidationService>();
             validationServiceMoq.Setup(x => x.IsValidUpdate(It.IsAny<Vehicle>()))
@@ -454,8 +429,7 @@ namespace AutoRenter.Domain.Services.Tests
                 .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
 
             var sut = new VehicleService(context,
-                vehicleCommandFactory,
-                locationCommandFactory,
+                commandFactory,
                 validationServiceMoq.Object,
                 makeServiceMoq.Object,
                 modelServiceMoq.Object);
@@ -474,8 +448,7 @@ namespace AutoRenter.Domain.Services.Tests
             var vehicle = context.Vehicles.First();
             vehicle.Color = "Orange";
 
-            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
-            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            ICommandFactory<Vehicle> commandFactory = new CommandFactory<Vehicle>();
 
             var validationServiceMoq = new Mock<IValidationService>();
             validationServiceMoq.Setup(x => x.IsValidUpdate(It.IsAny<Vehicle>()))
@@ -490,8 +463,7 @@ namespace AutoRenter.Domain.Services.Tests
                 .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
 
             var sut = new VehicleService(context,
-                vehicleCommandFactory,
-                locationCommandFactory,
+                commandFactory,
                 validationServiceMoq.Object,
                 makeServiceMoq.Object,
                 modelServiceMoq.Object);
@@ -510,8 +482,7 @@ namespace AutoRenter.Domain.Services.Tests
             var vehicle = context.Vehicles.First();
             vehicle.Color = "Orange";
 
-            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
-            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            ICommandFactory<Vehicle> commandFactory = new CommandFactory<Vehicle>();
 
             var validationServiceMoq = new Mock<IValidationService>();
             validationServiceMoq.Setup(x => x.IsValidUpdate(It.IsAny<Vehicle>()))
@@ -526,8 +497,7 @@ namespace AutoRenter.Domain.Services.Tests
                 .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
 
             var sut = new VehicleService(context,
-                vehicleCommandFactory,
-                locationCommandFactory,
+                commandFactory,
                 validationServiceMoq.Object,
                 makeServiceMoq.Object,
                 modelServiceMoq.Object);
@@ -545,8 +515,7 @@ namespace AutoRenter.Domain.Services.Tests
             // arrange
             var vehicle = context.Vehicles.First();
 
-            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
-            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            ICommandFactory<Vehicle> commandFactory = new CommandFactory<Vehicle>();
 
             var validationServiceMoq = new Mock<IValidationService>();
             validationServiceMoq.Setup(x => x.IsValidDelete(It.IsAny<Vehicle>()))
@@ -561,8 +530,7 @@ namespace AutoRenter.Domain.Services.Tests
                 .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
 
             var sut = new VehicleService(context,
-                vehicleCommandFactory,
-                locationCommandFactory,
+                commandFactory,
                 validationServiceMoq.Object,
                 makeServiceMoq.Object,
                 modelServiceMoq.Object);
@@ -580,8 +548,7 @@ namespace AutoRenter.Domain.Services.Tests
             // arrange
             var vehicle = context.Vehicles.First();
 
-            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
-            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            ICommandFactory<Vehicle> commandFactory = new CommandFactory<Vehicle>();
 
             var validationServiceMoq = new Mock<IValidationService>();
             validationServiceMoq.Setup(x => x.IsValidDelete(It.IsAny<Vehicle>()))
@@ -596,8 +563,7 @@ namespace AutoRenter.Domain.Services.Tests
                 .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
 
             var sut = new VehicleService(context,
-                vehicleCommandFactory,
-                locationCommandFactory,
+                commandFactory,
                 validationServiceMoq.Object,
                 makeServiceMoq.Object,
                 modelServiceMoq.Object);
@@ -618,8 +584,7 @@ namespace AutoRenter.Domain.Services.Tests
             // arrange
             var vehicle = context.Vehicles.First();
 
-            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
-            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            ICommandFactory<Vehicle> commandFactory = new CommandFactory<Vehicle>();
 
             var validationServiceMoq = new Mock<IValidationService>();
             validationServiceMoq.Setup(x => x.IsValidDelete(It.IsAny<Vehicle>()))
@@ -634,8 +599,7 @@ namespace AutoRenter.Domain.Services.Tests
                 .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
 
             var sut = new VehicleService(context,
-                vehicleCommandFactory,
-                locationCommandFactory,
+                commandFactory,
                 validationServiceMoq.Object,
                 makeServiceMoq.Object,
                 modelServiceMoq.Object);
@@ -652,8 +616,7 @@ namespace AutoRenter.Domain.Services.Tests
         {
             // arrange
             var targetId = context.Locations.FirstOrDefault().Id;
-            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
-            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            ICommandFactory<Vehicle> commandFactory = new CommandFactory<Vehicle>();
             var validationServiceMoq = new Mock<IValidationService>();
 
             var makeServiceMoq = new Mock<IMakeService>();
@@ -665,8 +628,7 @@ namespace AutoRenter.Domain.Services.Tests
                 .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
 
             var sut = new VehicleService(context,
-                vehicleCommandFactory,
-                locationCommandFactory,
+                commandFactory,
                 validationServiceMoq.Object,
                 makeServiceMoq.Object,
                 modelServiceMoq.Object);
@@ -684,8 +646,7 @@ namespace AutoRenter.Domain.Services.Tests
             // arrange
             var targetId = context.Locations.FirstOrDefault().Id;
             var targetVehicles = context.Vehicles.Where(x => x.LocationId == targetId);
-            ICommandFactory<Vehicle> vehicleCommandFactory = new CommandFactory<Vehicle>();
-            ICommandFactory<Location> locationCommandFactory = new CommandFactory<Location>();
+            ICommandFactory<Vehicle> commandFactory = new CommandFactory<Vehicle>();
             var validationServiceMoq = new Mock<IValidationService>();
 
             var makeServiceMoq = new Mock<IMakeService>();
@@ -697,8 +658,7 @@ namespace AutoRenter.Domain.Services.Tests
                 .ReturnsAsync(new Result<Model>(ResultCode.Success, context.Models.First()));
 
             var sut = new VehicleService(context,
-                vehicleCommandFactory,
-                locationCommandFactory,
+                commandFactory,
                 validationServiceMoq.Object,
                 makeServiceMoq.Object,
                 modelServiceMoq.Object);

@@ -13,21 +13,18 @@ namespace AutoRenter.Domain.Services
         private bool disposed = false;
         private readonly AutoRenterContext context;
         private readonly ICommandFactory<Vehicle> commandFactory;
-        private readonly ICommandFactory<Location> locationCommandFactory;
         private readonly IValidationService validationService;
         private readonly IMakeService makeService;
         private readonly IModelService modelService;
 
         public VehicleService(AutoRenterContext context, 
             ICommandFactory<Vehicle> commandFactory,
-            ICommandFactory<Location> locationCommandFactory,
             IValidationService validationService, 
             IMakeService makeService,
             IModelService modelService)
         {
             this.context = context;
             this.commandFactory = commandFactory;
-            this.locationCommandFactory = locationCommandFactory;
             this.validationService = validationService;
             this.makeService = makeService;
             this.modelService = modelService;
