@@ -136,18 +136,21 @@ namespace AutoRenter.Api.Controllers
             }
 
             var result = await locationService.GetVehicles(locationId);
-            if (result.ResultCode == ResultCode.Success)
-            {
-                var totalVehicles = result.Data.Count();
-                var formattedResult = new Dictionary<string, object>
-                {
-                    { "vehicles", result.Data }
-                };
-                Response.Headers.Add("x-total-count", totalVehicles.ToString());
-                return Ok(formattedResult);
-            }
 
-            return resultCodeProcessor.Process(result.ResultCode);
+            switch (result.ResultCode)
+            {
+                case ResultCode.Success:
+                case ResultCode.NotFound:
+                    var totalVehicles = result.Data?.Count() ?? 0;
+                    var formattedResult = new Dictionary<string, object>
+                    {
+                        { "vehicles", result.Data ?? new List<Vehicle>() }
+                    };
+                    Response.Headers.Add("x-total-count", totalVehicles.ToString());
+                    return Ok(formattedResult);
+                default:
+                    return resultCodeProcessor.Process(result.ResultCode);
+            }
         }
 
         [HttpPost("{locationId}/vehicles")]
