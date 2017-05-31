@@ -10,13 +10,13 @@ namespace AutoRenter.Api.Authorization
 {
     public class TokenManager : ITokenManager
     {
-        private readonly AppSettings _appSettings;
+        private readonly AppSettings appSettings;
 
         public DateTime UtcTime { get; set; }
 
         public TokenManager(IOptions<AppSettings> appSettings, DateTime utcTime)
         {
-            _appSettings = appSettings.Value;
+            this.appSettings = appSettings.Value;
             UtcTime = utcTime;
         }
 
@@ -33,17 +33,17 @@ namespace AutoRenter.Api.Authorization
         public virtual JwtSecurityToken CreateJsonWebToken(UserModel userModel)
         {
             return new JwtSecurityToken(
-                _appSettings.TokenSettings.Issuer,
-                _appSettings.TokenSettings.Audience,
+                appSettings.TokenSettings.Issuer,
+                appSettings.TokenSettings.Audience,
                 GetClaims(userModel),
                 UtcTime,
-                UtcTime.AddMinutes(_appSettings.TokenSettings.ExpirationMinutes),
+                UtcTime.AddMinutes(appSettings.TokenSettings.ExpirationMinutes),
                 GetSigningCredentials());
         }
 
         public virtual SigningCredentials GetSigningCredentials()
         {
-            return new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_appSettings.TokenSettings.Secret)),
+            return new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(appSettings.TokenSettings.Secret)),
                 SecurityAlgorithms.HmacSha256);
         }
 

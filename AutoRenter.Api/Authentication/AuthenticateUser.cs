@@ -6,11 +6,11 @@ namespace AutoRenter.Api.Authentication
 {
     public class AuthenticateUser : IAuthenticateUser
     {
-        private readonly ITokenManager _tokenManager;
+        private readonly ITokenManager tokenManager;
 
         public AuthenticateUser(ITokenManager tokenManager)
         {
-            _tokenManager = tokenManager;
+            this.tokenManager = tokenManager;
         }
 
         public ResultModel Execute(LoginModel loginModel)
@@ -36,7 +36,7 @@ namespace AutoRenter.Api.Authentication
                 Username = loginModel.Username,
                 IsAdministrator = loginModel.Username.ToUpper().IndexOf("ADMIN", StringComparison.Ordinal) > -1
             };
-            userModel.BearerToken = _tokenManager.CreateToken(userModel);
+            userModel.BearerToken = tokenManager.CreateToken(userModel);
             return userModel;
         }
     }

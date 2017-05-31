@@ -7,11 +7,11 @@ namespace AutoRenter.Api.Data
 {
     public static class AutoRenterDbInitializer
     {
-        private static AutoRenterContext _context;
+        private static AutoRenterContext context;
 
         public static void Initialize(IServiceProvider serviceProvider)
         {
-            _context = (AutoRenterContext) serviceProvider.GetService(typeof(AutoRenterContext));
+            context = (AutoRenterContext) serviceProvider.GetService(typeof(AutoRenterContext));
             InitializeLocations();
             InitializeMakes();
             InitializeModels();
@@ -22,7 +22,7 @@ namespace AutoRenter.Api.Data
 
         private static void InitializeLocations()
         {
-            if (!_context.Locations.Any())
+            if (!context.Locations.Any())
             {
                 ICollection<Location> locations = new List<Location>
                 {
@@ -45,15 +45,15 @@ namespace AutoRenter.Api.Data
                 };
 
                 foreach (var location in locations)
-                    _context.Locations.Add(location);
+                    context.Locations.Add(location);
             }
 
-            _context.SaveChanges();
+            context.SaveChanges();
         }
 
         private static void InitializeMakes()
         {
-            if (!_context.Makes.Any())
+            if (!context.Makes.Any())
             {
                 ICollection<Make> makes = new List<Make> {
                     new Make{Id = new Guid("c9224dfe-32c5-4d77-b6fc-b14a7ed1bfb2"), ExternalId = "tsl", Name = "Tesla"},
@@ -61,15 +61,15 @@ namespace AutoRenter.Api.Data
                     new Make{Id = new Guid("e54c86c9-7ebe-49f1-9e8a-1c54dab8ba92"), ExternalId = "frd", Name = "Ford"}
                 };
                 foreach (var make in makes)
-                    _context.Makes.Add(make);
+                    context.Makes.Add(make);
             }
 
-            _context.SaveChanges();
+            context.SaveChanges();
         }        
 
         private static void InitializeModels()
         {
-            if (!_context.Models.Any())
+            if (!context.Models.Any())
             {
                 ICollection<Model> models = new List<Model> {
                     new Model{Id = new Guid("5bc8fd2c-0fa5-4618-9462-df1334c97958"), ExternalId = "tms", Name = "Model S"},
@@ -79,15 +79,15 @@ namespace AutoRenter.Api.Data
                     new Model{Id = new Guid("f5ce77c3-95a6-41d6-81be-a4b9c2367dd3"), ExternalId = "fta", Name = "Taurus"}
                 };
                 foreach (var model in models)
-                _context.Models.Add(model);
+                context.Models.Add(model);
             }
 
-            _context.SaveChanges();
+            context.SaveChanges();
         }   
 
         private static void InitializeSkus()
         {
-            if (!_context.Skus.Any())
+            if (!context.Skus.Any())
             {
                 ICollection<Sku> skus = new List<Sku> {
                     new Sku{Id = new Guid("b19a9a7a-3631-427e-90ad-777f3d2b2535"), MakeId = "tsl", ModelId = "tms", Year = 2016, Color = "Black"},
@@ -112,15 +112,15 @@ namespace AutoRenter.Api.Data
                 };
 
                 foreach (var sku in skus)
-                    _context.Skus.Add(sku);
+                    context.Skus.Add(sku);
             }
 
-            _context.SaveChanges();
+            context.SaveChanges();
         }
       
         private static void InitializeStates()
         {
-            if (!_context.States.Any())
+            if (!context.States.Any())
             {
                 ICollection<State> states = new List<State> {
                     new State{Id = new Guid("e94b5f55-77c9-4b71-b2b3-6ee1a9eded2b"), StateCode = "AZ", Name = "Arizona"},
@@ -131,15 +131,15 @@ namespace AutoRenter.Api.Data
                 };
                 
                 foreach (var state in states)
-                    _context.States.Add(state);
+                    context.States.Add(state);
             }
 
-            _context.SaveChanges();
+            context.SaveChanges();
         }
       
         private static void InitializeVehicles()
         {
-            if (!_context.Vehicles.Any())
+            if (!context.Vehicles.Any())
             {
                 ICollection<Vehicle> vehicles = new List<Vehicle>
                 {
@@ -198,10 +198,10 @@ namespace AutoRenter.Api.Data
                 };
 
                 foreach (var vehicle in vehicles)
-                    _context.Vehicles.Add(vehicle);
+                    context.Vehicles.Add(vehicle);
             }
 
-            _context.SaveChanges();
+            context.SaveChanges();
         }
     }
 }

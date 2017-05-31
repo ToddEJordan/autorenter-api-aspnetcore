@@ -9,11 +9,11 @@ namespace AutoRenter.Api.Controllers
     [Route("api/login")]
     public class LoginController : Controller
     {
-        private readonly IAuthenticateUser _authenticateUser;
+        private readonly IAuthenticateUser authenticateUser;
 
         public LoginController(IAuthenticateUser authenticateUser)
         {
-            _authenticateUser = authenticateUser;
+            this.authenticateUser = authenticateUser;
         }
 
         [HttpPost]
@@ -22,7 +22,7 @@ namespace AutoRenter.Api.Controllers
         {
             try
             {
-                var result = _authenticateUser.Execute(loginModel);
+                var result = authenticateUser.Execute(loginModel);
                 return Ok(result);
             }
             catch (Exception exception)
