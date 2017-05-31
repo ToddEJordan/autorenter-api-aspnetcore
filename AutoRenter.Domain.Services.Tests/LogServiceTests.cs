@@ -126,8 +126,5 @@ namespace AutoRenter.Domain.Services.Tests
             // assert
             Assert.Equal(ResultCode.Success, result.ResultCode);
         }
-
-        //TODO - We can not determine if the correct log level was interpretted by the service layer.
-        // Service layer uses extensions for clean code. Cannot moq an extension.
     }
 }
