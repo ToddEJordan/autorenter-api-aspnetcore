@@ -119,7 +119,8 @@ namespace AutoRenter.Domain.Services
             }
 
             var vehiclesResult = await vehicleService.GetByLocationId(locationId);
-            if (vehiclesResult.Data.Any(x => x.Id == vehicle.Id))
+            if (vehiclesResult.Data != null
+                && vehiclesResult.Data.Any(x => x.Id == vehicle.Id))
             {
                 return new Result<Guid>(ResultCode.Conflict);
             }
@@ -136,7 +137,10 @@ namespace AutoRenter.Domain.Services
                 return new Result<Guid>(ResultCode.Failed);
             }
 
-            var existingVehicles = vehiclesResult.Data.ToList();
+            var existingVehicles = vehiclesResult.Data == null
+                ? new List<Vehicle>()
+                : vehiclesResult.Data.ToList();
+                
             existingVehicles.Add(addedVehicle.Data);
             locationResult.Data.Vehicles = existingVehicles;
             await context.SaveChangesAsync();
