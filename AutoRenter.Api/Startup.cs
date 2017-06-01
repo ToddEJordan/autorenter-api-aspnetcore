@@ -209,6 +209,12 @@ namespace AutoRenter.Api
         {
             var config = new MapperConfiguration(x =>
             {
+                x.CreateMap<Vehicle, VehicleModel>()
+                    .ForMember(dest => dest.Make,
+                        opts => opts.MapFrom(src => src.Make))
+                    .ForMember(dest => dest.Model,
+                        opts => opts.MapFrom(src => src.Model));
+
                 x.CreateMap<Make, MakeModel>()
                     .ForMember(dest => dest.Id,
                                 opts => opts.MapFrom(src => src.ExternalId));
