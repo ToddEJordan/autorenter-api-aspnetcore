@@ -59,11 +59,8 @@ namespace AutoRenter.Domain.Services
                 return result;
             }
 
-            var makeResult = await makeService.Get(result.Data.MakeId);
-            result.Data.Make = makeResult.Data;
-
-            var modelResult = await modelService.Get(result.Data.ModelId);
-            result.Data.Model = modelResult.Data;
+            await PopulateMake(result.Data);
+            await PopulateModel(result.Data);
 
             return result;
         }
@@ -75,6 +72,9 @@ namespace AutoRenter.Domain.Services
             {
                 return await Task.FromResult(new Result<IEnumerable<Vehicle>>(ResultCode.NotFound));
             }
+
+            await PopulateMakes(vehicles);
+            await PopulateModels(vehicles);
 
             return await Task.FromResult(new Result<IEnumerable<Vehicle>>(ResultCode.Success, vehicles.OrderBy(x => x.Vin)));
         }
@@ -89,14 +89,9 @@ namespace AutoRenter.Domain.Services
                 return result;
             }
 
-            foreach (var vehicle in result.Data)
-            {
-                var makeResult = await makeService.Get(vehicle.MakeId);
-                vehicle.Make = makeResult.Data;
+            await PopulateMakes(result.Data);
+            await PopulateModels(result.Data);
 
-                var modelResult = await modelService.Get(vehicle.ModelId);
-                vehicle.Model = modelResult.Data;
-            }
             return result;
         }
 
@@ -120,6 +115,40 @@ namespace AutoRenter.Domain.Services
 
             var command = commandFactory.CreateUpdateCommand(context);
             return await command.Execute(vehicle);
+        }
+
+        private async Task PopulateMakes(IEnumerable<Vehicle> vehicles)
+        {
+            foreach (var vehicle in vehicles)
+            {
+                await PopulateMake(vehicle);
+            }
+        }
+
+        private async Task PopulateModels(IEnumerable<Vehicle> vehicles)
+        {
+            foreach (var vehicle in vehicles)
+            {
+                await PopulateModel(vehicle);
+            }
+        }
+
+        private async Task PopulateMake(Vehicle vehicle)
+        {
+            var result = await makeService.Get(vehicle.MakeId);
+            if (result.ResultCode == ResultCode.Success)
+            {
+                vehicle.Make = result.Data;
+            }
+        }
+
+        private async Task PopulateModel(Vehicle vehicle)
+        {
+            var result = await modelService.Get(vehicle.ModelId);
+            if (result.ResultCode == ResultCode.Success)
+            {
+                vehicle.Model = result.Data;
+            }
         }
 
         public void Dispose()

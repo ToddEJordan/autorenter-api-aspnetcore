@@ -17,7 +17,7 @@ namespace AutoRenter.Api.Models
 
         public Guid LocationId { get; set; }
 
-        public MakeModel Make { get; set; }
-        public ModelModel Model { get; set; }
+        public string Make { get; set; }
+        public string Model { get; set; }
     }
 }

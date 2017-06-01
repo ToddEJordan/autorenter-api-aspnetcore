@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
+using AutoRenter.Api.Models;
 using AutoRenter.Api.Services;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Domain.Models;
@@ -16,11 +17,13 @@ namespace AutoRenter.Api.Controllers
     {
         private readonly ILocationService locationService;
         private readonly IResultCodeProcessor resultCodeProcessor;
+        private readonly IMapper mapper;
 
-        public LocationsController(ILocationService locationService, IResultCodeProcessor resultCodeProcessor)
+        public LocationsController(ILocationService locationService, IResultCodeProcessor resultCodeProcessor, IMapper mapper)
         {
             this.locationService = locationService;
             this.resultCodeProcessor = resultCodeProcessor;
+            this.mapper = mapper;
         }
 
         [HttpGet]
@@ -121,27 +124,35 @@ namespace AutoRenter.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetAllVehicles(Guid locationId)
         {
+            if (locationId == Guid.Empty)
+            {
+                return BadRequest(locationId);
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
             var result = await locationService.GetVehicles(locationId);
-
-            switch (result.ResultCode)
+            if (result.ResultCode != ResultCode.Success 
+                && result.ResultCode != ResultCode.NotFound)
             {
-                case ResultCode.Success:
-                case ResultCode.NotFound:
-                    var totalVehicles = result.Data?.Count() ?? 0;
-                    var formattedResult = new Dictionary<string, object>
-                    {
-                        { "vehicles", result.Data ?? new List<Vehicle>() }
-                    };
-                    Response.Headers.Add("x-total-count", totalVehicles.ToString());
-                    return Ok(formattedResult);
-                default:
-                    return resultCodeProcessor.Process(result.ResultCode);
+                return resultCodeProcessor.Process(result.ResultCode);
             }
+            
+            var response = result.Data == null 
+                ? new List<VehicleModel>() 
+                : result.Data
+                    .Select(x => mapper.Map<VehicleModel>(x))
+                    .ToList();
+
+            var formattedResult = new Dictionary<string, object>
+            {
+                { "vehicles", response }
+            };
+            Response.Headers.Add("x-total-count", response?.Count().ToString());
+            return Ok(formattedResult);
         }
 
         [HttpPost("{locationId}/vehicles")]

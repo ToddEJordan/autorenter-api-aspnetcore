@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 using System.Linq;
-using AutoRenter.Domain.Models;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using AutoRenter.Domain.Interfaces;
-
+using AutoMapper;
+using AutoRenter.Api.Models;
 using AutoRenter.Api.Services;
+using AutoRenter.Domain.Interfaces;
+using AutoRenter.Domain.Models;
 
 namespace AutoRenter.Api.Controllers
 {
@@ -17,10 +18,13 @@ namespace AutoRenter.Api.Controllers
     {
         private readonly IVehicleService vehicleService;
         private readonly IResultCodeProcessor resultCodeProcessor;
-        public VehiclesController(IVehicleService vehicleService, IResultCodeProcessor resultCodeProcessor)
+        private readonly IMapper mapper;
+
+        public VehiclesController(IVehicleService vehicleService, IResultCodeProcessor resultCodeProcessor, IMapper mapper)
         {
             this.vehicleService = vehicleService;
             this.resultCodeProcessor = resultCodeProcessor;
+            this.mapper = mapper;
         }
 
         [HttpGet]
@@ -30,11 +34,15 @@ namespace AutoRenter.Api.Controllers
             var result = await vehicleService.GetAll();
             if (result.ResultCode == ResultCode.Success)
             {
+                var response = result.Data
+                    .Select(vehicle => mapper.Map<VehicleModel>(vehicle))
+                    .ToList();
+
                 var formattedResult = new Dictionary<string, object>
                 {
-                    { "vehicles", result.Data }
+                    { "vehicles", response }
                 };
-                Response.Headers.Add("x-total-count", result.Data.Count().ToString());
+                Response.Headers.Add("x-total-count", response?.Count().ToString());
                 return Ok(formattedResult);
             }
 
@@ -53,9 +61,10 @@ namespace AutoRenter.Api.Controllers
             var result = await vehicleService.Get(id);
             if (result.ResultCode == ResultCode.Success)
             {
+                var response = mapper.Map<VehicleModel>(result.Data);
                 var formattedResult = new Dictionary<string, object>
                 {
-                    {"vehicle", result.Data}
+                    {"vehicle", response}
                 };
                 return Ok(formattedResult);
             }

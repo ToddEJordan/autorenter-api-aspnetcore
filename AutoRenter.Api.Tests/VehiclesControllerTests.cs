@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
 using Moq;
 using Xunit;
 using AutoRenter.Api.Controllers;
@@ -22,7 +23,9 @@ namespace AutoRenter.Api.Tests
             vehicleServiceMoq.Setup(x => x.GetAll())
                 .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.Success, TestVehicles()));
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
+            var mapperMoq = new Mock<IMapper>();
+
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, mapperMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -46,7 +49,9 @@ namespace AutoRenter.Api.Tests
             vehicleServiceMoq.Setup(x => x.GetAll())
                 .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.NotFound));
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
+            var mapperMoq = new Mock<IMapper>();
+
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, mapperMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -69,7 +74,9 @@ namespace AutoRenter.Api.Tests
             vehicleServiceMoq.Setup(x => x.GetAll())
                 .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.Success, TestVehicles()));
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
+            var mapperMoq = new Mock<IMapper>();
+
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, mapperMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -93,7 +100,9 @@ namespace AutoRenter.Api.Tests
             vehicleServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<Vehicle>(ResultCode.Success, TestVehicle()));
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
+            var mapperMoq = new Mock<IMapper>();
+
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, mapperMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -118,7 +127,9 @@ namespace AutoRenter.Api.Tests
             vehicleServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<Vehicle>(ResultCode.NotFound));
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
+            var mapperMoq = new Mock<IMapper>();
+
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, mapperMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -142,7 +153,9 @@ namespace AutoRenter.Api.Tests
             vehicleServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<Vehicle>(ResultCode.Success, TestVehicle()));
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
+            var mapperMoq = new Mock<IMapper>();
+
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, mapperMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -166,7 +179,9 @@ namespace AutoRenter.Api.Tests
             vehicleServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<Vehicle>(ResultCode.Success, TestVehicle()));
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
+            var mapperMoq = new Mock<IMapper>();
+
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, mapperMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -190,7 +205,9 @@ namespace AutoRenter.Api.Tests
             vehicleServiceMoq.Setup(x => x.Insert(It.IsAny<Vehicle>()))
                 .ReturnsAsync(() => new Result<Guid>(ResultCode.Success, TestVehicle().Id));
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
+            var mapperMoq = new Mock<IMapper>();
+
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, mapperMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -213,7 +230,9 @@ namespace AutoRenter.Api.Tests
             vehicleServiceMoq.Setup(x => x.Insert(It.IsAny<Vehicle>()))
                 .ReturnsAsync(() => new Result<Guid>(ResultCode.BadRequest, TestVehicle().Id));
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
+            var mapperMoq = new Mock<IMapper>();
+
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, mapperMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -237,7 +256,9 @@ namespace AutoRenter.Api.Tests
             vehicleServiceMoq.Setup(x => x.Insert(It.IsAny<Vehicle>()))
                 .ReturnsAsync(() => new Result<Guid>(ResultCode.Conflict, testVehicle.Id));
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
+            var mapperMoq = new Mock<IMapper>();
+
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, mapperMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -261,7 +282,9 @@ namespace AutoRenter.Api.Tests
             vehicleServiceMoq.Setup(x => x.Update(It.IsAny<Vehicle>()))
                 .ReturnsAsync(() => new Result<Guid>(ResultCode.Success, testVehicle.Id));
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
+            var mapperMoq = new Mock<IMapper>();
+
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, mapperMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -284,9 +307,10 @@ namespace AutoRenter.Api.Tests
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.Update(It.IsAny<Vehicle>()))
                 .ReturnsAsync(() => new Result<Guid>(ResultCode.BadRequest, testVehicle.Id));
-            var validationServiceMoq = new Mock<IValidationService>();
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
+            var mapperMoq = new Mock<IMapper>();
+
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, mapperMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -309,7 +333,9 @@ namespace AutoRenter.Api.Tests
             vehicleServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
                 .ReturnsAsync(() => ResultCode.Success);
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
+            var mapperMoq = new Mock<IMapper>();
+
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, mapperMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -332,7 +358,9 @@ namespace AutoRenter.Api.Tests
             vehicleServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
                 .ReturnsAsync(() => ResultCode.BadRequest);
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
+            var mapperMoq = new Mock<IMapper>();
+
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, mapperMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -355,7 +383,9 @@ namespace AutoRenter.Api.Tests
             vehicleServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
                 .ReturnsAsync(() => ResultCode.NotFound);
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor)
+            var mapperMoq = new Mock<IMapper>();
+
+            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, mapperMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
