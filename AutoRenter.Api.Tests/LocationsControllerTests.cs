@@ -173,7 +173,7 @@ namespace AutoRenter.Api.Tests
         public async void Get_ReturnsData()
         {
             // arrange
-            var targetId = new Guid("a341dc33-fe65-4c8d-a7b5-16be1741c02e");
+            var targetId = new IdentifierHelper().LocationId;
             var resultCodeProcessor = new ResultCodeProcessor();
 
             var locationServiceMoq = new Mock<ILocationService>();

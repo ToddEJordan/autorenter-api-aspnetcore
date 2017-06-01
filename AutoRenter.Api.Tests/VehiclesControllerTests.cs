@@ -6,6 +6,7 @@ using Moq;
 using Xunit;
 using AutoRenter.Api.Controllers;
 using AutoRenter.Api.Services;
+using AutoRenter.Api.Tests.Helpers;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Domain.Models;
 
@@ -95,7 +96,7 @@ namespace AutoRenter.Api.Tests
         {
             // arrange
             var resultCodeProcessor = new ResultCodeProcessor();
-            var targetId = new Guid("52731074-43be-4e67-8374-17ee4ec3369d");
+            var targetId = new IdentifierHelper().VehicleId;
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<Vehicle>(ResultCode.Success, TestVehicle()));
@@ -120,7 +121,7 @@ namespace AutoRenter.Api.Tests
         public async void Get_WhenNotFound()
         {
             // arrange
-            var targetId = new Guid("a2731074-43be-4e67-8374-17ee4ec3369d");
+            var targetId = Guid.NewGuid();
             var resultCodeProcessor = new ResultCodeProcessor();
 
             var vehicleServiceMoq = new Mock<IVehicleService>();
@@ -172,7 +173,7 @@ namespace AutoRenter.Api.Tests
         public async void Get_ReturnsData()
         {
             // arrange
-            var targetId = new Guid("52731074-43be-4e67-8374-17ee4ec3369d");
+            var targetId = new IdentifierHelper().VehicleId; ;
             var resultCodeProcessor = new ResultCodeProcessor();
 
             var vehicleServiceMoq = new Mock<IVehicleService>();

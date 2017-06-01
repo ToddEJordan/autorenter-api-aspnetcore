@@ -8,6 +8,8 @@ namespace AutoRenter.Api.Data
     public static class AutoRenterDbInitializer
     {
         private static AutoRenterContext context;
+        private static Guid locationId1 = new Guid("c0b694ec-3352-43e3-9f22-77c87fe83d48");
+        private static Guid locationId2 = new Guid("dc95a8f9-713f-4aed-bf5e-4e5567c4dd9f");
 
         public static void Initialize(IServiceProvider serviceProvider)
         {
@@ -28,7 +30,7 @@ namespace AutoRenter.Api.Data
                 {
                     new Location
                     {
-                        Id = new Guid("c0b694ec-3352-43e3-9f22-77c87fe83d48"),
+                        Id = locationId1,
                         SiteId = "ind",
                         Name = "Indianapolis International Airport",
                         City = "Indianapolis",
@@ -36,7 +38,7 @@ namespace AutoRenter.Api.Data
                     },
                     new Location
                     {
-                        Id = new Guid("dc95a8f9-713f-4aed-bf5e-4e5567c4dd9f"),
+                        Id = locationId2,
                         SiteId = "lax",
                         Name = "Los Angeles International Airport",
                         City = "Los Angeles",
@@ -146,7 +148,7 @@ namespace AutoRenter.Api.Data
                     new Vehicle
                     {
                         Id = new Guid("0b68a1d6-4210-42e0-9647-3747da20a181"),
-                        LocationId = new Guid("c0b694ec-3352-43e3-9f22-77c87fe83d48"),
+                        LocationId = locationId1,
                         Vin = "1XKDPB0X04R047346",
                         MakeId = "frd",
                         ModelId = "fxp",
@@ -159,7 +161,7 @@ namespace AutoRenter.Api.Data
                     new Vehicle
                     {
                         Id = new Guid("474086d6-eb1b-4861-9876-de892db743c9"),
-                        LocationId = new Guid("c0b694ec-3352-43e3-9f22-77c87fe83d48"),
+                        LocationId = locationId1,
                         Vin = "1HVLPHXM4GHA52708",
                         MakeId = "tsl",
                         ModelId = "tms",
@@ -172,7 +174,7 @@ namespace AutoRenter.Api.Data
                     new Vehicle
                     {
                         Id = new Guid("85a8eea6-1c03-4455-9125-36527a00a96b"),
-                        LocationId = new Guid("dc95a8f9-713f-4aed-bf5e-4e5567c4dd9f"),
+                        LocationId = locationId2,
                         Vin = "2XKDPB0X04R047346",
                         MakeId = "che",
                         ModelId = "cvt",
@@ -185,7 +187,7 @@ namespace AutoRenter.Api.Data
                     new Vehicle
                     {
                         Id = new Guid("4d9f9e42-6d36-450e-9068-18ed163d9829"),
-                        LocationId = new Guid("dc95a8f9-713f-4aed-bf5e-4e5567c4dd9f"),
+                        LocationId = locationId2,
                         Vin = "1XKDPB0X04R047346",
                         MakeId = "frd",
                         ModelId = "fta",
