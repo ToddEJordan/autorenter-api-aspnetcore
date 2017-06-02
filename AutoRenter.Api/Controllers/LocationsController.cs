@@ -135,24 +135,13 @@ namespace AutoRenter.Api.Controllers
             }
 
             var result = await locationService.GetVehicles(locationId);
-            if (result.ResultCode != ResultCode.Success 
-                && result.ResultCode != ResultCode.NotFound)
+            if (result.ResultCode == ResultCode.Success 
+                || result.ResultCode == ResultCode.NotFound)
             {
-                return resultCodeProcessor.Process(result.ResultCode);
+                return Ok(FormatResult(result.Data));
             }
-            
-            var response = result.Data == null 
-                ? new List<VehicleModel>() 
-                : result.Data
-                    .Select(x => mapper.Map<VehicleModel>(x))
-                    .ToList();
 
-            var formattedResult = new Dictionary<string, object>
-            {
-                { "vehicles", response }
-            };
-            Response.Headers.Add("x-total-count", response?.Count().ToString());
-            return Ok(formattedResult);
+            return resultCodeProcessor.Process(result.ResultCode);
         }
 
         [HttpPost("{locationId}/vehicles")]
@@ -171,6 +160,22 @@ namespace AutoRenter.Api.Controllers
             }
 
             return resultCodeProcessor.Process(result.ResultCode);
+        }
+
+        private Dictionary<string, object> FormatResult(IEnumerable<Vehicle> vehicles)
+        {
+            var vehicleModels = vehicles == null
+                ? new List<VehicleModel>()
+                : vehicles
+                    .Select(x => mapper.Map<VehicleModel>(x))
+                    .ToList();
+
+            var formattedResult = new Dictionary<string, object>
+            {
+                { "vehicles", vehicleModels }
+            };
+            Response.Headers.Add("x-total-count", vehicleModels?.Count().ToString());
+            return formattedResult;
         }
     }
 }
