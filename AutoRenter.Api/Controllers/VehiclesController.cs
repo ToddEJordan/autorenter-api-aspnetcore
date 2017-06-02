@@ -74,12 +74,14 @@ namespace AutoRenter.Api.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Post([FromBody] Vehicle vehicle)
+        public async Task<IActionResult> Post([FromBody] VehicleModel vehicleModel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
+            var vehicle = mapper.Map<Vehicle>(vehicleModel);
 
             var result = await vehicleService.Insert(vehicle);
             if (result.ResultCode == ResultCode.Success)
@@ -110,12 +112,14 @@ namespace AutoRenter.Api.Controllers
 
         [HttpPut("{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> Put(Guid id, [FromBody] Vehicle vehicle)
+        public async Task<IActionResult> Put(Guid id, [FromBody] VehicleModel vehicleModel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
+            var vehicle = mapper.Map<Vehicle>(vehicleModel);
 
             var result = await vehicleService.Update(vehicle);
             if (result.ResultCode == ResultCode.Success)

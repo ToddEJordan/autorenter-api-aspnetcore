@@ -219,13 +219,23 @@ namespace AutoRenter.Api
                     .ForMember(dest => dest.Model,
                         opts => opts.MapFrom(src => src.Model.Name));
 
+                x.CreateMap<VehicleModel, Vehicle>()
+                    .ForMember(dest => dest.Make,
+                        opts => opts.Ignore())
+                    .ForMember(dest => dest.Model,
+                        opts => opts.Ignore());
+
                 x.CreateMap<Make, MakeModel>()
                     .ForMember(dest => dest.Id,
                                 opts => opts.MapFrom(src => src.ExternalId));
 
+                x.CreateMap<MakeModel, Make>();
+
                 x.CreateMap<Model, ModelModel>()
                     .ForMember(dest => dest.Id,
                         opts => opts.MapFrom(src => src.ExternalId));
+
+                x.CreateMap<ModelModel, Model>();
             });
 
             services.AddSingleton(typeof(IMapper), new Mapper(config));
