@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoRenter.Api.Data;
+using AutoRenter.Domain.Data;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Domain.Models;
 

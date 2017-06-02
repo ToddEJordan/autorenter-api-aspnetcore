@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoRenter.Domain.Models;
 using AutoRenter.Domain.Interfaces;
-using AutoRenter.Api.Data;
+using AutoRenter.Domain.Data;
 
 namespace AutoRenter.Domain.Services
 {

@@ -1,7 +1,7 @@
 ﻿using AutoRenter.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace AutoRenter.Api.Data
+namespace AutoRenter.Domain.Data
 {
     public class AutoRenterContext : DbContext
     {

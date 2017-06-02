@@ -1,7 +1,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
-using AutoRenter.Api.Data;
+using AutoRenter.Domain.Data;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Domain.Models;
 using AutoRenter.Domain.Services.Commands;

@@ -1,4 +1,4 @@
-﻿using AutoRenter.Api.Data;
+﻿using AutoRenter.Domain.Data;
 using AutoRenter.Domain.Models;
 
 namespace AutoRenter.Domain.Interfaces

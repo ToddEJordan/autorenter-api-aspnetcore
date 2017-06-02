@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
-using AutoRenter.Api.Data;
+using AutoRenter.Domain.Data;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Domain.Models;
 using AutoRenter.Domain.Services.Commands;

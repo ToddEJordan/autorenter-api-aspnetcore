@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoRenter.Api", "AutoRenter.Api\AutoRenter.Api.csproj", "{F4675F5C-6950-43B6-8802-13853AFE7A3C}"
 EndProject
@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoRenter.Domain.Services"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoRenter.Domain.Interfaces", "AutoRenter.Domain.Interfaces\AutoRenter.Domain.Interfaces.csproj", "{6A5A2B69-0B5F-45B2-8E98-33BFC7A495A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoRenter.Api.Data", "AutoRenter.Api.Data\AutoRenter.Api.Data.csproj", "{DFD39567-0461-4E36-810E-433C4E493F70}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoRenter.Domain.Data", "AutoRenter.Api.Data\AutoRenter.Domain.Data.csproj", "{DFD39567-0461-4E36-810E-433C4E493F70}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoRenter.Api.Validation", "AutoRenter.Api.Validation\AutoRenter.Api.Validation.csproj", "{946CD07F-AB4B-4D8C-AE06-5BD15F2F5369}"
 EndProject

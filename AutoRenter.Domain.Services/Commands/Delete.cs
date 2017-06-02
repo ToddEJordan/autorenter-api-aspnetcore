@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using AutoRenter.Api.Data;
+using AutoRenter.Domain.Data;
 using AutoRenter.Domain.Models;
 using AutoRenter.Domain.Interfaces;
 

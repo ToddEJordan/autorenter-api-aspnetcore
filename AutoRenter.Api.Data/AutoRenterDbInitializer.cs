@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoRenter.Domain.Models;
 
-namespace AutoRenter.Api.Data
+namespace AutoRenter.Domain.Data
 {
     public static class AutoRenterDbInitializer
     {
