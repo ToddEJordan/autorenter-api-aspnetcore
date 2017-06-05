@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using FluentValidation;
 using AutoRenter.Domain.Interfaces;
-using IValidatorFactory = AutoRenter.Api.Validation.IValidatorFactory;
+using IValidatorFactory = AutoRenter.Domain.Validation.IValidatorFactory;
 
 namespace AutoRenter.Domain.Services
 {

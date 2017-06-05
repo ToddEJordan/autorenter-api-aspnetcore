@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using FluentValidation;
 using AutoRenter.Domain.Models;
 
-namespace AutoRenter.Api.Validation
+namespace AutoRenter.Domain.Validation
 {
     public class ValidatorFactory : IValidatorFactory
     {

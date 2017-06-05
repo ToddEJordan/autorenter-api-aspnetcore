@@ -1,5 +1,5 @@
-﻿using AutoRenter.Domain.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using AutoRenter.Domain.Models;
 
 namespace AutoRenter.Domain.Data
 {

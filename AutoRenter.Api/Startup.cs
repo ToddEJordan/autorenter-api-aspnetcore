@@ -21,11 +21,11 @@ using AutoRenter.Api.Authentication;
 using AutoRenter.Api.Authorization;
 using AutoRenter.Api.Models;
 using AutoRenter.Api.Services;
-using AutoRenter.Api.Validation;
 using AutoRenter.Domain.Data;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Domain.Models;
 using AutoRenter.Domain.Services.Commands;
+using AutoRenter.Domain.Validation;
 
 namespace AutoRenter.Api
 {

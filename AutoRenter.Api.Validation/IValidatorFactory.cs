@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace AutoRenter.Api.Validation
+namespace AutoRenter.Domain.Validation
 {
     public interface IValidatorFactory
     {

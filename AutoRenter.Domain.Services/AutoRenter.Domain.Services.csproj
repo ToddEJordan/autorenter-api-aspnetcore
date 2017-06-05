@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AutoRenter.Api.Data\AutoRenter.Domain.Data.csproj" />
-    <ProjectReference Include="..\AutoRenter.Api.Validation\AutoRenter.Api.Validation.csproj" />
+    <ProjectReference Include="..\AutoRenter.Api.Validation\AutoRenter.Domain.Validation.csproj" />
     <ProjectReference Include="..\AutoRenter.Domain.Interfaces\AutoRenter.Domain.Interfaces.csproj" />
     <ProjectReference Include="..\AutoRenter.Domain.Models\AutoRenter.Domain.Models.csproj" />
   </ItemGroup>

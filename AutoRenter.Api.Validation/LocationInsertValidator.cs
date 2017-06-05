@@ -1,7 +1,7 @@
 ﻿using AutoRenter.Domain.Models;
 using FluentValidation;
 
-namespace AutoRenter.Api.Validation
+namespace AutoRenter.Domain.Validation
 {
     public class LocationInsertValidator : AbstractValidator<Location>, IValidator<Location>
     {

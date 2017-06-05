@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using AutoRenter.Domain.Models;
 
-namespace AutoRenter.Api.Validation
+namespace AutoRenter.Domain.Validation
 {
     public class LocationDeleteValidator : AbstractValidator<Location>, IValidator<Location>
     {
