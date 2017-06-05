@@ -67,9 +67,9 @@ namespace AutoRenter.Domain.Services.Tests
             if (!context.Makes.Any())
             {
                 ICollection<Make> makes = new List<Make> {
-                    new Make{Id = new Guid("c9224dfe-32c5-4d77-b6fc-b14a7ed1bfb2"), ExternalId = "tsl", Name = "Tesla"},
-                    new Make{Id = new Guid("b865eb42-e21c-4288-84ea-00bd10f050ec"), ExternalId = "che", Name = "Chevrolet"},
-                    new Make{Id = new Guid("e54c86c9-7ebe-49f1-9e8a-1c54dab8ba92"), ExternalId = "frd", Name = "Ford"}
+                    new Make{Id = Guid.NewGuid(), ExternalId = "tsl", Name = "Tesla"},
+                    new Make{Id = Guid.NewGuid(), ExternalId = "che", Name = "Chevrolet"},
+                    new Make{Id = Guid.NewGuid(), ExternalId = "frd", Name = "Ford"}
                 };
                 foreach (var make in makes)
                     context.Makes.Add(make);
@@ -83,11 +83,11 @@ namespace AutoRenter.Domain.Services.Tests
             if (!context.Models.Any())
             {
                 ICollection<Model> models = new List<Model> {
-                    new Model{Id = new Guid("5bc8fd2c-0fa5-4618-9462-df1334c97958"), ExternalId = "tms", Name = "Model S"},
-                    new Model{Id = new Guid("6b0e0dc3-cf8e-4476-b156-e0d63aa2a08b"), ExternalId = "tmx", Name = "Model X"},
-                    new Model{Id = new Guid("4e1b13cc-4d42-401c-9889-b4cce23f0d73"), ExternalId = "cvt", Name = "Corvette"},
-                    new Model{Id = new Guid("8078bc4b-0af4-4ce3-9713-c148883a609d"), ExternalId = "fxp", Name = "Explorer"},
-                    new Model{Id = new Guid("f5ce77c3-95a6-41d6-81be-a4b9c2367dd3"), ExternalId = "fta", Name = "Taurus"}
+                    new Model{Id = Guid.NewGuid(), ExternalId = "tms", Name = "Model S"},
+                    new Model{Id = Guid.NewGuid(), ExternalId = "tmx", Name = "Model X"},
+                    new Model{Id = Guid.NewGuid(), ExternalId = "cvt", Name = "Corvette"},
+                    new Model{Id = Guid.NewGuid(), ExternalId = "fxp", Name = "Explorer"},
+                    new Model{Id = Guid.NewGuid(), ExternalId = "fta", Name = "Taurus"}
                 };
                 foreach (var model in models)
                     context.Models.Add(model);
@@ -101,25 +101,25 @@ namespace AutoRenter.Domain.Services.Tests
             if (!context.Skus.Any())
             {
                 ICollection<Sku> skus = new List<Sku> {
-                    new Sku{Id = new Guid("b19a9a7a-3631-427e-90ad-777f3d2b2535"), MakeId = "tsl", ModelId = "tms", Year = 2016, Color = "Black"},
-                    new Sku{Id = new Guid("f90f3ce2-b9a9-48f1-b38a-8101f75b414b"), MakeId = "tsl", ModelId = "tmx", Year = 2016, Color = "Black"},
-                    new Sku{Id = new Guid("72c88d7e-238d-47db-9185-d80828c9b008"), MakeId = "tsl", ModelId = "tms", Year = 2017, Color = "Black"},
-                    new Sku{Id = new Guid("2dcb89f6-c71c-4651-9cb4-bc120d877248"), MakeId = "tsl", ModelId = "tms", Year = 2017, Color = "Silver"},
-                    new Sku{Id = new Guid("5a0431d7-93a3-4d8a-9d87-7f8a0c7c2829"), MakeId = "tsl", ModelId = "tmx", Year = 2017, Color = "Black"},
-                    new Sku{Id = new Guid("fb240f9e-7e48-43cd-90a9-43a6433f1d07"), MakeId = "tsl", ModelId = "tmx", Year = 2017, Color = "Silver"},
-                    new Sku{Id = new Guid("1370471a-cc1e-4b37-98a4-73f5e344bbe9"), MakeId = "che", ModelId = "cvt", Year = 2016, Color = "Black"},
-                    new Sku{Id = new Guid("3b7844c2-be06-4843-b413-3360895a02ea"), MakeId = "che", ModelId = "cvt", Year = 2016, Color = "Red"},
-                    new Sku{Id = new Guid("a931c512-749a-4181-b212-e5bcd30ac731"), MakeId = "che", ModelId = "cvt", Year = 2017, Color = "Black"},
-                    new Sku{Id = new Guid("950588cc-5b8c-4be0-ac4d-e0207e20bb79"), MakeId = "che", ModelId = "cvt", Year = 2017, Color = "Red"},
-                    new Sku{Id = new Guid("a05f8bf7-c028-4f4f-8e5f-cddb378cc86a"), MakeId = "frd", ModelId = "fxp", Year = 2016, Color = "Black"},
-                    new Sku{Id = new Guid("0f40b060-201f-46e9-8557-b168292859ae"), MakeId = "frd", ModelId = "fta", Year = 2016, Color = "Black"},
-                    new Sku{Id = new Guid("f52a9405-f57d-4e35-836d-8ebc14f6dc37"), MakeId = "frd", ModelId = "fta", Year = 2016, Color = "Red"},
-                    new Sku{Id = new Guid("02208a1d-62ef-4298-95c0-ef6e8d2fa7a5"), MakeId = "frd", ModelId = "fta", Year = 2016, Color = "Silver"},
-                    new Sku{Id = new Guid("4d281090-360c-4e0c-a63e-0fe981d17bcc"), MakeId = "frd", ModelId = "fxp", Year = 2017, Color = "Black"},
-                    new Sku{Id = new Guid("c33ac900-4e23-4361-9806-975447794364"), MakeId = "frd", ModelId = "fxp", Year = 2017, Color = "Silver"},
-                    new Sku{Id = new Guid("80b2ff7c-f551-4505-bd86-a96863443075"), MakeId = "frd", ModelId = "fta", Year = 2017, Color = "Black"},
-                    new Sku{Id = new Guid("2252e340-7ac2-4543-abb6-46d067a7836e"), MakeId = "frd", ModelId = "fta", Year = 2017, Color = "Red"},
-                    new Sku{Id = new Guid("ddec89e9-eb22-4b44-acff-d45e5600596e"), MakeId = "frd", ModelId = "fta", Year = 2017, Color = "Silver"}
+                    new Sku{Id = Guid.NewGuid(), MakeId = "tsl", ModelId = "tms", Year = 2016, Color = "Black"},
+                    new Sku{Id = Guid.NewGuid(), MakeId = "tsl", ModelId = "tmx", Year = 2016, Color = "Black"},
+                    new Sku{Id = Guid.NewGuid(), MakeId = "tsl", ModelId = "tms", Year = 2017, Color = "Black"},
+                    new Sku{Id = Guid.NewGuid(), MakeId = "tsl", ModelId = "tms", Year = 2017, Color = "Silver"},
+                    new Sku{Id = Guid.NewGuid(), MakeId = "tsl", ModelId = "tmx", Year = 2017, Color = "Black"},
+                    new Sku{Id = Guid.NewGuid(), MakeId = "tsl", ModelId = "tmx", Year = 2017, Color = "Silver"},
+                    new Sku{Id = Guid.NewGuid(), MakeId = "che", ModelId = "cvt", Year = 2016, Color = "Black"},
+                    new Sku{Id = Guid.NewGuid(), MakeId = "che", ModelId = "cvt", Year = 2016, Color = "Red"},
+                    new Sku{Id = Guid.NewGuid(), MakeId = "che", ModelId = "cvt", Year = 2017, Color = "Black"},
+                    new Sku{Id = Guid.NewGuid(), MakeId = "che", ModelId = "cvt", Year = 2017, Color = "Red"},
+                    new Sku{Id = Guid.NewGuid(), MakeId = "frd", ModelId = "fxp", Year = 2016, Color = "Black"},
+                    new Sku{Id = Guid.NewGuid(), MakeId = "frd", ModelId = "fta", Year = 2016, Color = "Black"},
+                    new Sku{Id = Guid.NewGuid(), MakeId = "frd", ModelId = "fta", Year = 2016, Color = "Red"},
+                    new Sku{Id = Guid.NewGuid(), MakeId = "frd", ModelId = "fta", Year = 2016, Color = "Silver"},
+                    new Sku{Id = Guid.NewGuid(), MakeId = "frd", ModelId = "fxp", Year = 2017, Color = "Black"},
+                    new Sku{Id = Guid.NewGuid(), MakeId = "frd", ModelId = "fxp", Year = 2017, Color = "Silver"},
+                    new Sku{Id = Guid.NewGuid(), MakeId = "frd", ModelId = "fta", Year = 2017, Color = "Black"},
+                    new Sku{Id = Guid.NewGuid(), MakeId = "frd", ModelId = "fta", Year = 2017, Color = "Red"},
+                    new Sku{Id = Guid.NewGuid(), MakeId = "frd", ModelId = "fta", Year = 2017, Color = "Silver"}
                 };
 
                 foreach (var sku in skus)
@@ -134,11 +134,11 @@ namespace AutoRenter.Domain.Services.Tests
             if (!context.States.Any())
             {
                 ICollection<State> states = new List<State> {
-                    new State{Id = new Guid("e94b5f55-77c9-4b71-b2b3-6ee1a9eded2b"), StateCode = "AZ", Name = "Arizona"},
-                    new State{Id = new Guid("70780b56-1ae3-4777-8bf8-c57626a5b4ef"), StateCode = "CA", Name = "California"},
-                    new State{Id = new Guid("bb14da69-9398-4ab8-8881-f35c65d287a7"), StateCode = "HI", Name = "Hawaii"},
-                    new State{Id = new Guid("7a9f7ecc-c19f-49bb-af00-46902688e4c4"), StateCode = "IN", Name = "Indiana"},
-                    new State{Id = new Guid("b15c1e60-1ae3-4d63-bae8-7f20e647fab5"), StateCode = "WA", Name = "Washington"}
+                    new State{Id = Guid.NewGuid(), StateCode = "AZ", Name = "Arizona"},
+                    new State{Id = Guid.NewGuid(), StateCode = "CA", Name = "California"},
+                    new State{Id = Guid.NewGuid(), StateCode = "HI", Name = "Hawaii"},
+                    new State{Id = Guid.NewGuid(), StateCode = "IN", Name = "Indiana"},
+                    new State{Id = Guid.NewGuid(), StateCode = "WA", Name = "Washington"}
                 };
 
                 foreach (var state in states)
@@ -156,7 +156,7 @@ namespace AutoRenter.Domain.Services.Tests
                 {
                     new Vehicle
                     {
-                        Id = new Guid("0b68a1d6-4210-42e0-9647-3747da20a181"),
+                        Id = Guid.NewGuid(),
                         LocationId = locationId1,
                         Vin = "1XKDPB0X04R047346",
                         MakeId = "frd",
@@ -169,7 +169,7 @@ namespace AutoRenter.Domain.Services.Tests
                     },
                     new Vehicle
                     {
-                        Id = new Guid("474086d6-eb1b-4861-9876-de892db743c9"),
+                        Id = Guid.NewGuid(),
                         LocationId = locationId1,
                         Vin = "1HVLPHXM4GHA52708",
                         MakeId = "tsl",
@@ -182,7 +182,7 @@ namespace AutoRenter.Domain.Services.Tests
                     },
                     new Vehicle
                     {
-                        Id = new Guid("85a8eea6-1c03-4455-9125-36527a00a96b"),
+                        Id = Guid.NewGuid(),
                         LocationId = locationId2,
                         Vin = "2XKDPB0X04R047346",
                         MakeId = "che",
@@ -195,7 +195,7 @@ namespace AutoRenter.Domain.Services.Tests
                     },
                     new Vehicle
                     {
-                        Id = new Guid("4d9f9e42-6d36-450e-9068-18ed163d9829"),
+                        Id = Guid.NewGuid(),
                         LocationId = locationId2,
                         Vin = "1XKDPB0X04R047346",
                         MakeId = "frd",
