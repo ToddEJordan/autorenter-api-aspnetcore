@@ -1,7 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using AutoRenter.Api.Services;
@@ -15,10 +13,13 @@ namespace AutoRenter.Api.Controllers
     {
         private readonly ISkuService skuService;
         private readonly IResultCodeProcessor resultCodeProcessor;
-        public SkusController(ISkuService skuService, IResultCodeProcessor resultCodeProcessor)
+        private readonly IResponseFormatter responseFormatter;
+
+        public SkusController(ISkuService skuService, IResultCodeProcessor resultCodeProcessor, IResponseFormatter responseFormatter)
         {
             this.skuService = skuService;
             this.resultCodeProcessor = resultCodeProcessor;
+            this.responseFormatter = responseFormatter;
         }
 
         [HttpGet]
@@ -28,11 +29,8 @@ namespace AutoRenter.Api.Controllers
             var result = await skuService.GetAll();
             if (result.ResultCode == ResultCode.Success)
             {
-                var formattedResult = new Dictionary<string, object>
-                {
-                    { "skus", result.Data }
-                };
                 Response.Headers.Add("x-total-count", result.Data.Count().ToString());
+                var formattedResult = responseFormatter.Format("skus", result.Data);
                 return Ok(formattedResult);
             }
 

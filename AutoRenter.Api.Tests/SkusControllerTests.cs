@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
@@ -23,7 +22,14 @@ namespace AutoRenter.Api.Tests
             skuServiceMoq.Setup(x => x.GetAll())
                 .ReturnsAsync(() => new Result<IEnumerable<Sku>>(ResultCode.Success, TestSkus()));
 
-            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor)
+            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
+                .Returns(new Dictionary<string, object>
+                        {
+                            { "skus", new SkuHelper().GetMany() }
+                        });
+
+            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -47,7 +53,14 @@ namespace AutoRenter.Api.Tests
             skuServiceMoq.Setup(x => x.GetAll())
                 .ReturnsAsync(() => new Result<IEnumerable<Sku>>(ResultCode.NotFound));
 
-            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor)
+            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
+                .Returns(new Dictionary<string, object>
+                        {
+                            { "skus", new SkuHelper().GetMany() }
+                        });
+
+            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -70,7 +83,14 @@ namespace AutoRenter.Api.Tests
             skuServiceMoq.Setup(x => x.GetAll())
                 .ReturnsAsync(() => new Result<IEnumerable<Sku>>(ResultCode.Success, TestSkus()));
 
-            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor)
+            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
+                .Returns(new Dictionary<string, object>
+                        {
+                            { "skus", new SkuHelper().GetMany() }
+                        });
+
+            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
 using AutoRenter.Api.Models;
 using AutoRenter.Api.Services;
 using AutoRenter.Domain.Interfaces;
@@ -18,13 +17,15 @@ namespace AutoRenter.Api.Controllers
     {
         private readonly IVehicleService vehicleService;
         private readonly IResultCodeProcessor resultCodeProcessor;
-        private readonly IMapper mapper;
+        private readonly IResponseFormatter responseFormatter;
 
-        public VehiclesController(IVehicleService vehicleService, IResultCodeProcessor resultCodeProcessor, IMapper mapper)
+        public VehiclesController(IVehicleService vehicleService, 
+            IResultCodeProcessor resultCodeProcessor, 
+            IResponseFormatter responseFormatter)
         {
             this.vehicleService = vehicleService;
             this.resultCodeProcessor = resultCodeProcessor;
-            this.mapper = mapper;
+            this.responseFormatter = responseFormatter;
         }
 
         [HttpGet]
@@ -34,15 +35,8 @@ namespace AutoRenter.Api.Controllers
             var result = await vehicleService.GetAll();
             if (result.ResultCode == ResultCode.Success)
             {
-                var response = result.Data
-                    .Select(vehicle => mapper.Map<VehicleModel>(vehicle))
-                    .ToList();
-
-                var formattedResult = new Dictionary<string, object>
-                {
-                    { "vehicles", response }
-                };
-                Response.Headers.Add("x-total-count", response?.Count().ToString());
+                Response.Headers.Add("x-total-count", result.Data.Count().ToString());
+                var formattedResult = responseFormatter.FormatAndMap<IEnumerable<VehicleModel>, IEnumerable<Vehicle>>("vehicles", result.Data);
                 return Ok(formattedResult);
             }
 
@@ -61,11 +55,8 @@ namespace AutoRenter.Api.Controllers
             var result = await vehicleService.Get(id);
             if (result.ResultCode == ResultCode.Success)
             {
-                var response = mapper.Map<VehicleModel>(result.Data);
-                var formattedResult = new Dictionary<string, object>
-                {
-                    {"vehicle", response}
-                };
+                var formattedResult = responseFormatter
+                    .FormatAndMap<VehicleModel, Vehicle>("vehicle", result.Data);
                 return Ok(formattedResult);
             }
 
@@ -81,7 +72,7 @@ namespace AutoRenter.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var vehicle = mapper.Map<Vehicle>(vehicleModel);
+            var vehicle = responseFormatter.Map<Vehicle, VehicleModel>(vehicleModel);
 
             var result = await vehicleService.Insert(vehicle);
             if (result.ResultCode == ResultCode.Success)
@@ -119,7 +110,7 @@ namespace AutoRenter.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var vehicle = mapper.Map<Vehicle>(vehicleModel);
+            var vehicle = responseFormatter.Map<Vehicle, VehicleModel>(vehicleModel);
 
             var result = await vehicleService.Update(vehicle);
             if (result.ResultCode == ResultCode.Success)

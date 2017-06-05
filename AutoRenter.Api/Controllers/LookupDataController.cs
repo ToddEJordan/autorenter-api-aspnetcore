@@ -1,12 +1,11 @@
 ﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
 using AutoRenter.Api.Models;
+using AutoRenter.Api.Services;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Domain.Models;
 
@@ -15,17 +14,17 @@ namespace AutoRenter.Api.Controllers
     [Route("api/lookup-data")]
     public class LookupDataController : Controller
     {
-        private readonly IMapper mapper;
         private readonly IMakeService makeService;
         private readonly IModelService modelService;
         private readonly IStateService stateService;
+        private readonly IResponseFormatter responseFormatter;
 
-        public LookupDataController(IMapper mapper, IMakeService makeService, IModelService modelService, IStateService stateService)
+        public LookupDataController(IMakeService makeService, IModelService modelService, IStateService stateService, IResponseFormatter responseFormatter)
         {
-            this.mapper = mapper;
             this.makeService = makeService;
             this.modelService = modelService;
             this.stateService = stateService;
+            this.responseFormatter = responseFormatter;
         }
 
         [HttpGet]
@@ -34,11 +33,7 @@ namespace AutoRenter.Api.Controllers
         {
             var query = Request.Query;
             var lookupData = await GetData(query);
-            var formattedResult = new Dictionary<string, object>
-            {
-                {"lookupData", lookupData}
-            };
-
+            var formattedResult = responseFormatter.Format("lookupData", lookupData);
             Response.Headers.Add("x-total-count", lookupData.Count.ToString());
             return Ok(formattedResult);
         }
@@ -82,7 +77,7 @@ namespace AutoRenter.Api.Controllers
             if (modelsResult.ResultCode == ResultCode.Success)
             {
                 var data = modelsResult.Data
-                    .Select(model => mapper.Map<ModelModel>(model))
+                    .Select(model => responseFormatter.Map<ModelModel, Model>(model))
                     .OrderBy(x => x.Id)
                     .ToList();
                 lookupData.AddOrUpdate("models", data,
@@ -96,7 +91,7 @@ namespace AutoRenter.Api.Controllers
             if (makesResult.ResultCode == ResultCode.Success)
             {
                 var data = makesResult.Data
-                    .Select(make => mapper.Map<MakeModel>(make))
+                    .Select(make => responseFormatter.Map<MakeModel, Make>(make))
                     .OrderBy(x => x.Id)
                     .ToList();
                 lookupData.AddOrUpdate("makes", data,

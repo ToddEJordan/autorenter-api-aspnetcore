@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
 using AutoRenter.Api.Models;
 using AutoRenter.Api.Services;
 using AutoRenter.Domain.Interfaces;
@@ -17,13 +16,13 @@ namespace AutoRenter.Api.Controllers
     {
         private readonly ILocationService locationService;
         private readonly IResultCodeProcessor resultCodeProcessor;
-        private readonly IMapper mapper;
+        private readonly IResponseFormatter responseFormatter;
 
-        public LocationsController(ILocationService locationService, IResultCodeProcessor resultCodeProcessor, IMapper mapper)
+        public LocationsController(ILocationService locationService, IResultCodeProcessor resultCodeProcessor, IResponseFormatter responseFormatter)
         {
             this.locationService = locationService;
             this.resultCodeProcessor = resultCodeProcessor;
-            this.mapper = mapper;
+            this.responseFormatter = responseFormatter;
         }
 
         [HttpGet]
@@ -33,12 +32,10 @@ namespace AutoRenter.Api.Controllers
             var result = await locationService.GetAll();
             if (result.ResultCode == ResultCode.Success)
             {
-                var formattedResult = new Dictionary<string, object>
-                {
-                    { "locations", result.Data }
-                };
                 Response.Headers.Add("x-total-count", result.Data.Count().ToString());
-                return Ok(formattedResult);
+                var response = responseFormatter
+                    .FormatAndMap<IEnumerable<LocationModel>, IEnumerable<Location>>("locations", result.Data);
+                return Ok(response);
             }
 
             return resultCodeProcessor.Process(result.ResultCode);
@@ -56,11 +53,9 @@ namespace AutoRenter.Api.Controllers
             var result = await locationService.Get(id);
             if (result.ResultCode == ResultCode.Success)
             {
-                var formattedResult = new Dictionary<string, object>
-                {
-                    { "location", result.Data }
-                };
-                return Ok(formattedResult);
+                var response = responseFormatter
+                    .FormatAndMap<LocationModel, Location>("location", result.Data);
+                return Ok(response);
             }
 
             return resultCodeProcessor.Process(result.ResultCode);
@@ -138,7 +133,9 @@ namespace AutoRenter.Api.Controllers
             if (result.ResultCode == ResultCode.Success 
                 || result.ResultCode == ResultCode.NotFound)
             {
-                return Ok(FormatResult(result.Data));
+                var formattedResult =
+                    responseFormatter.FormatAndMap<IEnumerable<VehicleModel>, IEnumerable<Vehicle>>("vehicles", result.Data);
+                return Ok(formattedResult);
             }
 
             return resultCodeProcessor.Process(result.ResultCode);
@@ -160,22 +157,6 @@ namespace AutoRenter.Api.Controllers
             }
 
             return resultCodeProcessor.Process(result.ResultCode);
-        }
-
-        private Dictionary<string, object> FormatResult(IEnumerable<Vehicle> vehicles)
-        {
-            var vehicleModels = vehicles == null
-                ? new List<VehicleModel>()
-                : vehicles
-                    .Select(x => mapper.Map<VehicleModel>(x))
-                    .ToList();
-
-            var formattedResult = new Dictionary<string, object>
-            {
-                { "vehicles", vehicleModels }
-            };
-            Response.Headers.Add("x-total-count", vehicleModels?.Count().ToString());
-            return formattedResult;
         }
     }
 }

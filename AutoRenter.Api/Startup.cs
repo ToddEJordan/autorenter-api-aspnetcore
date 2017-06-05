@@ -85,9 +85,10 @@ namespace AutoRenter.Api
 
         private static void ConfigureDIForApi(IServiceCollection services)
         {
+            services.AddTransient<IAuthenticateUser, AuthenticateUser>();
+            services.AddTransient<IResponseFormatter, ResponseFormatter>();
             services.AddTransient<IResultCodeProcessor, ResultCodeProcessor>();
             services.AddTransient<ITokenManager, TokenManager>();
-            services.AddTransient<IAuthenticateUser, AuthenticateUser>();
         }
 
         private static void ConfigureDIForDomainServices(IServiceCollection services)
@@ -236,6 +237,10 @@ namespace AutoRenter.Api
                         opts => opts.MapFrom(src => src.ExternalId));
 
                 x.CreateMap<ModelModel, Model>();
+
+                x.CreateMap<Location, LocationModel>()
+                    .ForMember(dest => dest.VehicleCount,
+                        opts => opts.ResolveUsing(src => src.Vehicles.Count));
             });
 
             services.AddSingleton(typeof(IMapper), new Mapper(config));

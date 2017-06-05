@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
 using Xunit;
 using AutoRenter.Api.Controllers;
 using AutoRenter.Api.Models;
+using AutoRenter.Api.Services;
+using AutoRenter.Api.Tests.Helpers;
 
 namespace AutoRenter.Api.Tests
 {
@@ -13,7 +16,14 @@ namespace AutoRenter.Api.Tests
         public async Task Get_ReturnsInfo()
         {
             // arrange
-            var sut = new InfoController();
+            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
+                .Returns(new Dictionary<string, object>
+                        {
+                            { "data", new InfoHelper().Get() }
+                        });
+
+            var sut = new InfoController(responseFormatterMoq.Object);
 
             // act
             var response = await sut.Get();
@@ -27,7 +37,14 @@ namespace AutoRenter.Api.Tests
         public async Task Get_ReturnsTitle()
         {
             // arrange
-            var sut = new InfoController();
+            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
+                .Returns(new Dictionary<string, object>
+                        {
+                            { "data", new InfoHelper().Get() }
+                        });
+
+            var sut = new InfoController(responseFormatterMoq.Object);
 
             // act
             var response = await sut.Get();
@@ -44,7 +61,14 @@ namespace AutoRenter.Api.Tests
         public async Task Get_ReturnsEnvironment()
         {
             // arrange
-            var sut = new InfoController();
+            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
+                .Returns(new Dictionary<string, object>
+                        {
+                            { "data", new InfoHelper().Get() }
+                        });
+
+            var sut = new InfoController(responseFormatterMoq.Object);
 
             // act
             var response = await sut.Get();
@@ -61,7 +85,14 @@ namespace AutoRenter.Api.Tests
         public async Task Get_ReturnsVersion()
         {
             // arrange
-            var sut = new InfoController();
+            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
+                .Returns(new Dictionary<string, object>
+                        {
+                            { "data", new InfoHelper().Get() }
+                        });
+
+            var sut = new InfoController(responseFormatterMoq.Object);
 
             // act
             var response = await sut.Get();
@@ -78,7 +109,14 @@ namespace AutoRenter.Api.Tests
         public async Task Get_ReturnsBuild()
         {
             // arrange
-            var sut = new InfoController();
+            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
+                .Returns(new Dictionary<string, object>
+                        {
+                            { "data", new InfoHelper().Get() }
+                        });
+
+            var sut = new InfoController(responseFormatterMoq.Object);
 
             // act
             var response = await sut.Get();
