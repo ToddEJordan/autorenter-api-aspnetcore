@@ -106,7 +106,7 @@ namespace AutoRenter.Api.Tests
         {
             // arrange
             var resultCodeProcessor = new ResultCodeProcessor();
-            var targetId = new IdentifierHelper().VehicleId;
+            var targetId = IdentifierHelper.VehicleId;
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<Vehicle>(ResultCode.Success, TestVehicle()));
@@ -188,7 +188,7 @@ namespace AutoRenter.Api.Tests
         public async void Get_ReturnsData()
         {
             // arrange
-            var targetId = new IdentifierHelper().VehicleId; ;
+            var targetId = IdentifierHelper.VehicleId; ;
             var resultCodeProcessor = new ResultCodeProcessor();
 
             var vehicleServiceMoq = new Mock<IVehicleService>();
@@ -199,7 +199,7 @@ namespace AutoRenter.Api.Tests
             responseFormatterMoq.Setup(x => x.FormatAndMap<VehicleModel, Vehicle>(It.IsAny<string>(), It.IsAny<Vehicle>()))
                 .Returns(new Dictionary<string, object>
                         {
-                            { "vehicle", new VehicleHelper().Get() }
+                            { "vehicle", VehicleHelper.Get() }
                         });
 
             var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
@@ -421,27 +421,27 @@ namespace AutoRenter.Api.Tests
 
         private Vehicle TestVehicle()
         {
-            return new Helpers.VehicleHelper().Get();
+            return VehicleHelper.Get();
         }
 
         private IEnumerable<Vehicle> TestVehicles()
         {
-            return new Helpers.VehicleHelper().GetMany();
+            return VehicleHelper.GetMany();
         }
 
         private VehicleModel TestVehicleModel()
         {
-            return new Helpers.VehicleModelHelper().Get();
+            return VehicleModelHelper.Get();
         }
 
         private IEnumerable<VehicleModel> TestVehicleModels()
         {
-            return new Helpers.VehicleModelHelper().GetMany();
+            return VehicleModelHelper.GetMany();
         }
 
         private ControllerContext DefaultControllerContext()
         {
-            return new Helpers.ControllerContextHelper().GetContext();
+            return ControllerContextHelper.GetContext();
         }
     }
 }

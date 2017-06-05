@@ -2,9 +2,9 @@
 
 namespace AutoRenter.Api.Tests.Helpers
 {
-    internal class InfoHelper
+    internal static class InfoHelper
     {
-        public ApiInfoModel Get()
+        public static ApiInfoModel Get()
         {
             return new ApiInfoModel
             {

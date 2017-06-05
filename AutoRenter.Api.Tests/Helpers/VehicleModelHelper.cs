@@ -3,29 +3,29 @@ using AutoRenter.Api.Models;
 
 namespace AutoRenter.Api.Tests.Helpers
 {
-    internal class VehicleModelHelper
+    internal static class VehicleModelHelper
     {
-        internal VehicleModel Get()
+        internal static VehicleModel Get()
         {
             return TestVehicle();
         }
 
-        internal IEnumerable<VehicleModel> GetMany()
+        internal static IEnumerable<VehicleModel> GetMany()
         {
             return new[] { TestVehicle() };
         }
 
-        private VehicleModel TestVehicle()
+        private static VehicleModel TestVehicle()
         {
-            var make = new MakeHelper().Get();
-            var model = new ModelHelper().Get();
+            var make = MakeHelper.Get();
+            var model = ModelHelper.Get();
 
             return new VehicleModel()
             {
-                Id = new IdentifierHelper().VehicleId,
+                Id = IdentifierHelper.VehicleId,
                 Color = "blue",
                 IsRentToOwn = false,
-                LocationId = new IdentifierHelper().LocationId,
+                LocationId = IdentifierHelper.LocationId,
                 MakeId = make.ExternalId,
                 Make = make.Name,
                 ModelId = model.ExternalId,

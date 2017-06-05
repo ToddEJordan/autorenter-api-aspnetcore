@@ -26,7 +26,7 @@ namespace AutoRenter.Api.Tests
             responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
                 .Returns(new Dictionary<string, object>
                         {
-                            { "skus", new SkuHelper().GetMany() }
+                            { "skus", SkuHelper.GetMany() }
                         });
 
             var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
@@ -57,7 +57,7 @@ namespace AutoRenter.Api.Tests
             responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
                 .Returns(new Dictionary<string, object>
                         {
-                            { "skus", new SkuHelper().GetMany() }
+                            { "skus", SkuHelper.GetMany() }
                         });
 
             var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
@@ -87,7 +87,7 @@ namespace AutoRenter.Api.Tests
             responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
                 .Returns(new Dictionary<string, object>
                         {
-                            { "skus", new SkuHelper().GetMany() }
+                            { "skus", SkuHelper.GetMany() }
                         });
 
             var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
@@ -106,17 +106,17 @@ namespace AutoRenter.Api.Tests
 
         private ControllerContext DefaultControllerContext()
         {
-            return new ControllerContextHelper().GetContext();
+            return ControllerContextHelper.GetContext();
         }
 
         private Sku TestSku()
         {
-            return new SkuHelper().Get();
+            return SkuHelper.Get();
         }
 
         private IEnumerable<Sku> TestSkus()
         {
-            return new SkuHelper().GetMany();
+            return SkuHelper.GetMany();
         }
     }
 }

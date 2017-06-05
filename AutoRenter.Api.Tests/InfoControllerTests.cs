@@ -20,7 +20,7 @@ namespace AutoRenter.Api.Tests
             responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
                 .Returns(new Dictionary<string, object>
                         {
-                            { "data", new InfoHelper().Get() }
+                            { "data", InfoHelper.Get() }
                         });
 
             var sut = new InfoController(responseFormatterMoq.Object);
@@ -41,7 +41,7 @@ namespace AutoRenter.Api.Tests
             responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
                 .Returns(new Dictionary<string, object>
                         {
-                            { "data", new InfoHelper().Get() }
+                            { "data", InfoHelper.Get() }
                         });
 
             var sut = new InfoController(responseFormatterMoq.Object);
@@ -65,7 +65,7 @@ namespace AutoRenter.Api.Tests
             responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
                 .Returns(new Dictionary<string, object>
                         {
-                            { "data", new InfoHelper().Get() }
+                            { "data", InfoHelper.Get() }
                         });
 
             var sut = new InfoController(responseFormatterMoq.Object);
@@ -89,7 +89,7 @@ namespace AutoRenter.Api.Tests
             responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
                 .Returns(new Dictionary<string, object>
                         {
-                            { "data", new InfoHelper().Get() }
+                            { "data", InfoHelper.Get() }
                         });
 
             var sut = new InfoController(responseFormatterMoq.Object);
@@ -113,7 +113,7 @@ namespace AutoRenter.Api.Tests
             responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
                 .Returns(new Dictionary<string, object>
                         {
-                            { "data", new InfoHelper().Get() }
+                            { "data", InfoHelper.Get() }
                         });
 
             var sut = new InfoController(responseFormatterMoq.Object);

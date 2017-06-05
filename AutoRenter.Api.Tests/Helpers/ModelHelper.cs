@@ -3,23 +3,23 @@ using AutoRenter.Domain.Models;
 
 namespace AutoRenter.Api.Tests.Helpers
 {
-    internal class ModelHelper
+    internal static class ModelHelper
     {
-        internal Model Get()
+        internal static Model Get()
         {
             return TestModel();
         }
 
-        internal IEnumerable<Model> GetMany()
+        internal static IEnumerable<Model> GetMany()
         {
             return new[] { TestModel() };
         }
 
-        private Model TestModel()
+        private static Model TestModel()
         {
             return new Model()
             {
-                Id = new IdentifierHelper().ModelId,
+                Id = IdentifierHelper.ModelId,
                 ExternalId = "ModelId",
                 Name = "ModelName"
             };

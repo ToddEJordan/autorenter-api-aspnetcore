@@ -3,23 +3,23 @@ using AutoRenter.Domain.Models;
 
 namespace AutoRenter.Api.Tests.Helpers
 {
-    internal class MakeHelper
+    internal static class MakeHelper
     {
-        public Make Get()
+        public static Make Get()
         {
             return TestMake();
         }
 
-        public IEnumerable<Make> GetMany()
+        public static IEnumerable<Make> GetMany()
         {
             return new[] { TestMake() };
         }
 
-        private Make TestMake()
+        private static Make TestMake()
         {
             return new Make
             {
-                Id = new IdentifierHelper().MakeId,
+                Id = IdentifierHelper.MakeId,
                 ExternalId = "MakeId",
                 Name = "MakeName"
             };

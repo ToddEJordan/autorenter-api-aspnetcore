@@ -102,7 +102,7 @@ namespace AutoRenter.Api.Tests
         {
             // arrange
             var resultCodeProcessor = new ResultCodeProcessor();
-            var targetId = new IdentifierHelper().LocationId;
+            var targetId = IdentifierHelper.LocationId;
             var locationServiceMoq = new Mock<ILocationService>();
             locationServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<Location>(ResultCode.Success, TestLocation()));
@@ -179,7 +179,7 @@ namespace AutoRenter.Api.Tests
         public async void Get_ReturnsData()
         {
             // arrange
-            var targetId = new IdentifierHelper().LocationId;
+            var targetId = IdentifierHelper.LocationId;
             var resultCodeProcessor = new ResultCodeProcessor();
 
             var locationServiceMoq = new Mock<ILocationService>();
@@ -414,7 +414,7 @@ namespace AutoRenter.Api.Tests
         public async void GetAllVehicles_WhenFound()
         {
             // arrange
-            var locationId = new IdentifierHelper().LocationId;
+            var locationId = IdentifierHelper.LocationId;
             var resultCodeProcessor = new ResultCodeProcessor();
 
             var locationServiceMoq = new Mock<ILocationService>();
@@ -425,7 +425,7 @@ namespace AutoRenter.Api.Tests
             responseFormatterMoq.Setup(x => x.FormatAndMap<IEnumerable<VehicleModel>, IEnumerable<Vehicle>>(It.IsAny<string>(), It.IsAny<IEnumerable<Vehicle>>()))
                 .Returns(new Dictionary<string, object>
                         {
-                            { "vehicles", new VehicleHelper().GetMany() }
+                            { "vehicles", VehicleHelper.GetMany() }
                         });
 
             var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
@@ -446,7 +446,7 @@ namespace AutoRenter.Api.Tests
         public async void GetAllVehicles_WhenNotFound()
         {
             // arrange
-            var locationId = new IdentifierHelper().LocationId;
+            var locationId = IdentifierHelper.LocationId;
             var resultCodeProcessor = new ResultCodeProcessor();
 
             var locationServiceMoq = new Mock<ILocationService>();
@@ -504,7 +504,7 @@ namespace AutoRenter.Api.Tests
         private async void GetAllVehicles_ReturnsData()
         {
             // arrange
-            var locationId = new IdentifierHelper().LocationId;
+            var locationId = IdentifierHelper.LocationId;
             var resultCodeProcessor = new ResultCodeProcessor();
 
             var locationServiceMoq = new Mock<ILocationService>();
@@ -515,7 +515,7 @@ namespace AutoRenter.Api.Tests
             responseFormatterMoq.Setup(x => x.FormatAndMap<IEnumerable<VehicleModel>, IEnumerable<Vehicle>>(It.IsAny<string>(), It.IsAny<IEnumerable<Vehicle>>()))
                 .Returns(new Dictionary<string, object>
                         {
-                            { "vehicles", new VehicleModelHelper().GetMany() }
+                            { "vehicles", VehicleModelHelper.GetMany() }
                         });
 
             var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
@@ -534,22 +534,22 @@ namespace AutoRenter.Api.Tests
 
         private ControllerContext DefaultControllerContext()
         {
-            return new ControllerContextHelper().GetContext();
+            return ControllerContextHelper.GetContext();
         }
 
         private Location TestLocation()
         {
-            return new LocationHelper().Get();
+            return LocationHelper.Get();
         }
 
         private IEnumerable<Location> TestLocations()
         {
-            return new LocationHelper().GetMany();
+            return LocationHelper.GetMany();
         }
 
         private IEnumerable<Vehicle> TestVehicles()
         {
-            return new VehicleHelper().GetMany();
+            return VehicleHelper.GetMany();
         }
     }
 }

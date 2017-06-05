@@ -4,9 +4,9 @@ using Moq;
 
 namespace AutoRenter.Api.Tests.Helpers
 {
-    internal class ControllerContextHelper
+    internal static class ControllerContextHelper
     {
-        internal ControllerContext GetContext()
+        internal static ControllerContext GetContext()
         {
             var headerDictionary = new HeaderDictionary();
             var response = new Mock<HttpResponse>();

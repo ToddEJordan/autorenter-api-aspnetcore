@@ -5,23 +5,23 @@ namespace AutoRenter.Api.Tests.Helpers
 {
     internal class SkuHelper
     {
-        internal Sku Get()
+        internal static Sku Get()
         {
             return TestSku();
         }
 
-        internal IEnumerable<Sku> GetMany()
+        internal static IEnumerable<Sku> GetMany()
         {
             return new[] { TestSku() };
         }
 
-        private Sku TestSku()
+        private static Sku TestSku()
         {
-            var make = new MakeHelper().Get();
-            var model = new ModelHelper().Get();
+            var make = MakeHelper.Get();
+            var model = ModelHelper.Get();
             return new Sku
             {
-                Id = new IdentifierHelper().SkuId,
+                Id = IdentifierHelper.SkuId,
                 MakeId = make.ExternalId,
                 ModelId = model.ExternalId,
                 Year = 2016,
