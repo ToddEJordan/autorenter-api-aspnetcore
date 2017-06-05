@@ -41,10 +41,8 @@ namespace AutoRenter.Domain.Services
                 var vehiclesResult = await vehicleService.GetByLocationId(location.Id);
                 if (vehiclesResult.ResultCode == ResultCode.Success)
                 {
-                    location.VehicleCount = vehiclesResult.Data.Count();
+                    location.Vehicles = vehiclesResult.Data.ToList();
                 }
-
-                location.Vehicles = null;
             }
 
             return result;
@@ -63,7 +61,7 @@ namespace AutoRenter.Domain.Services
             var vehicleResult = await vehicleService.GetByLocationId(id);
             if (vehicleResult.ResultCode == ResultCode.Success)
             {
-                result.Data.VehicleCount = vehicleResult.Data.Count();
+                result.Data.Vehicles = vehicleResult.Data.ToList();
             }
 
             return result;
