@@ -33,9 +33,9 @@ namespace AutoRenter.Api.Controllers
             if (result.ResultCode == ResultCode.Success)
             {
                 Response.Headers.Add("x-total-count", result.Data.Count().ToString());
-                var response = responseFormatter
+                var formattedResult = responseFormatter
                     .FormatAndMap<IEnumerable<LocationModel>, IEnumerable<Location>>("locations", result.Data);
-                return Ok(response);
+                return Ok(formattedResult);
             }
 
             return resultCodeProcessor.Process(result.ResultCode);
@@ -53,9 +53,9 @@ namespace AutoRenter.Api.Controllers
             var result = await locationService.Get(id);
             if (result.ResultCode == ResultCode.Success)
             {
-                var response = responseFormatter
+                var formattedResult = responseFormatter
                     .FormatAndMap<LocationModel, Location>("location", result.Data);
-                return Ok(response);
+                return Ok(formattedResult);
             }
 
             return resultCodeProcessor.Process(result.ResultCode);
@@ -63,12 +63,14 @@ namespace AutoRenter.Api.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Post([FromBody] Location location)
+        public async Task<IActionResult> Post([FromBody] LocationModel locationModel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
+            var location = responseFormatter.Map<Location, LocationModel>(locationModel);
 
             var result = await locationService.Insert(location);
             if (result.ResultCode == ResultCode.Success)
@@ -99,12 +101,14 @@ namespace AutoRenter.Api.Controllers
 
         [HttpPut("{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> Put(Guid id, [FromBody] Location location)
+        public async Task<IActionResult> Put(Guid id, [FromBody] LocationModel locationModel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
+            var location = responseFormatter.Map<Location, LocationModel>(locationModel);
 
             var result = await locationService.Update(location);
             if (result.ResultCode == ResultCode.Success)
@@ -143,12 +147,14 @@ namespace AutoRenter.Api.Controllers
 
         [HttpPost("{locationId}/vehicles")]
         [AllowAnonymous]
-        public async Task<IActionResult> AddVehicleToLocation(Guid locationId, [FromBody] Vehicle vehicle)
+        public async Task<IActionResult> AddVehicleToLocation(Guid locationId, [FromBody] VehicleModel vehicleModel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
+            var vehicle = responseFormatter.Map<Vehicle, VehicleModel>(vehicleModel);
 
             var result = await locationService.AddVehicle(locationId, vehicle);
             if (result.ResultCode == ResultCode.Success)

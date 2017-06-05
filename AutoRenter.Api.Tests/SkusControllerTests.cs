@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 using AutoRenter.Api.Controllers;
+using AutoRenter.Api.Models;
 using AutoRenter.Api.Services;
 using AutoRenter.Api.Tests.Helpers;
 using AutoRenter.Domain.Interfaces;
@@ -84,10 +85,10 @@ namespace AutoRenter.Api.Tests
                 .ReturnsAsync(() => new Result<IEnumerable<Sku>>(ResultCode.Success, TestSkus()));
 
             var responseFormatterMoq = new Mock<IResponseFormatter>();
-            responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
+            responseFormatterMoq.Setup(x => x.FormatAndMap<IEnumerable<SkuModel>, IEnumerable<Sku>>(It.IsAny<string>(), It.IsAny<IEnumerable<Sku>>()))
                 .Returns(new Dictionary<string, object>
                         {
-                            { "skus", SkuHelper.GetMany() }
+                            { "skus", SkuModelHelper.GetMany() }
                         });
 
             var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)

@@ -238,9 +238,17 @@ namespace AutoRenter.Api
 
                 x.CreateMap<ModelModel, Model>();
 
+                x.CreateMap<LocationModel, Location>();
+
                 x.CreateMap<Location, LocationModel>()
                     .ForMember(dest => dest.VehicleCount,
                         opts => opts.ResolveUsing(src => src.Vehicles.Count));
+
+                x.CreateMap<SkuModel, Sku>();
+                x.CreateMap<Sku, SkuModel>();
+
+                x.CreateMap<LogEntry, LogEntryModel>();
+                x.CreateMap<LogEntryModel, LogEntry>();
             });
 
             services.AddSingleton(typeof(IMapper), new Mapper(config));

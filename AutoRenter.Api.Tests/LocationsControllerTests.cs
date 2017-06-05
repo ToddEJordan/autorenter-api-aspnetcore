@@ -225,7 +225,7 @@ namespace AutoRenter.Api.Tests
             };
 
             // act
-            var result = await sut.Post(TestLocation());
+            var result = await sut.Post(TestLocationModel());
             var createdAtRouteResult = result as CreatedAtRouteResult;
 
             // assert
@@ -250,7 +250,7 @@ namespace AutoRenter.Api.Tests
             };
 
             // act
-            var result = await sut.Post(TestLocation());
+            var result = await sut.Post(TestLocationModel());
             var badRequestResult = result as BadRequestResult;
 
             // assert
@@ -261,12 +261,12 @@ namespace AutoRenter.Api.Tests
         public async void Post_WhenConflict()
         {
             // arrange
-            var testLocation = TestLocation();
+            var testLocation = TestLocationModel();
             var resultCodeProcessor = new ResultCodeProcessor();
 
             var locationServiceMoq = new Mock<ILocationService>();
             locationServiceMoq.Setup(x => x.Insert(It.IsAny<Location>()))
-                .ReturnsAsync(() => new Result<Guid>(ResultCode.Conflict, testLocation.Id));
+                .ReturnsAsync(() => new Result<Guid>(ResultCode.Conflict, TestLocation().Id));
 
             var responseFormatterMoq = new Mock<IResponseFormatter>();
 
@@ -287,12 +287,12 @@ namespace AutoRenter.Api.Tests
         public async void Put_WhenValid()
         {
             // arrange
-            var testLocation = TestLocation();
+            var testLocation = TestLocationModel();
             var resultCodeProcessor = new ResultCodeProcessor();
 
             var locationServiceMoq = new Mock<ILocationService>();
             locationServiceMoq.Setup(x => x.Update(It.IsAny<Location>()))
-                .ReturnsAsync(() => new Result<Guid>(ResultCode.Success, testLocation.Id));
+                .ReturnsAsync(() => new Result<Guid>(ResultCode.Success, TestLocation().Id));
 
             var responseFormatterMoq = new Mock<IResponseFormatter>();
 
@@ -313,12 +313,12 @@ namespace AutoRenter.Api.Tests
         public async void Put_WhenNotValid()
         {
             // arrange
-            var testLocation = TestLocation();
+            var testLocation = TestLocationModel();
             var resultCodeProcessor = new ResultCodeProcessor();
 
             var locationServiceMoq = new Mock<ILocationService>();
             locationServiceMoq.Setup(x => x.Update(It.IsAny<Location>()))
-                .ReturnsAsync(() => new Result<Guid>(ResultCode.BadRequest, testLocation.Id));
+                .ReturnsAsync(() => new Result<Guid>(ResultCode.BadRequest, TestLocation().Id));
 
             var responseFormatterMoq = new Mock<IResponseFormatter>();
 
@@ -542,14 +542,29 @@ namespace AutoRenter.Api.Tests
             return LocationHelper.Get();
         }
 
+        private LocationModel TestLocationModel()
+        {
+            return LocationModelHelper.Get();
+        }
+
         private IEnumerable<Location> TestLocations()
         {
             return LocationHelper.GetMany();
         }
 
+        private IEnumerable<LocationModel> TestLocationModels()
+        {
+            return LocationModelHelper.GetMany();
+        }
+
         private IEnumerable<Vehicle> TestVehicles()
         {
             return VehicleHelper.GetMany();
+        }
+
+        private IEnumerable<VehicleModel> TestVehicleModels()
+        {
+            return VehicleModelHelper.GetMany();
         }
     }
 }

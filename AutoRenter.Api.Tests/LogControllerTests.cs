@@ -5,6 +5,7 @@ using AutoRenter.Api.Controllers;
 using AutoRenter.Api.Services;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Domain.Models;
+using AutoRenter.Api.Models;
 
 namespace AutoRenter.Api.Tests
 {
@@ -18,16 +19,27 @@ namespace AutoRenter.Api.Tests
             logService.Setup(x => x.Log(It.IsAny<LogEntry>()))
                 .ReturnsAsync(new Result<object>(ResultCode.Success));
 
+            var level = "warning";
+            var message = "test message";
+            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            responseFormatterMoq.Setup(x => x.Map<LogEntry, LogEntryModel>(It.IsAny<LogEntryModel>()))
+                .Returns(new LogEntry()
+                {
+                    Level = level,
+                    Message = message
+                });
+
             IResultCodeProcessor processor = new ResultCodeProcessor();
-            var sut = new LogController(logService.Object, processor);
-            var logEntry = new LogEntry()
+            var sut = new LogController(logService.Object, processor, responseFormatterMoq.Object);
+
+            var logEntryModel = new LogEntryModel()
             {
-                Level = "warning",
-                Message = "test message"
+                Level = level,
+                Message = message
             };
 
             // act
-            var result = await sut.Post(logEntry);
+            var result = await sut.Post(logEntryModel);
             var createdResult = result as CreatedResult;
 
             // assert
@@ -43,15 +55,27 @@ namespace AutoRenter.Api.Tests
                 .ReturnsAsync(new Result<object>(ResultCode.BadRequest));
 
             IResultCodeProcessor processor = new ResultCodeProcessor();
-            var sut = new LogController(logService.Object, processor);
-            var logEntry = new LogEntry()
+
+            var level = "warning";
+            var message = "test message";
+            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            responseFormatterMoq.Setup(x => x.Map<LogEntry, LogEntryModel>(It.IsAny<LogEntryModel>()))
+                .Returns(new LogEntry()
+                {
+                    Level = level,
+                    Message = message
+                });
+
+            var sut = new LogController(logService.Object, processor, responseFormatterMoq.Object);
+
+            var logEntryModel = new LogEntryModel()
             {
-                Level = "warning",
-                Message = "test message"
+                Level = level,
+                Message = message
             };
 
             // act
-            var result = await sut.Post(logEntry);
+            var result = await sut.Post(logEntryModel);
             var badRequestResult = result as BadRequestResult;
 
             // assert
@@ -62,21 +86,32 @@ namespace AutoRenter.Api.Tests
         public async void Post_PassesMessageToService()
         {
             // arrange
-            var message = "Test message";
             var logService = new Mock<ILogService>();
             logService.Setup(x => x.Log(It.IsAny<LogEntry>()))
                 .ReturnsAsync(new Result<object>(ResultCode.Success));
 
             IResultCodeProcessor processor = new ResultCodeProcessor();
-            var sut = new LogController(logService.Object, processor);
-            var logEntry = new LogEntry()
+
+            var level = "warning";
+            var message = "test message";
+            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            responseFormatterMoq.Setup(x => x.Map<LogEntry, LogEntryModel>(It.IsAny<LogEntryModel>()))
+                .Returns(new LogEntry()
+                {
+                    Level = level,
+                    Message = message
+                });
+
+            var sut = new LogController(logService.Object, processor, responseFormatterMoq.Object);
+
+            var logEntryModel = new LogEntryModel()
             {
-                Level = "warning",
+                Level = level,
                 Message = message
             };
 
             // act
-            var result = await sut.Post(logEntry);
+            var result = await sut.Post(logEntryModel);
             var createdResult = result as CreatedResult;
 
             // assert
@@ -87,17 +122,28 @@ namespace AutoRenter.Api.Tests
         public async void Post_PassesLevelToService()
         {
             // arrange
-            var level = "info";
             var logService = new Mock<ILogService>();
             logService.Setup(x => x.Log(It.IsAny<LogEntry>()))
                 .ReturnsAsync(new Result<object>(ResultCode.Success));
 
             IResultCodeProcessor processor = new ResultCodeProcessor();
-            var sut = new LogController(logService.Object, processor);
-            var logEntry = new LogEntry()
+
+            var level = "info";
+            var message = "test message";
+            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            responseFormatterMoq.Setup(x => x.Map<LogEntry, LogEntryModel>(It.IsAny<LogEntryModel>()))
+                .Returns(new LogEntry()
+                {
+                    Level = level,
+                    Message = message
+                });
+
+            var sut = new LogController(logService.Object, processor, responseFormatterMoq.Object);
+
+            var logEntry = new LogEntryModel()
             {
                 Level = level,
-                Message = "Test message"
+                Message = message
             };
 
             // act
