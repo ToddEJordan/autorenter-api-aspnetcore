@@ -137,6 +137,7 @@ namespace AutoRenter.Api.Controllers
             if (result.ResultCode == ResultCode.Success 
                 || result.ResultCode == ResultCode.NotFound)
             {
+                Response.Headers.Add("x-total-count", result.Data.Count().ToString());
                 var formattedResult =
                     responseFormatter.FormatAndMap<IEnumerable<VehicleModel>, IEnumerable<Vehicle>>("vehicles", result.Data);
                 return Ok(formattedResult);
