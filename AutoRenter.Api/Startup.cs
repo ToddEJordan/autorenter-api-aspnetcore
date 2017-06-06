@@ -86,7 +86,7 @@ namespace AutoRenter.Api
         private static void ConfigureDIForApi(IServiceCollection services)
         {
             services.AddTransient<IAuthenticateUser, AuthenticateUser>();
-            services.AddTransient<IResponseFormatter, ResponseFormatter>();
+            services.AddTransient<IDataStructureConverter, DataStructureConverter>();
             services.AddTransient<IResultCodeProcessor, ResultCodeProcessor>();
             services.AddTransient<ITokenManager, TokenManager>();
         }

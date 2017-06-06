@@ -13,13 +13,13 @@ namespace AutoRenter.Api.Controllers
     {
         private readonly ILogService logService;
         private readonly IResultCodeProcessor resultCodeProcessor;
-        private readonly IResponseFormatter responseFormatter;
+        private readonly IDataStructureConverter dataStructureConverter;
 
-        public LogController(ILogService logService, IResultCodeProcessor resultCodeProcessor, IResponseFormatter responseFormatter)
+        public LogController(ILogService logService, IResultCodeProcessor resultCodeProcessor, IDataStructureConverter dataStructureConverter)
         {
             this.logService = logService;
             this.resultCodeProcessor = resultCodeProcessor;
-            this.responseFormatter = responseFormatter;
+            this.dataStructureConverter = dataStructureConverter;
         }
 
         [HttpPost]
@@ -31,7 +31,7 @@ namespace AutoRenter.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var log = responseFormatter.Map<LogEntry, LogEntryModel>(logEntryModel);
+            var log = dataStructureConverter.Map<LogEntry, LogEntryModel>(logEntryModel);
 
             var result = await logService.Log(log);
             if (result.ResultCode == ResultCode.Success)

@@ -9,11 +9,11 @@ namespace AutoRenter.Api.Controllers
     [Route("api/")]
     public class InfoController : Controller
     {
-        private readonly IResponseFormatter responseFormatter;
+        private readonly IDataStructureConverter dataStructureConverter;
 
-        public InfoController(IResponseFormatter responseFormatter)
+        public InfoController(IDataStructureConverter dataStructureConverter)
         {
-            this.responseFormatter = responseFormatter;
+            this.dataStructureConverter = dataStructureConverter;
         }
 
         [HttpGet]
@@ -21,7 +21,7 @@ namespace AutoRenter.Api.Controllers
         public async Task<IActionResult> Get()
         {
             var apiInfo = GetApiInfo();
-            var formattedResult = responseFormatter.Format("data", apiInfo);
+            var formattedResult = dataStructureConverter.Format("data", apiInfo);
             return await Task.FromResult(Ok(formattedResult));
         }
 

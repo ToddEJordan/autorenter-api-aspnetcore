@@ -17,14 +17,14 @@ namespace AutoRenter.Api.Controllers
         private readonly IMakeService makeService;
         private readonly IModelService modelService;
         private readonly IStateService stateService;
-        private readonly IResponseFormatter responseFormatter;
+        private readonly IDataStructureConverter dataStructureConverter;
 
-        public LookupDataController(IMakeService makeService, IModelService modelService, IStateService stateService, IResponseFormatter responseFormatter)
+        public LookupDataController(IMakeService makeService, IModelService modelService, IStateService stateService, IDataStructureConverter dataStructureConverter)
         {
             this.makeService = makeService;
             this.modelService = modelService;
             this.stateService = stateService;
-            this.responseFormatter = responseFormatter;
+            this.dataStructureConverter = dataStructureConverter;
         }
 
         [HttpGet]
@@ -33,7 +33,7 @@ namespace AutoRenter.Api.Controllers
         {
             var query = Request.Query;
             var lookupData = await GetData(query);
-            var formattedResult = responseFormatter.Format("lookupData", lookupData);
+            var formattedResult = dataStructureConverter.Format("lookupData", lookupData);
             Response.Headers.Add("x-total-count", lookupData.Count.ToString());
             return Ok(formattedResult);
         }
@@ -77,7 +77,7 @@ namespace AutoRenter.Api.Controllers
             if (modelsResult.ResultCode == ResultCode.Success)
             {
                 var data = modelsResult.Data
-                    .Select(model => responseFormatter.Map<ModelModel, Model>(model))
+                    .Select(model => dataStructureConverter.Map<ModelModel, Model>(model))
                     .OrderBy(x => x.Id)
                     .ToList();
                 lookupData.AddOrUpdate("models", data,
@@ -91,7 +91,7 @@ namespace AutoRenter.Api.Controllers
             if (makesResult.ResultCode == ResultCode.Success)
             {
                 var data = makesResult.Data
-                    .Select(make => responseFormatter.Map<MakeModel, Make>(make))
+                    .Select(make => dataStructureConverter.Map<MakeModel, Make>(make))
                     .OrderBy(x => x.Id)
                     .ToList();
                 lookupData.AddOrUpdate("makes", data,

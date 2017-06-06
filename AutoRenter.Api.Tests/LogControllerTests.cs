@@ -21,8 +21,8 @@ namespace AutoRenter.Api.Tests
 
             var level = "warning";
             var message = "test message";
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
-            responseFormatterMoq.Setup(x => x.Map<LogEntry, LogEntryModel>(It.IsAny<LogEntryModel>()))
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
+            dataStructureConverterMoq.Setup(x => x.Map<LogEntry, LogEntryModel>(It.IsAny<LogEntryModel>()))
                 .Returns(new LogEntry()
                 {
                     Level = level,
@@ -30,7 +30,7 @@ namespace AutoRenter.Api.Tests
                 });
 
             IResultCodeProcessor processor = new ResultCodeProcessor();
-            var sut = new LogController(logService.Object, processor, responseFormatterMoq.Object);
+            var sut = new LogController(logService.Object, processor, dataStructureConverterMoq.Object);
 
             var logEntryModel = new LogEntryModel()
             {
@@ -58,15 +58,15 @@ namespace AutoRenter.Api.Tests
 
             var level = "warning";
             var message = "test message";
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
-            responseFormatterMoq.Setup(x => x.Map<LogEntry, LogEntryModel>(It.IsAny<LogEntryModel>()))
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
+            dataStructureConverterMoq.Setup(x => x.Map<LogEntry, LogEntryModel>(It.IsAny<LogEntryModel>()))
                 .Returns(new LogEntry()
                 {
                     Level = level,
                     Message = message
                 });
 
-            var sut = new LogController(logService.Object, processor, responseFormatterMoq.Object);
+            var sut = new LogController(logService.Object, processor, dataStructureConverterMoq.Object);
 
             var logEntryModel = new LogEntryModel()
             {
@@ -94,15 +94,15 @@ namespace AutoRenter.Api.Tests
 
             var level = "warning";
             var message = "test message";
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
-            responseFormatterMoq.Setup(x => x.Map<LogEntry, LogEntryModel>(It.IsAny<LogEntryModel>()))
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
+            dataStructureConverterMoq.Setup(x => x.Map<LogEntry, LogEntryModel>(It.IsAny<LogEntryModel>()))
                 .Returns(new LogEntry()
                 {
                     Level = level,
                     Message = message
                 });
 
-            var sut = new LogController(logService.Object, processor, responseFormatterMoq.Object);
+            var sut = new LogController(logService.Object, processor, dataStructureConverterMoq.Object);
 
             var logEntryModel = new LogEntryModel()
             {
@@ -130,15 +130,15 @@ namespace AutoRenter.Api.Tests
 
             var level = "info";
             var message = "test message";
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
-            responseFormatterMoq.Setup(x => x.Map<LogEntry, LogEntryModel>(It.IsAny<LogEntryModel>()))
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
+            dataStructureConverterMoq.Setup(x => x.Map<LogEntry, LogEntryModel>(It.IsAny<LogEntryModel>()))
                 .Returns(new LogEntry()
                 {
                     Level = level,
                     Message = message
                 });
 
-            var sut = new LogController(logService.Object, processor, responseFormatterMoq.Object);
+            var sut = new LogController(logService.Object, processor, dataStructureConverterMoq.Object);
 
             var logEntry = new LogEntryModel()
             {

@@ -23,14 +23,14 @@ namespace AutoRenter.Api.Tests
             skuServiceMoq.Setup(x => x.GetAll())
                 .ReturnsAsync(() => new Result<IEnumerable<Sku>>(ResultCode.Success, TestSkus()));
 
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
-            responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
+            dataStructureConverterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
                 .Returns(new Dictionary<string, object>
                         {
                             { "skus", SkuHelper.GetMany() }
                         });
 
-            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
+            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -54,14 +54,14 @@ namespace AutoRenter.Api.Tests
             skuServiceMoq.Setup(x => x.GetAll())
                 .ReturnsAsync(() => new Result<IEnumerable<Sku>>(ResultCode.NotFound));
 
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
-            responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
+            dataStructureConverterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
                 .Returns(new Dictionary<string, object>
                         {
                             { "skus", SkuHelper.GetMany() }
                         });
 
-            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
+            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -84,14 +84,14 @@ namespace AutoRenter.Api.Tests
             skuServiceMoq.Setup(x => x.GetAll())
                 .ReturnsAsync(() => new Result<IEnumerable<Sku>>(ResultCode.Success, TestSkus()));
 
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
-            responseFormatterMoq.Setup(x => x.FormatAndMap<IEnumerable<SkuModel>, IEnumerable<Sku>>(It.IsAny<string>(), It.IsAny<IEnumerable<Sku>>()))
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
+            dataStructureConverterMoq.Setup(x => x.FormatAndMap<IEnumerable<SkuModel>, IEnumerable<Sku>>(It.IsAny<string>(), It.IsAny<IEnumerable<Sku>>()))
                 .Returns(new Dictionary<string, object>
                         {
                             { "skus", SkuModelHelper.GetMany() }
                         });
 
-            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
+            var sut = new SkusController(skuServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };

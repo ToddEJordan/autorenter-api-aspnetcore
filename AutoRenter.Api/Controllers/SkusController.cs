@@ -15,13 +15,13 @@ namespace AutoRenter.Api.Controllers
     {
         private readonly ISkuService skuService;
         private readonly IResultCodeProcessor resultCodeProcessor;
-        private readonly IResponseFormatter responseFormatter;
+        private readonly IDataStructureConverter dataStructureConverter;
 
-        public SkusController(ISkuService skuService, IResultCodeProcessor resultCodeProcessor, IResponseFormatter responseFormatter)
+        public SkusController(ISkuService skuService, IResultCodeProcessor resultCodeProcessor, IDataStructureConverter dataStructureConverter)
         {
             this.skuService = skuService;
             this.resultCodeProcessor = resultCodeProcessor;
-            this.responseFormatter = responseFormatter;
+            this.dataStructureConverter = dataStructureConverter;
         }
 
         [HttpGet]
@@ -33,7 +33,7 @@ namespace AutoRenter.Api.Controllers
             if (result.ResultCode == ResultCode.Success)
             {
                 Response.Headers.Add("x-total-count", result.Data.Count().ToString());
-                var formattedResult = responseFormatter
+                var formattedResult = dataStructureConverter
                     .FormatAndMap<IEnumerable<SkuModel>, IEnumerable<Sku>>("skus", result.Data);
                 return Ok(formattedResult);
             }

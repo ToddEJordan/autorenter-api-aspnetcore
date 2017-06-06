@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using AutoRenter.Domain.Models;
 
 namespace AutoRenter.Api.Services
 {
-    public interface IResponseFormatter
+    public interface IDataStructureConverter
     {
         Dictionary<string, object> Format(string contentLabel, object data);
 

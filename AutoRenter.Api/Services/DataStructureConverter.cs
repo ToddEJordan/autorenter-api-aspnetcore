@@ -4,10 +4,10 @@ using AutoMapper;
 
 namespace AutoRenter.Api.Services
 {
-    public class ResponseFormatter : IResponseFormatter
+    public class DataStructureConverter : IDataStructureConverter
     {
         private readonly IMapper mapper;
-        public ResponseFormatter(IMapper mapper)
+        public DataStructureConverter(IMapper mapper)
         {
             this.mapper = mapper;
         }

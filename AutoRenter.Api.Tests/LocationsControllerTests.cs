@@ -25,9 +25,9 @@ namespace AutoRenter.Api.Tests
             locationServiceMoq.Setup(x => x.GetAll())
                 .ReturnsAsync(() => new Result<IEnumerable<Location>>(ResultCode.Success, TestLocations()));
 
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -51,9 +51,9 @@ namespace AutoRenter.Api.Tests
             locationServiceMoq.Setup(x => x.GetAll())
                 .ReturnsAsync(() => new Result<IEnumerable<Location>>(ResultCode.NotFound));
 
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -76,14 +76,14 @@ namespace AutoRenter.Api.Tests
             locationServiceMoq.Setup(x => x.GetAll())
                 .ReturnsAsync(() => new Result<IEnumerable<Location>>(ResultCode.Success, TestLocations()));
 
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
-            responseFormatterMoq.Setup(x => x.FormatAndMap<IEnumerable<LocationModel>, IEnumerable<Location>>(It.IsAny<string>(), It.IsAny<IEnumerable<Location>>()))
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
+            dataStructureConverterMoq.Setup(x => x.FormatAndMap<IEnumerable<LocationModel>, IEnumerable<Location>>(It.IsAny<string>(), It.IsAny<IEnumerable<Location>>()))
                 .Returns(new Dictionary<string, object>
                         {
                             { "locations", TestLocations() }
                         });
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -107,9 +107,9 @@ namespace AutoRenter.Api.Tests
             locationServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<Location>(ResultCode.Success, TestLocation()));
 
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -134,9 +134,9 @@ namespace AutoRenter.Api.Tests
             locationServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<Location>(ResultCode.NotFound));
 
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -160,9 +160,9 @@ namespace AutoRenter.Api.Tests
             locationServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<Location>(ResultCode.Success, TestLocation()));
 
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -186,14 +186,14 @@ namespace AutoRenter.Api.Tests
             locationServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<Location>(ResultCode.Success, TestLocation()));
 
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
-            responseFormatterMoq.Setup(x => x.FormatAndMap<LocationModel, Location>(It.IsAny<string>(), It.IsAny<Location>()))
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
+            dataStructureConverterMoq.Setup(x => x.FormatAndMap<LocationModel, Location>(It.IsAny<string>(), It.IsAny<Location>()))
                 .Returns(new Dictionary<string, object>
                         {
                             { "location", TestLocation() }
                         });
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -217,9 +217,9 @@ namespace AutoRenter.Api.Tests
             locationServiceMoq.Setup(x => x.Insert(It.IsAny<Location>()))
                 .ReturnsAsync(() => new Result<Guid>(ResultCode.Success, TestLocation().Id));
 
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -242,9 +242,9 @@ namespace AutoRenter.Api.Tests
             locationServiceMoq.Setup(x => x.Insert(It.IsAny<Location>()))
                 .ReturnsAsync(() => new Result<Guid>(ResultCode.BadRequest, TestLocation().Id));
 
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -268,9 +268,9 @@ namespace AutoRenter.Api.Tests
             locationServiceMoq.Setup(x => x.Insert(It.IsAny<Location>()))
                 .ReturnsAsync(() => new Result<Guid>(ResultCode.Conflict, TestLocation().Id));
 
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -294,9 +294,9 @@ namespace AutoRenter.Api.Tests
             locationServiceMoq.Setup(x => x.Update(It.IsAny<Location>()))
                 .ReturnsAsync(() => new Result<Guid>(ResultCode.Success, TestLocation().Id));
 
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -320,9 +320,9 @@ namespace AutoRenter.Api.Tests
             locationServiceMoq.Setup(x => x.Update(It.IsAny<Location>()))
                 .ReturnsAsync(() => new Result<Guid>(ResultCode.BadRequest, TestLocation().Id));
 
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -345,9 +345,9 @@ namespace AutoRenter.Api.Tests
             locationServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
                 .ReturnsAsync(() => ResultCode.Success);
 
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -370,9 +370,9 @@ namespace AutoRenter.Api.Tests
             locationServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
                 .ReturnsAsync(() => ResultCode.BadRequest);
 
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -395,9 +395,9 @@ namespace AutoRenter.Api.Tests
             locationServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
                 .ReturnsAsync(() => ResultCode.NotFound);
 
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -421,14 +421,14 @@ namespace AutoRenter.Api.Tests
             locationServiceMoq.Setup(x => x.GetVehicles(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.Success, TestVehicles()));
 
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
-            responseFormatterMoq.Setup(x => x.FormatAndMap<IEnumerable<VehicleModel>, IEnumerable<Vehicle>>(It.IsAny<string>(), It.IsAny<IEnumerable<Vehicle>>()))
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
+            dataStructureConverterMoq.Setup(x => x.FormatAndMap<IEnumerable<VehicleModel>, IEnumerable<Vehicle>>(It.IsAny<string>(), It.IsAny<IEnumerable<Vehicle>>()))
                 .Returns(new Dictionary<string, object>
                         {
                             { "vehicles", VehicleHelper.GetMany() }
                         });
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -453,14 +453,14 @@ namespace AutoRenter.Api.Tests
             locationServiceMoq.Setup(x => x.GetVehicles(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.NotFound));
 
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
-            responseFormatterMoq.Setup(x => x.FormatAndMap<IEnumerable<VehicleModel>, IEnumerable<Vehicle>>(It.IsAny<string>(), It.IsAny<IEnumerable<Vehicle>>()))
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
+            dataStructureConverterMoq.Setup(x => x.FormatAndMap<IEnumerable<VehicleModel>, IEnumerable<Vehicle>>(It.IsAny<string>(), It.IsAny<IEnumerable<Vehicle>>()))
                 .Returns(new Dictionary<string, object>
                         {
                             { "vehicles", new List<VehicleModel>() }
                         });
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -485,9 +485,9 @@ namespace AutoRenter.Api.Tests
             locationServiceMoq.Setup(x => x.GetVehicles(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.Success, TestVehicles()));
 
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -511,14 +511,14 @@ namespace AutoRenter.Api.Tests
             locationServiceMoq.Setup(x => x.GetVehicles(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.Success, TestVehicles()));
 
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
-            responseFormatterMoq.Setup(x => x.FormatAndMap<IEnumerable<VehicleModel>, IEnumerable<Vehicle>>(It.IsAny<string>(), It.IsAny<IEnumerable<Vehicle>>()))
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
+            dataStructureConverterMoq.Setup(x => x.FormatAndMap<IEnumerable<VehicleModel>, IEnumerable<Vehicle>>(It.IsAny<string>(), It.IsAny<IEnumerable<Vehicle>>()))
                 .Returns(new Dictionary<string, object>
                         {
                             { "vehicles", VehicleModelHelper.GetMany() }
                         });
 
-            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, responseFormatterMoq.Object)
+            var sut = new LocationsController(locationServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };

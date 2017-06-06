@@ -16,14 +16,14 @@ namespace AutoRenter.Api.Tests
         public async Task Get_ReturnsInfo()
         {
             // arrange
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
-            responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
+            dataStructureConverterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
                 .Returns(new Dictionary<string, object>
                         {
                             { "data", InfoHelper.Get() }
                         });
 
-            var sut = new InfoController(responseFormatterMoq.Object);
+            var sut = new InfoController(dataStructureConverterMoq.Object);
 
             // act
             var response = await sut.Get();
@@ -37,14 +37,14 @@ namespace AutoRenter.Api.Tests
         public async Task Get_ReturnsTitle()
         {
             // arrange
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
-            responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
+            dataStructureConverterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
                 .Returns(new Dictionary<string, object>
                         {
                             { "data", InfoHelper.Get() }
                         });
 
-            var sut = new InfoController(responseFormatterMoq.Object);
+            var sut = new InfoController(dataStructureConverterMoq.Object);
 
             // act
             var response = await sut.Get();
@@ -61,14 +61,14 @@ namespace AutoRenter.Api.Tests
         public async Task Get_ReturnsEnvironment()
         {
             // arrange
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
-            responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
+            dataStructureConverterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
                 .Returns(new Dictionary<string, object>
                         {
                             { "data", InfoHelper.Get() }
                         });
 
-            var sut = new InfoController(responseFormatterMoq.Object);
+            var sut = new InfoController(dataStructureConverterMoq.Object);
 
             // act
             var response = await sut.Get();
@@ -85,14 +85,14 @@ namespace AutoRenter.Api.Tests
         public async Task Get_ReturnsVersion()
         {
             // arrange
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
-            responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
+            dataStructureConverterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
                 .Returns(new Dictionary<string, object>
                         {
                             { "data", InfoHelper.Get() }
                         });
 
-            var sut = new InfoController(responseFormatterMoq.Object);
+            var sut = new InfoController(dataStructureConverterMoq.Object);
 
             // act
             var response = await sut.Get();
@@ -109,14 +109,14 @@ namespace AutoRenter.Api.Tests
         public async Task Get_ReturnsBuild()
         {
             // arrange
-            var responseFormatterMoq = new Mock<IResponseFormatter>();
-            responseFormatterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
+            var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
+            dataStructureConverterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
                 .Returns(new Dictionary<string, object>
                         {
                             { "data", InfoHelper.Get() }
                         });
 
-            var sut = new InfoController(responseFormatterMoq.Object);
+            var sut = new InfoController(dataStructureConverterMoq.Object);
 
             // act
             var response = await sut.Get();

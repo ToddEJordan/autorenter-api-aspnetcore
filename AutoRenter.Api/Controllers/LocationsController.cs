@@ -16,13 +16,13 @@ namespace AutoRenter.Api.Controllers
     {
         private readonly ILocationService locationService;
         private readonly IResultCodeProcessor resultCodeProcessor;
-        private readonly IResponseFormatter responseFormatter;
+        private readonly IDataStructureConverter dataStructureConverter;
 
-        public LocationsController(ILocationService locationService, IResultCodeProcessor resultCodeProcessor, IResponseFormatter responseFormatter)
+        public LocationsController(ILocationService locationService, IResultCodeProcessor resultCodeProcessor, IDataStructureConverter dataStructureConverter)
         {
             this.locationService = locationService;
             this.resultCodeProcessor = resultCodeProcessor;
-            this.responseFormatter = responseFormatter;
+            this.dataStructureConverter = dataStructureConverter;
         }
 
         [HttpGet]
@@ -33,7 +33,7 @@ namespace AutoRenter.Api.Controllers
             if (result.ResultCode == ResultCode.Success)
             {
                 Response.Headers.Add("x-total-count", result.Data.Count().ToString());
-                var formattedResult = responseFormatter
+                var formattedResult = dataStructureConverter
                     .FormatAndMap<IEnumerable<LocationModel>, IEnumerable<Location>>("locations", result.Data);
                 return Ok(formattedResult);
             }
@@ -53,7 +53,7 @@ namespace AutoRenter.Api.Controllers
             var result = await locationService.Get(id);
             if (result.ResultCode == ResultCode.Success)
             {
-                var formattedResult = responseFormatter
+                var formattedResult = dataStructureConverter
                     .FormatAndMap<LocationModel, Location>("location", result.Data);
                 return Ok(formattedResult);
             }
@@ -70,7 +70,7 @@ namespace AutoRenter.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var location = responseFormatter.Map<Location, LocationModel>(locationModel);
+            var location = dataStructureConverter.Map<Location, LocationModel>(locationModel);
 
             var result = await locationService.Insert(location);
             if (result.ResultCode == ResultCode.Success)
@@ -108,7 +108,7 @@ namespace AutoRenter.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var location = responseFormatter.Map<Location, LocationModel>(locationModel);
+            var location = dataStructureConverter.Map<Location, LocationModel>(locationModel);
 
             var result = await locationService.Update(location);
             if (result.ResultCode == ResultCode.Success)
@@ -139,7 +139,7 @@ namespace AutoRenter.Api.Controllers
             {
                 Response.Headers.Add("x-total-count", result.Data.Count().ToString());
                 var formattedResult =
-                    responseFormatter.FormatAndMap<IEnumerable<VehicleModel>, IEnumerable<Vehicle>>("vehicles", result.Data);
+                    dataStructureConverter.FormatAndMap<IEnumerable<VehicleModel>, IEnumerable<Vehicle>>("vehicles", result.Data);
                 return Ok(formattedResult);
             }
 
@@ -155,7 +155,7 @@ namespace AutoRenter.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var vehicle = responseFormatter.Map<Vehicle, VehicleModel>(vehicleModel);
+            var vehicle = dataStructureConverter.Map<Vehicle, VehicleModel>(vehicleModel);
 
             var result = await locationService.AddVehicle(locationId, vehicle);
             if (result.ResultCode == ResultCode.Success)
