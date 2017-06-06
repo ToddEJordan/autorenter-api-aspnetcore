@@ -4,9 +4,9 @@ using AutoRenter.Domain.Models;
 
 namespace AutoRenter.Api.Services
 {
-    public class ResultCodeProcessor : IResultCodeProcessor
+    public class ErrorCodeConverter : IErrorCodeConverter
     {
-        public IActionResult Process(ResultCode resultCode)
+        public IActionResult Convert(ResultCode resultCode)
         {
             switch (resultCode)
             {

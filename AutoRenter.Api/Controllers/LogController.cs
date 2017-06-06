@@ -12,13 +12,13 @@ namespace AutoRenter.Api.Controllers
     public class LogController : Controller
     {
         private readonly ILogService logService;
-        private readonly IResultCodeProcessor resultCodeProcessor;
+        private readonly IErrorCodeConverter errorCodeConverter;
         private readonly IDataStructureConverter dataStructureConverter;
 
-        public LogController(ILogService logService, IResultCodeProcessor resultCodeProcessor, IDataStructureConverter dataStructureConverter)
+        public LogController(ILogService logService, IErrorCodeConverter errorCodeConverter, IDataStructureConverter dataStructureConverter)
         {
             this.logService = logService;
-            this.resultCodeProcessor = resultCodeProcessor;
+            this.errorCodeConverter = errorCodeConverter;
             this.dataStructureConverter = dataStructureConverter;
         }
 
@@ -39,7 +39,7 @@ namespace AutoRenter.Api.Controllers
                 return Created(string.Empty, log.Message);
             }
 
-            return resultCodeProcessor.Process(result.ResultCode);
+            return errorCodeConverter.Convert(result.ResultCode);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace AutoRenter.Api.Controllers
         {
             var query = Request.Query;
             var lookupData = await GetData(query);
-            var formattedResult = dataStructureConverter.Format("lookupData", lookupData);
+            var formattedResult = dataStructureConverter.Convert("lookupData", lookupData);
             Response.Headers.Add("x-total-count", lookupData.Count.ToString());
             return Ok(formattedResult);
         }

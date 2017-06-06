@@ -14,13 +14,13 @@ namespace AutoRenter.Api.Controllers
     public class SkusController : Controller
     {
         private readonly ISkuService skuService;
-        private readonly IResultCodeProcessor resultCodeProcessor;
+        private readonly IErrorCodeConverter errorCodeConverter;
         private readonly IDataStructureConverter dataStructureConverter;
 
-        public SkusController(ISkuService skuService, IResultCodeProcessor resultCodeProcessor, IDataStructureConverter dataStructureConverter)
+        public SkusController(ISkuService skuService, IErrorCodeConverter errorCodeConverter, IDataStructureConverter dataStructureConverter)
         {
             this.skuService = skuService;
-            this.resultCodeProcessor = resultCodeProcessor;
+            this.errorCodeConverter = errorCodeConverter;
             this.dataStructureConverter = dataStructureConverter;
         }
 
@@ -34,11 +34,11 @@ namespace AutoRenter.Api.Controllers
             {
                 Response.Headers.Add("x-total-count", result.Data.Count().ToString());
                 var formattedResult = dataStructureConverter
-                    .FormatAndMap<IEnumerable<SkuModel>, IEnumerable<Sku>>("skus", result.Data);
+                    .ConvertAndMap<IEnumerable<SkuModel>, IEnumerable<Sku>>("skus", result.Data);
                 return Ok(formattedResult);
             }
 
-            return resultCodeProcessor.Process(result.ResultCode);
+            return errorCodeConverter.Convert(result.ResultCode);
         }
     }
 }

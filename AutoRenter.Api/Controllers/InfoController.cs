@@ -21,7 +21,7 @@ namespace AutoRenter.Api.Controllers
         public async Task<IActionResult> Get()
         {
             var apiInfo = GetApiInfo();
-            var formattedResult = dataStructureConverter.Format("data", apiInfo);
+            var formattedResult = dataStructureConverter.Convert("data", apiInfo);
             return await Task.FromResult(Ok(formattedResult));
         }
 

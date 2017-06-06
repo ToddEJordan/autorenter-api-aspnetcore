@@ -87,7 +87,7 @@ namespace AutoRenter.Api
         {
             services.AddTransient<IAuthenticateUser, AuthenticateUser>();
             services.AddTransient<IDataStructureConverter, DataStructureConverter>();
-            services.AddTransient<IResultCodeProcessor, ResultCodeProcessor>();
+            services.AddTransient<IErrorCodeConverter, ErrorCodeConverter>();
             services.AddTransient<ITokenManager, TokenManager>();
         }
 

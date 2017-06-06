@@ -13,10 +13,10 @@ namespace AutoRenter.Api.Tests
         {
             // arrange
             var payload = ResultCode.NotFound;
-            var sut = new ResultCodeProcessor();
+            var sut = new ErrorCodeConverter();
 
             // act
-            var result = sut.Process(payload);
+            var result = sut.Convert(payload);
             var notFoundResult = result as NotFoundResult;
 
             // assert
@@ -29,10 +29,10 @@ namespace AutoRenter.Api.Tests
             // arrange
             var payload = ResultCode.Conflict;
             var expected = StatusCodes.Status409Conflict;
-            var sut = new ResultCodeProcessor();
+            var sut = new ErrorCodeConverter();
 
             // act
-            var result = sut.Process(payload);
+            var result = sut.Convert(payload);
             var conflictResult = result as StatusCodeResult;
             
             // assert
@@ -45,10 +45,10 @@ namespace AutoRenter.Api.Tests
             // arrange
             var payload = ResultCode.BadRequest;
             var expected = StatusCodes.Status400BadRequest;
-            var sut = new ResultCodeProcessor();
+            var sut = new ErrorCodeConverter();
 
             // act
-            var result = sut.Process(payload);
+            var result = sut.Convert(payload);
             var conflictResult = result as StatusCodeResult;
 
             // assert
@@ -62,10 +62,10 @@ namespace AutoRenter.Api.Tests
         {
             // arrange
             var expected = StatusCodes.Status500InternalServerError;
-            var sut = new ResultCodeProcessor();
+            var sut = new ErrorCodeConverter();
 
             // act
-            var result = sut.Process(value);
+            var result = sut.Convert(value);
             var codedResult = result as StatusCodeResult;
 
             // assert

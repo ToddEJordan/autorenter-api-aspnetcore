@@ -15,13 +15,13 @@ namespace AutoRenter.Api.Controllers
     public class LocationsController : Controller
     {
         private readonly ILocationService locationService;
-        private readonly IResultCodeProcessor resultCodeProcessor;
+        private readonly IErrorCodeConverter errorCodeConverter;
         private readonly IDataStructureConverter dataStructureConverter;
 
-        public LocationsController(ILocationService locationService, IResultCodeProcessor resultCodeProcessor, IDataStructureConverter dataStructureConverter)
+        public LocationsController(ILocationService locationService, IErrorCodeConverter errorCodeConverter, IDataStructureConverter dataStructureConverter)
         {
             this.locationService = locationService;
-            this.resultCodeProcessor = resultCodeProcessor;
+            this.errorCodeConverter = errorCodeConverter;
             this.dataStructureConverter = dataStructureConverter;
         }
 
@@ -34,11 +34,11 @@ namespace AutoRenter.Api.Controllers
             {
                 Response.Headers.Add("x-total-count", result.Data.Count().ToString());
                 var formattedResult = dataStructureConverter
-                    .FormatAndMap<IEnumerable<LocationModel>, IEnumerable<Location>>("locations", result.Data);
+                    .ConvertAndMap<IEnumerable<LocationModel>, IEnumerable<Location>>("locations", result.Data);
                 return Ok(formattedResult);
             }
 
-            return resultCodeProcessor.Process(result.ResultCode);
+            return errorCodeConverter.Convert(result.ResultCode);
         }
 
         [HttpGet("{id:Guid}", Name = "GetLocation")]
@@ -54,11 +54,11 @@ namespace AutoRenter.Api.Controllers
             if (result.ResultCode == ResultCode.Success)
             {
                 var formattedResult = dataStructureConverter
-                    .FormatAndMap<LocationModel, Location>("location", result.Data);
+                    .ConvertAndMap<LocationModel, Location>("location", result.Data);
                 return Ok(formattedResult);
             }
 
-            return resultCodeProcessor.Process(result.ResultCode);
+            return errorCodeConverter.Convert(result.ResultCode);
         }
 
         [HttpPost]
@@ -78,7 +78,7 @@ namespace AutoRenter.Api.Controllers
                 return CreatedAtRoute("GetLocation", new { id = result.Data }, result.Data);
             }
 
-            return resultCodeProcessor.Process(result.ResultCode);
+            return errorCodeConverter.Convert(result.ResultCode);
         }
 
         [HttpDelete("{id}")]
@@ -96,7 +96,7 @@ namespace AutoRenter.Api.Controllers
                 return NoContent();
             }
 
-            return resultCodeProcessor.Process(result);
+            return errorCodeConverter.Convert(result);
         }
 
         [HttpPut("{id}")]
@@ -116,7 +116,7 @@ namespace AutoRenter.Api.Controllers
                 return Ok(result.Data);
             }
 
-            return resultCodeProcessor.Process(result.ResultCode);
+            return errorCodeConverter.Convert(result.ResultCode);
         }
 
         [HttpGet("{locationId}/vehicles")]
@@ -141,11 +141,11 @@ namespace AutoRenter.Api.Controllers
                     result.Data == null ? "0" : result.Data.Count().ToString());
 
                 var formattedResult =
-                    dataStructureConverter.FormatAndMap<IEnumerable<VehicleModel>, IEnumerable<Vehicle>>("vehicles", result.Data);
+                    dataStructureConverter.ConvertAndMap<IEnumerable<VehicleModel>, IEnumerable<Vehicle>>("vehicles", result.Data);
                 return Ok(formattedResult);
             }
 
-            return resultCodeProcessor.Process(result.ResultCode);
+            return errorCodeConverter.Convert(result.ResultCode);
         }
 
         [HttpPost("{locationId}/vehicles")]
@@ -165,7 +165,7 @@ namespace AutoRenter.Api.Controllers
                 return Created("GetVehicle", result.Data);
             }
 
-            return resultCodeProcessor.Process(result.ResultCode);
+            return errorCodeConverter.Convert(result.ResultCode);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace AutoRenter.Api.Services
             this.mapper = mapper;
         }
 
-        public Dictionary<string, object> Format(string contentLabel, object data)
+        public Dictionary<string, object> Convert(string contentLabel, object data)
         {
             return new Dictionary<string, object>
             {
@@ -32,16 +32,16 @@ namespace AutoRenter.Api.Services
                 .ToList();
         }
 
-        public Dictionary<string, object> FormatAndMap<TDest, TSource>(string contentLabel, TSource source)
+        public Dictionary<string, object> ConvertAndMap<TDest, TSource>(string contentLabel, TSource source)
         {
             var data = Map<TDest, TSource>(source);
-            return Format(contentLabel, data);
+            return Convert(contentLabel, data);
         }
 
-        public Dictionary<string, object> FormatAndMap<TDest, TSource>(string contentLabel, IEnumerable<TSource> sources)
+        public Dictionary<string, object> ConvertAndMap<TDest, TSource>(string contentLabel, IEnumerable<TSource> sources)
         {
             var datas = Map<TDest, TSource>(sources);
-            return Format(contentLabel, datas);
+            return Convert(contentLabel, datas);
         }
     }
 }

@@ -3,8 +3,8 @@ using AutoRenter.Domain.Models;
 
 namespace AutoRenter.Api.Services
 {
-    public interface IResultCodeProcessor
+    public interface IErrorCodeConverter
     {
-        IActionResult Process(ResultCode resultCode);
+        IActionResult Convert(ResultCode resultCode);
     }
 }

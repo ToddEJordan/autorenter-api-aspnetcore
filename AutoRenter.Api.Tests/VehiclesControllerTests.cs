@@ -18,20 +18,20 @@ namespace AutoRenter.Api.Tests
         public async void GetAll_WhenFound()
         {
             // arrange
-            var resultCodeProcessor = new ResultCodeProcessor();
+            var errorCodeConverter = new ErrorCodeConverter();
 
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.GetAll())
                 .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.Success, TestVehicles()));
 
             var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
-            dataStructureConverterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
+            dataStructureConverterMoq.Setup(x => x.Convert(It.IsAny<string>(), It.IsAny<object>()))
                 .Returns(new Dictionary<string, object>
                         {
                             { "vehicles", TestVehicles() }
                         });
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, errorCodeConverter, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -49,7 +49,7 @@ namespace AutoRenter.Api.Tests
         public async void GetAll_WhenNotFound()
         {
             // arrange
-            var resultCodeProcessor = new ResultCodeProcessor();
+            var errorCodeConverter = new ErrorCodeConverter();
 
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.GetAll())
@@ -57,7 +57,7 @@ namespace AutoRenter.Api.Tests
 
             var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, errorCodeConverter, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -74,20 +74,20 @@ namespace AutoRenter.Api.Tests
         public async void GetAll_ReturnsData()
         {
             // arrange
-            var resultCodeProcessor = new ResultCodeProcessor();
+            var errorCodeConverter = new ErrorCodeConverter();
 
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.GetAll())
                 .ReturnsAsync(() => new Result<IEnumerable<Vehicle>>(ResultCode.Success, TestVehicles()));
 
             var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
-            dataStructureConverterMoq.Setup(x => x.FormatAndMap<IEnumerable<VehicleModel>, IEnumerable<Vehicle>>(It.IsAny<string>(), It.IsAny<IEnumerable<Vehicle>>()))
+            dataStructureConverterMoq.Setup(x => x.ConvertAndMap<IEnumerable<VehicleModel>, IEnumerable<Vehicle>>(It.IsAny<string>(), It.IsAny<IEnumerable<Vehicle>>()))
                 .Returns(new Dictionary<string, object>
                         {
                             { "vehicles", TestVehicles() }
                         });
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, errorCodeConverter, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -105,20 +105,20 @@ namespace AutoRenter.Api.Tests
         public async void Get_WhenFound()
         {
             // arrange
-            var resultCodeProcessor = new ResultCodeProcessor();
+            var errorCodeConverter = new ErrorCodeConverter();
             var targetId = IdentifierHelper.VehicleId;
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<Vehicle>(ResultCode.Success, TestVehicle()));
 
             var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
-            dataStructureConverterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
+            dataStructureConverterMoq.Setup(x => x.Convert(It.IsAny<string>(), It.IsAny<object>()))
                 .Returns(new Dictionary<string, object>
                         {
                             { "vehicle", TestVehicle() }
                         });
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, errorCodeConverter, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -137,7 +137,7 @@ namespace AutoRenter.Api.Tests
         {
             // arrange
             var targetId = Guid.NewGuid();
-            var resultCodeProcessor = new ResultCodeProcessor();
+            var errorCodeConverter = new ErrorCodeConverter();
 
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
@@ -145,7 +145,7 @@ namespace AutoRenter.Api.Tests
 
             var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, errorCodeConverter, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -163,7 +163,7 @@ namespace AutoRenter.Api.Tests
         {
             // arrange
             var targetId = Guid.Empty;
-            var resultCodeProcessor = new ResultCodeProcessor();
+            var errorCodeConverter = new ErrorCodeConverter();
 
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
@@ -171,7 +171,7 @@ namespace AutoRenter.Api.Tests
 
             var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, errorCodeConverter, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -189,20 +189,20 @@ namespace AutoRenter.Api.Tests
         {
             // arrange
             var targetId = IdentifierHelper.VehicleId; ;
-            var resultCodeProcessor = new ResultCodeProcessor();
+            var errorCodeConverter = new ErrorCodeConverter();
 
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.Get(It.IsAny<Guid>()))
                 .ReturnsAsync(() => new Result<Vehicle>(ResultCode.Success, TestVehicle()));
 
             var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
-            dataStructureConverterMoq.Setup(x => x.FormatAndMap<VehicleModel, Vehicle>(It.IsAny<string>(), It.IsAny<Vehicle>()))
+            dataStructureConverterMoq.Setup(x => x.ConvertAndMap<VehicleModel, Vehicle>(It.IsAny<string>(), It.IsAny<Vehicle>()))
                 .Returns(new Dictionary<string, object>
                         {
                             { "vehicle", VehicleHelper.Get() }
                         });
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, errorCodeConverter, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -220,7 +220,7 @@ namespace AutoRenter.Api.Tests
         public async void Post_WhenValid()
         {
             // arrange
-            var resultCodeProcessor = new ResultCodeProcessor();
+            var errorCodeConverter = new ErrorCodeConverter();
 
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.Insert(It.IsAny<Vehicle>()))
@@ -228,7 +228,7 @@ namespace AutoRenter.Api.Tests
 
             var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, errorCodeConverter, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -245,7 +245,7 @@ namespace AutoRenter.Api.Tests
         public async void Post_WhenNotValid()
         {
             // arrange
-            var resultCodeProcessor = new ResultCodeProcessor();
+            var errorCodeConverter = new ErrorCodeConverter();
 
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.Insert(It.IsAny<Vehicle>()))
@@ -253,7 +253,7 @@ namespace AutoRenter.Api.Tests
 
             var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, errorCodeConverter, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -271,7 +271,7 @@ namespace AutoRenter.Api.Tests
         {
             // arrange
             var testVehicle = TestVehicleModel();
-            var resultCodeProcessor = new ResultCodeProcessor();
+            var errorCodeConverter = new ErrorCodeConverter();
 
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.Insert(It.IsAny<Vehicle>()))
@@ -279,7 +279,7 @@ namespace AutoRenter.Api.Tests
 
             var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, errorCodeConverter, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -297,7 +297,7 @@ namespace AutoRenter.Api.Tests
         {
             // arrange
             var testVehicle = TestVehicleModel();
-            var resultCodeProcessor = new ResultCodeProcessor();
+            var errorCodeConverter = new ErrorCodeConverter();
 
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.Update(It.IsAny<Vehicle>()))
@@ -305,7 +305,7 @@ namespace AutoRenter.Api.Tests
 
             var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, errorCodeConverter, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -323,7 +323,7 @@ namespace AutoRenter.Api.Tests
         {
             // arrange
             var testVehicle = TestVehicleModel();
-            var resultCodeProcessor = new ResultCodeProcessor();
+            var errorCodeConverter = new ErrorCodeConverter();
 
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.Update(It.IsAny<Vehicle>()))
@@ -331,7 +331,7 @@ namespace AutoRenter.Api.Tests
 
             var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, errorCodeConverter, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -348,7 +348,7 @@ namespace AutoRenter.Api.Tests
         public async void Delete_WhenValid()
         {
             // arrange
-            var resultCodeProcessor = new ResultCodeProcessor();
+            var errorCodeConverter = new ErrorCodeConverter();
 
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
@@ -356,7 +356,7 @@ namespace AutoRenter.Api.Tests
 
             var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, errorCodeConverter, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -373,7 +373,7 @@ namespace AutoRenter.Api.Tests
         public async void Delete_WhenNotValid()
         {
             // arrange
-            var resultCodeProcessor = new ResultCodeProcessor();
+            var errorCodeConverter = new ErrorCodeConverter();
 
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
@@ -381,7 +381,7 @@ namespace AutoRenter.Api.Tests
 
             var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, errorCodeConverter, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };
@@ -398,7 +398,7 @@ namespace AutoRenter.Api.Tests
         public async void Delete_WhenNotFound()
         {
             // arrange
-            var resultCodeProcessor = new ResultCodeProcessor();
+            var errorCodeConverter = new ErrorCodeConverter();
 
             var vehicleServiceMoq = new Mock<IVehicleService>();
             vehicleServiceMoq.Setup(x => x.Delete(It.IsAny<Guid>()))
@@ -406,7 +406,7 @@ namespace AutoRenter.Api.Tests
 
             var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
 
-            var sut = new VehiclesController(vehicleServiceMoq.Object, resultCodeProcessor, dataStructureConverterMoq.Object)
+            var sut = new VehiclesController(vehicleServiceMoq.Object, errorCodeConverter, dataStructureConverterMoq.Object)
             {
                 ControllerContext = DefaultControllerContext()
             };

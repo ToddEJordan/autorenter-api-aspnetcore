@@ -29,7 +29,7 @@ namespace AutoRenter.Api.Tests
                     Message = message
                 });
 
-            IResultCodeProcessor processor = new ResultCodeProcessor();
+            IErrorCodeConverter processor = new ErrorCodeConverter();
             var sut = new LogController(logService.Object, processor, dataStructureConverterMoq.Object);
 
             var logEntryModel = new LogEntryModel()
@@ -54,7 +54,7 @@ namespace AutoRenter.Api.Tests
             logService.Setup(x => x.Log(It.IsAny<LogEntry>()))
                 .ReturnsAsync(new Result<object>(ResultCode.BadRequest));
 
-            IResultCodeProcessor processor = new ResultCodeProcessor();
+            IErrorCodeConverter processor = new ErrorCodeConverter();
 
             var level = "warning";
             var message = "test message";
@@ -90,7 +90,7 @@ namespace AutoRenter.Api.Tests
             logService.Setup(x => x.Log(It.IsAny<LogEntry>()))
                 .ReturnsAsync(new Result<object>(ResultCode.Success));
 
-            IResultCodeProcessor processor = new ResultCodeProcessor();
+            IErrorCodeConverter processor = new ErrorCodeConverter();
 
             var level = "warning";
             var message = "test message";
@@ -126,7 +126,7 @@ namespace AutoRenter.Api.Tests
             logService.Setup(x => x.Log(It.IsAny<LogEntry>()))
                 .ReturnsAsync(new Result<object>(ResultCode.Success));
 
-            IResultCodeProcessor processor = new ResultCodeProcessor();
+            IErrorCodeConverter processor = new ErrorCodeConverter();
 
             var level = "info";
             var message = "test message";

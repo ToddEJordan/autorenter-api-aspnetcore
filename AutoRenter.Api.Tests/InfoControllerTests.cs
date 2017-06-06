@@ -17,7 +17,7 @@ namespace AutoRenter.Api.Tests
         {
             // arrange
             var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
-            dataStructureConverterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
+            dataStructureConverterMoq.Setup(x => x.Convert(It.IsAny<string>(), It.IsAny<object>()))
                 .Returns(new Dictionary<string, object>
                         {
                             { "data", InfoHelper.Get() }
@@ -38,7 +38,7 @@ namespace AutoRenter.Api.Tests
         {
             // arrange
             var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
-            dataStructureConverterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
+            dataStructureConverterMoq.Setup(x => x.Convert(It.IsAny<string>(), It.IsAny<object>()))
                 .Returns(new Dictionary<string, object>
                         {
                             { "data", InfoHelper.Get() }
@@ -62,7 +62,7 @@ namespace AutoRenter.Api.Tests
         {
             // arrange
             var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
-            dataStructureConverterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
+            dataStructureConverterMoq.Setup(x => x.Convert(It.IsAny<string>(), It.IsAny<object>()))
                 .Returns(new Dictionary<string, object>
                         {
                             { "data", InfoHelper.Get() }
@@ -86,7 +86,7 @@ namespace AutoRenter.Api.Tests
         {
             // arrange
             var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
-            dataStructureConverterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
+            dataStructureConverterMoq.Setup(x => x.Convert(It.IsAny<string>(), It.IsAny<object>()))
                 .Returns(new Dictionary<string, object>
                         {
                             { "data", InfoHelper.Get() }
@@ -110,7 +110,7 @@ namespace AutoRenter.Api.Tests
         {
             // arrange
             var dataStructureConverterMoq = new Mock<IDataStructureConverter>();
-            dataStructureConverterMoq.Setup(x => x.Format(It.IsAny<string>(), It.IsAny<object>()))
+            dataStructureConverterMoq.Setup(x => x.Convert(It.IsAny<string>(), It.IsAny<object>()))
                 .Returns(new Dictionary<string, object>
                         {
                             { "data", InfoHelper.Get() }

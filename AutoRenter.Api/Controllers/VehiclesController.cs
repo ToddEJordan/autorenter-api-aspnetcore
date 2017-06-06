@@ -16,15 +16,15 @@ namespace AutoRenter.Api.Controllers
     public class VehiclesController : Controller
     {
         private readonly IVehicleService vehicleService;
-        private readonly IResultCodeProcessor resultCodeProcessor;
+        private readonly IErrorCodeConverter errorCodeConverter;
         private readonly IDataStructureConverter dataStructureConverter;
 
         public VehiclesController(IVehicleService vehicleService, 
-            IResultCodeProcessor resultCodeProcessor, 
+            IErrorCodeConverter errorCodeConverter, 
             IDataStructureConverter dataStructureConverter)
         {
             this.vehicleService = vehicleService;
-            this.resultCodeProcessor = resultCodeProcessor;
+            this.errorCodeConverter = errorCodeConverter;
             this.dataStructureConverter = dataStructureConverter;
         }
 
@@ -37,11 +37,11 @@ namespace AutoRenter.Api.Controllers
             {
                 Response.Headers.Add("x-total-count", result.Data.Count().ToString());
                 var formattedResult = dataStructureConverter
-                    .FormatAndMap<IEnumerable<VehicleModel>, IEnumerable<Vehicle>>("vehicles", result.Data);
+                    .ConvertAndMap<IEnumerable<VehicleModel>, IEnumerable<Vehicle>>("vehicles", result.Data);
                 return Ok(formattedResult);
             }
 
-            return resultCodeProcessor.Process(result.ResultCode);
+            return errorCodeConverter.Convert(result.ResultCode);
         }
 
         [HttpGet("{id:Guid}", Name = "GetVehicle")]
@@ -57,11 +57,11 @@ namespace AutoRenter.Api.Controllers
             if (result.ResultCode == ResultCode.Success)
             {
                 var formattedResult = dataStructureConverter
-                    .FormatAndMap<VehicleModel, Vehicle>("vehicle", result.Data);
+                    .ConvertAndMap<VehicleModel, Vehicle>("vehicle", result.Data);
                 return Ok(formattedResult);
             }
 
-            return resultCodeProcessor.Process(result.ResultCode);
+            return errorCodeConverter.Convert(result.ResultCode);
         }
 
         [HttpPost]
@@ -81,7 +81,7 @@ namespace AutoRenter.Api.Controllers
                 return CreatedAtRoute("GetVehicle", new { id = result.Data }, result.Data);
             }
 
-            return resultCodeProcessor.Process(result.ResultCode);
+            return errorCodeConverter.Convert(result.ResultCode);
         }
 
         [HttpDelete("{id}")]
@@ -99,7 +99,7 @@ namespace AutoRenter.Api.Controllers
                 return NoContent();
             }
 
-            return resultCodeProcessor.Process(resultCode);
+            return errorCodeConverter.Convert(resultCode);
         }
 
         [HttpPut("{id}")]
@@ -119,7 +119,7 @@ namespace AutoRenter.Api.Controllers
                 return Ok(result.Data);
             }
 
-            return resultCodeProcessor.Process(result.ResultCode);
+            return errorCodeConverter.Convert(result.ResultCode);
         }
     }
 }
