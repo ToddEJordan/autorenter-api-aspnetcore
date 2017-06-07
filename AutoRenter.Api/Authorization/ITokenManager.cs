@@ -1,4 +1,4 @@
-﻿using AutoRenter.Api.Features.User;
+﻿using AutoRenter.Api.Models;
 
 namespace AutoRenter.Api.Authorization
 {

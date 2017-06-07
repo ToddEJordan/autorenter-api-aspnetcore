@@ -10,34 +10,34 @@ These instructions will cover usage information for the API and the optional dev
 
 - ASP.NET Core
 - Entity Framework Core
-- Repository Pattern
-- Automapper
 - FluentValidation
-- CQS Pattern - MediatR
+- AutoMapper
 - Global exception handler
 - Cors
+- xUnit
+- Moq
 
 ## Prerequisites
 
-- Download and run the [.NET Core 1.0 RC4 SDK Installer](https://github.com/dotnet/core/blob/master/release-notes/rc4-download.md).
+- Download and install [.NET Core 1.0](https://dot.net/core)
 
 ## How To
 
-- Unless otherwise noted, all terminal commands must be issued from the project's root directory.
+- Unless otherwise noted, all terminal commands must be issued from the solution's root directory.
 
 ### Local Development
 
-1. Open the project folder in your favorite text editor (preferably VS Code)
-1. Run `dotnet restore` from the command line
-   1. Optionally run `dotnet build` if you prefer to build before running. Running will also build.
-1. Run `dotnet run` from the command line
+1. Open the project folder in your favorite text editor (preferably VS Code).
+2. Run `dotnet restore` from the command line to restore dependencies.
+3. Run `dotnet build` to build the solution.
+   a. Note: running will also build.
+4. To run api tests, navigate to a test folder (e.g., `./AutoRenter.Api.Tests`) and run `dotnet test'.
+5. To run the app, navigate to the `AutoRenter.Api` folder and run `dotnet run`.
 
 ### Browse the app
 
 After successfully starting the API app, you should be able to view data by browsing to [http://127.0.0.1:3000/api/locations](http://127.0.0.1:3000/api/locations).
 For more in-depth testing, use a web debugging tool such as [Fiddler](https://www.telerik.com/download/fiddler) or [Postman](https://www.getpostman.com/).
-
-[Postman collection](https://www.getpostman.com/collections/5530fbffa46505020891)
 
 ### Docker Development
 
@@ -71,11 +71,12 @@ Make sure you have the correct version of ASP.NET Core:
 dotnet --version
 ```
 
-The supported version is 1.0.0-rc4-*.
+The supported version is 1.0.4
 
 ### The project does not load in Visual Studio
 
 The [Microsoft Documentation](https://www.microsoft.com/net/core#windowsvs2015) says that this will work with Visual Studio Update 3. Not so. The project file format has been changed from a JSON-based format to an XML-based format (allegedly to maintain compatibility with MSBuild). However, VS Update 3 does not yet support this new format.
+Consider using [Visual Studio 2017](https://www.microsoft.com/net/core#windowsvs2017) or [Visual Studio Code](https://code.visualstudio.com/download).
 
 ## Contributing
 

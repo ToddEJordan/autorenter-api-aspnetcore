@@ -1,14 +1,8 @@
 using System;
+using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
-using AutoMapper;
-using AutoRenter.Api;
-using AutoRenter.Api.Authorization;
-using AutoRenter.Api.Data;
-using AutoRenter.Api.Features.Login;
-using AutoRenter.Api.Infrastructure;
-using AutoRenter.Api.Services;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
@@ -20,15 +14,25 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Serialization;
 using Microsoft.IdentityModel.Tokens;
+using AutoMapper;
+using Newtonsoft.Json.Serialization;
+using AutoRenter.Api.Authentication;
+using AutoRenter.Api.Authorization;
+using AutoRenter.Api.Models;
+using AutoRenter.Api.Services;
+using AutoRenter.Domain.Data;
+using AutoRenter.Domain.Interfaces;
+using AutoRenter.Domain.Models;
+using AutoRenter.Domain.Services.Commands;
+using AutoRenter.Domain.Validation;
 
-namespace AutoRenter.API
+namespace AutoRenter.Api
 {
     public class Startup
     {
         private const string CorsPolicyName = "AllowAll";
-        private bool _useInMemoryProvider = true;
+        private bool useInMemoryProvider = true;
 
         public Startup(IHostingEnvironment env)
         {
@@ -49,43 +53,19 @@ namespace AutoRenter.API
             ConfigureData(services);
             ConfigureCompression(services);
             ConfigureCors(services);
-            ConfigureAutoMapper(services);
             ConfigureMvc(services);
-            ConfigureMediatR(services);
             ConfigureDI(services);
-        }
-
-        private static void ConfigureAutoMapper(IServiceCollection services)
-        {
-            services.AddAutoMapper(typeof(Startup));
-            Mapper.AssertConfigurationIsValid();
-        }
-
-        private static void ConfigureMediatR(IServiceCollection services)
-        {
-            services.AddMediatR(typeof(Startup));
         }
 
         private void ConfigureData(IServiceCollection services)
         {
-            try
-            {
-                _useInMemoryProvider = bool.Parse(Configuration["AppSettings:InMemoryProvider"]);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            useInMemoryProvider = bool.Parse(Configuration["AppSettings:InMemoryProvider"]);
 
             services.AddDbContext<AutoRenterContext>(options =>
             {
-                switch (_useInMemoryProvider)
+                if (useInMemoryProvider)
                 {
-                    case true:
-                        options.UseInMemoryDatabase();
-                        break;
-                    default:
-                        break;
+                    options.UseInMemoryDatabase();
                 }
             });
         }
@@ -97,17 +77,41 @@ namespace AutoRenter.API
 
         private static void ConfigureDI(IServiceCollection services)
         {
-            services.AddScoped<ILocationRepository, LocationRepository>();
-            services.AddScoped<ISkuRepository, SkuRepository>();
-            services.AddScoped<IVehicleRepository, VehicleRepository>();
-            services.AddTransient<IResponseConverter, ResponseConverter>();
-            services.AddTransient<ITokenManager, TokenManager>();
+            ConfigureDIForApi(services);
+            ConfigureDIForDomainServices(services);
+            ConfigureDIForFactories(services);
+            ConfigureDIForAutoMapper(services);
+        }
+
+        private static void ConfigureDIForApi(IServiceCollection services)
+        {
             services.AddTransient<IAuthenticateUser, AuthenticateUser>();
+            services.AddTransient<IDataStructureConverter, DataStructureConverter>();
+            services.AddTransient<IErrorCodeConverter, ErrorCodeConverter>();
+            services.AddTransient<ITokenManager, TokenManager>();
+        }
+
+        private static void ConfigureDIForDomainServices(IServiceCollection services)
+        {
+            Assembly ass = Assembly.Load(new AssemblyName("AutoRenter.Domain.Services"));
+            foreach (TypeInfo ti in ass.DefinedTypes
+                .Where(x => x.ImplementedInterfaces.Contains(typeof(IDomainService))))
+            {
+                var interfaceType = ti.ImplementedInterfaces.FirstOrDefault(x => x.Name == $"I{ti.Name}");
+                var serviceType = ass.GetType(ti.FullName);
+                services.AddTransient(interfaceType, serviceType);
+            }
+        }
+
+        private static void ConfigureDIForFactories(IServiceCollection services)
+        {
+            services.AddTransient(typeof(ICommandFactory<>), typeof(CommandFactory<>));
+            services.AddTransient<IValidatorFactory, ValidatorFactory>();
         }
 
         private static void ConfigureMvc(IServiceCollection services)
         {
-            services.AddMvc(options => { options.Conventions.Add(new FeatureConvention()); })
+            services.AddMvc()
                 .AddJsonOptions(a => 
                 {
                     a.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -167,7 +171,6 @@ namespace AutoRenter.API
                             var error = context.Features.Get<IExceptionHandlerFeature>();
                             if (error != null)
                             {
-                                context.Response.AddApplicationError(error.Error.Message);
                                 await context.Response.WriteAsync(error.Error.Message).ConfigureAwait(false);
                             }
                         });
@@ -205,6 +208,50 @@ namespace AutoRenter.API
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero
             };
+        }
+
+        private static void ConfigureDIForAutoMapper(IServiceCollection services)
+        {
+            var config = new MapperConfiguration(x =>
+            {
+                x.CreateMap<Vehicle, VehicleModel>()
+                    .ForMember(dest => dest.Make,
+                        opts => opts.MapFrom(src => src.Make.Name))
+                    .ForMember(dest => dest.Model,
+                        opts => opts.MapFrom(src => src.Model.Name));
+
+                x.CreateMap<VehicleModel, Vehicle>()
+                    .ForMember(dest => dest.Make,
+                        opts => opts.Ignore())
+                    .ForMember(dest => dest.Model,
+                        opts => opts.Ignore());
+
+                x.CreateMap<Make, MakeModel>()
+                    .ForMember(dest => dest.Id,
+                                opts => opts.MapFrom(src => src.ExternalId));
+
+                x.CreateMap<MakeModel, Make>();
+
+                x.CreateMap<Model, ModelModel>()
+                    .ForMember(dest => dest.Id,
+                        opts => opts.MapFrom(src => src.ExternalId));
+
+                x.CreateMap<ModelModel, Model>();
+
+                x.CreateMap<LocationModel, Location>();
+
+                x.CreateMap<Location, LocationModel>()
+                    .ForMember(dest => dest.VehicleCount,
+                        opts => opts.ResolveUsing(src => src.Vehicles.Count));
+
+                x.CreateMap<SkuModel, Sku>();
+                x.CreateMap<Sku, SkuModel>();
+
+                x.CreateMap<LogEntry, LogEntryModel>();
+                x.CreateMap<LogEntryModel, LogEntry>();
+            });
+
+            services.AddSingleton(typeof(IMapper), new Mapper(config));
         }
     }
 }

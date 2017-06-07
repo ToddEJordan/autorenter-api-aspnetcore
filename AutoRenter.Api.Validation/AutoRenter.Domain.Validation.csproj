@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AutoRenter.Domain.Interfaces\AutoRenter.Domain.Interfaces.csproj" />
+    <ProjectReference Include="..\AutoRenter.Domain.Models\AutoRenter.Domain.Models.csproj" />
+  </ItemGroup>
+
+</Project>
