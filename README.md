@@ -32,7 +32,9 @@ These instructions will cover usage information for the API and the optional dev
 3. Run `dotnet build` to build the solution.
    a. Note: running will also build.
 4. To run api tests, navigate to a test folder (e.g., `./AutoRenter.Api.Tests`) and run `dotnet test'.
-5. To run the app, navigate to the `AutoRenter.Api` folder and run `dotnet run`.
+5. To run all api tests in Bash run './RunTests.sh'.
+6. To run the app, navigate to the `AutoRenter.Api` folder and run `dotnet run`.
+
 
 ### Browse the app
 
