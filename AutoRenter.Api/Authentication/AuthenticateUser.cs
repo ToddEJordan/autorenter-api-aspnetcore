@@ -27,14 +27,16 @@ namespace AutoRenter.Api.Authentication
 
         public virtual UserModel LookupUser(LoginModel loginModel)
         {
-            if (loginModel.Password != "secret") return null;
+            if (loginModel.Password != "admin" &&
+                loginModel.Password != "user") 
+                return null;
             var userModel = new UserModel
             {
                 FirstName = "John",
                 LastName = "Doe",
                 Email = "john.doe@fusionalliance.com",
                 Username = loginModel.Username,
-                IsAdministrator = loginModel.Username.ToUpper().IndexOf("ADMIN", StringComparison.Ordinal) > -1
+                IsAdministrator = loginModel.Password.ToUpper().IndexOf("ADMIN", StringComparison.Ordinal) > -1
             };
             userModel.BearerToken = tokenManager.CreateToken(userModel);
             return userModel;
