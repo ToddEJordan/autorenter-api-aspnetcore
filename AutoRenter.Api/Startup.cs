@@ -55,6 +55,7 @@ namespace AutoRenter.Api
             ConfigureCors(services);
             ConfigureMvc(services);
             ConfigureDI(services);
+            ConfigureSwagger(services);
         }
 
         private void ConfigureData(IServiceCollection services)
@@ -144,6 +145,20 @@ namespace AutoRenter.Api
             services.AddCors(options => { options.AddPolicy(CorsPolicyName, corsBuilder.Build()); });
         }
 
+        private static void ConfigureSwagger(IServiceCollection services)
+        {
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc(
+                    "AutoRenterAPI", 
+                    new Swashbuckle.AspNetCore.Swagger.Info {
+                        Title = "AutoRenter API",
+                        Version = "v1",
+                        Description = "ASP.NET Core implementation of the RESTful AutoRenter API."
+                    });
+            });
+        }
+
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             app.UseResponseCompression();
@@ -181,6 +196,19 @@ namespace AutoRenter.Api
             ValidateTokens(app);
             AutoRenterDbInitializer.Initialize(app.ApplicationServices);
             app.UseMvc();
+            app.UseSwagger(options =>
+            {   
+                options.RouteTemplate = "docs/api/{documentName}/swagger.json";                
+            });
+            app.UseSwaggerUI(options =>
+            {
+                options.RoutePrefix = "docs/api";
+                options.SwaggerEndpoint(
+                    "/docs/api/AutoRenterAPI/swagger.json", 
+                    "AutoRenter API V1"
+                );
+                options.DocExpansion("none");
+            });
         }
 
         private void ValidateTokens(IApplicationBuilder app)

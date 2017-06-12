@@ -7,6 +7,7 @@ using Moq;
 namespace AutoRenter.Api.OldTests.Features.Login
 {
     [TestClass]
+    [Ignore]
     public class AuthenticateUserTests
     {
         private Mock<ITokenManager> _stubTokenManager;
