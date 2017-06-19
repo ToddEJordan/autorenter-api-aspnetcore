@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -31,11 +30,14 @@ namespace AutoRenter.Api
 {
     public class Startup
     {
-        private const string CorsPolicyName = "AllowAll";
+        private const string CorsPolicyName = "Secure";
         private bool useInMemoryProvider = true;
+        private bool isDevelopment = false;
 
         public Startup(IHostingEnvironment env)
         {
+            isDevelopment = env.IsDevelopment();
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", true, true)
@@ -112,20 +114,19 @@ namespace AutoRenter.Api
 
         private static void ConfigureMvc(IServiceCollection services)
         {
-            services.AddMvc()
-                .AddJsonOptions(a => 
-                {
-                    a.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                    a.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-                });
-
             services.AddMvc(config =>
             {
                 var policy = new AuthorizationPolicyBuilder()
                                  .RequireAuthenticatedUser()
                                  .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
+            })
+            .AddJsonOptions(a =>
+            {
+                a.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                a.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
             });
+
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("Administrator", policy => policy.Requirements.Add(new AdministratorAuthorizationRequirement()));
@@ -133,16 +134,30 @@ namespace AutoRenter.Api
             services.AddSingleton<IAuthorizationHandler, IsAdminHandler>();
         }
 
-        private static void ConfigureCors(IServiceCollection services)
+        private void ConfigureCors(IServiceCollection services)
         {
-            // TODO: Harden this later
-            var corsBuilder = new CorsPolicyBuilder();
-            corsBuilder.AllowAnyHeader();
-            corsBuilder.AllowAnyMethod();
-            corsBuilder.AllowAnyOrigin();
-            corsBuilder.AllowCredentials();
+            var origins = GetCorsOrigins();
+            var corsProvider = new CorsProvider(isDevelopment, origins);
 
-            services.AddCors(options => { options.AddPolicy(CorsPolicyName, corsBuilder.Build()); });
+            services.AddCors(options => 
+            {
+                options.AddPolicy(CorsPolicyName, corsProvider.GetCorsPolicy());
+            });
+        }
+
+        private string[] GetCorsOrigins()
+        {
+            var config = Configuration["AppSettings:CorsOrigins"];
+
+            if (string.IsNullOrEmpty(config))
+            {
+                return new string[0];
+            }
+
+            return config
+                    .Split(',')
+                    .Select(x => x.Trim())
+                    .ToArray();
         }
 
         private static void ConfigureSwagger(IServiceCollection services)

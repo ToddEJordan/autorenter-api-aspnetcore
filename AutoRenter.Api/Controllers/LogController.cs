@@ -8,7 +8,7 @@ using AutoRenter.Domain.Models;
 
 namespace AutoRenter.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/log")]
     public class LogController : Controller
     {
         private readonly ILogService logService;
