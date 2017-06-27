@@ -15,8 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoRenter.Domain.Data", "A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoRenter.Domain.Validation", "AutoRenter.Api.Validation\AutoRenter.Domain.Validation.csproj", "{946CD07F-AB4B-4D8C-AE06-5BD15F2F5369}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoRenter.Api.OldTests", "AutoRenter.Api.OldTests\AutoRenter.Api.OldTests.csproj", "{A9CC1EFF-BC05-4BFC-89C1-F7B5F2BB3133}"
-EndProject
+
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoRenter.Api.Tests", "AutoRenter.Api.Tests\AutoRenter.Api.Tests.csproj", "{13EA7039-F409-4211-9373-304785D4D6CB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoRenter.Domain.Services.Tests", "AutoRenter.Domain.Services.Tests\AutoRenter.Domain.Services.Tests.csproj", "{FE958AE3-BA5D-484C-9177-1F42B767AC25}"
