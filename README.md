@@ -26,6 +26,7 @@ These instructions will cover usage information for the API and the optional dev
 ## How To
 
 - Unless otherwise noted, all terminal commands must be issued from the solution's root directory.
+- See the [Azure Deployment Guide](https://github.com/fusionalliance/autorenter-api-aspnetcore/blob/development/azure-deployment.md) for information on deploying the project to Azure.
 
 ### Local Development
 

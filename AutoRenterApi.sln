@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoRenter.Api", "AutoRenter.Api\AutoRenter.Api.csproj", "{F4675F5C-6950-43B6-8802-13853AFE7A3C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoRenter.Api", "AutoRenter.Api\AutoRenter.Api.csproj", "{F4675F5C-6950-43B6-8802-13853AFE7A3C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoRenter.Domain.Models", "AutoRenter.Domain.Models\AutoRenter.Domain.Models.csproj", "{D649EAB8-2A72-401B-841B-4A308B342230}"
 EndProject
@@ -15,14 +15,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoRenter.Domain.Data", "A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoRenter.Domain.Validation", "AutoRenter.Api.Validation\AutoRenter.Domain.Validation.csproj", "{946CD07F-AB4B-4D8C-AE06-5BD15F2F5369}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoRenter.Api.OldTests", "AutoRenter.Api.OldTests\AutoRenter.Api.OldTests.csproj", "{A9CC1EFF-BC05-4BFC-89C1-F7B5F2BB3133}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoRenter.Api.OldTests", "AutoRenter.Api.OldTests\AutoRenter.Api.OldTests.csproj", "{A9CC1EFF-BC05-4BFC-89C1-F7B5F2BB3133}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoRenter.Api.Tests", "AutoRenter.Api.Tests\AutoRenter.Api.Tests.csproj", "{13EA7039-F409-4211-9373-304785D4D6CB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoRenter.Api.Tests", "AutoRenter.Api.Tests\AutoRenter.Api.Tests.csproj", "{13EA7039-F409-4211-9373-304785D4D6CB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoRenter.Domain.Services.Tests", "AutoRenter.Domain.Services.Tests\AutoRenter.Domain.Services.Tests.csproj", "{FE958AE3-BA5D-484C-9177-1F42B767AC25}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoRenter.Domain.Services.Tests", "AutoRenter.Domain.Services.Tests\AutoRenter.Domain.Services.Tests.csproj", "{FE958AE3-BA5D-484C-9177-1F42B767AC25}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AD0804F9-0983-4CE8-B74A-B58685020C36}"
 	ProjectSection(SolutionItems) = preProject
+		azure-deployment.md = azure-deployment.md
 		README.md = README.md
 	EndProjectSection
 EndProject
