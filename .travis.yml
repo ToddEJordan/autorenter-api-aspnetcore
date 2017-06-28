@@ -5,6 +5,8 @@ dist: trusty
 dotnet: 1.0.4
 deploy:
   provider: heroku
+  api_key:
+    secure: HbV28Vc9aC/TmvdJtE5rgSnfgUi0Z2fGaHcobBKfZ+O2NsO/VJ5Po1WO1bdI6O4X5N1kdvDdFe6CZZavcGKuAVZxk/jvM1n4onM3A7r+5PzirzZjT+Fkze/BAYU6ah/YxfELlT1SgC1Y9L9t4gLs7orthtYRhouYKrm7zxsclaYb2G+vEyN7YLYg0kZ3i5ioEnt45qzZETJqhDCoyIG+Bec2xoxFw5bYGCPOAxl8m9nkqv0UUqrkfAJ67iBriKScCs2bbI+7bAfYJCDRUP9/h2js0eDa5FAQZoHn8ATBkrmVRcryRivR/+g0v0fGQcVKVKvWxV/ZXhnNXfquWGIxAdUz6Qme4YteRH6VeDgea6lRh44uPSp3qrirfc3TjM4v0hBuhA+cRSovJDN7UO9Qq/ezg90tuMoM1aZ7Z50XCz5/i55fsDfASW5nXDjOOfKBUcHZz8PsE2bytKVR5fZn6n0ROpr+X/n/mMcove9iDoMoZKiKdE7jzVvMeQhml3hPcXRgo9r7s2HNabwsagVWo25UYk2nTxR/ipx4CzvLpHU94qWSotmdoDWkyXZgckewDMIk/N41FoVPu4aDAtbOeB4E8STmfOJU/RDd8hGzfeJrLoIKFQG/ZJI2fDIdNkBD4dzTZNogJazZn/ph9agmV1bCuAxlPO2gQ55nZpGTSPg=
   app: autorenter-api-aspnetcore
   on: development
 script:
@@ -12,5 +14,3 @@ script:
 - dotnet test "./AutoRenter.Api.Tests/AutoRenter.Api.Tests.csproj"
 - dotnet test "./AutoRenter.Domain.Services.Tests/AutoRenter.Domain.Services.Tests.csproj"
 - dotnet build
-dd:
-  secure: HbV28Vc9aC/TmvdJtE5rgSnfgUi0Z2fGaHcobBKfZ+O2NsO/VJ5Po1WO1bdI6O4X5N1kdvDdFe6CZZavcGKuAVZxk/jvM1n4onM3A7r+5PzirzZjT+Fkze/BAYU6ah/YxfELlT1SgC1Y9L9t4gLs7orthtYRhouYKrm7zxsclaYb2G+vEyN7YLYg0kZ3i5ioEnt45qzZETJqhDCoyIG+Bec2xoxFw5bYGCPOAxl8m9nkqv0UUqrkfAJ67iBriKScCs2bbI+7bAfYJCDRUP9/h2js0eDa5FAQZoHn8ATBkrmVRcryRivR/+g0v0fGQcVKVKvWxV/ZXhnNXfquWGIxAdUz6Qme4YteRH6VeDgea6lRh44uPSp3qrirfc3TjM4v0hBuhA+cRSovJDN7UO9Qq/ezg90tuMoM1aZ7Z50XCz5/i55fsDfASW5nXDjOOfKBUcHZz8PsE2bytKVR5fZn6n0ROpr+X/n/mMcove9iDoMoZKiKdE7jzVvMeQhml3hPcXRgo9r7s2HNabwsagVWo25UYk2nTxR/ipx4CzvLpHU94qWSotmdoDWkyXZgckewDMIk/N41FoVPu4aDAtbOeB4E8STmfOJU/RDd8hGzfeJrLoIKFQG/ZJI2fDIdNkBD4dzTZNogJazZn/ph9agmV1bCuAxlPO2gQ55nZpGTSPg=
