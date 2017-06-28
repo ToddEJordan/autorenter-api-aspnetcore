@@ -3,12 +3,6 @@ solution: autorenterapi.sln
 mono: none
 dist: trusty
 dotnet: 1.0.4
-deploy:
-  provider: heroku
-  api_key:
-    secure: FknhdIUKHYOkBsv+j4BcaPLgFil+4t/sq6Guilj5dGQmrIqZFU7YiXkXRBzh7f02behiN0VJDm33hsgAXaIpZBG5kHw6DuHSBGaFNn9J74qL4H9ytJ/GYvAyuirQusabjYGcw2ty188ISpyO1+uPi2Mqt6PpPxXC0H2ouwrGT7kK5mN+esf9iQEzLpIbnKls+Ogy8R9M3B+iTpPpvJ0nLd/cHTS8tm1W3Pd4NW9JCeivzNDlG7t/EfRnHC3AyNwNQJEVIdJeZgH9dx8FsOUyxA4aIfh7WqxhS3ig4NPYZ1lfx9FCVAjjD39JA1GYwx1CiZDVZqGWXDT9ScD9lkWPkgxYqZsa8qeKO1VY9d+P9Ojy8gW2M3l0S6o3D2R0AP8xeScL30UesohPm/48qSSUV/mLRlOSP720aAqWIegA6+v5Oh8BH/EYfvOt4WPjSQbiMxsxu8DDrdGrUlVP9+qVqcwqB63pJgklTER7LI8jY5ZNTEmuxbVdvYGrYAgS6vLFU4vLh3+DKEqRYnFDhmBAUgk6N71x3WfloEJ6TO2MO4mr/3N+DSRFbYn0BTOGp8ToOZWITnrt1B864Cjdqr+JK/jvb/j1PNJ9UwgkYZoGVf7TlmWsMcPHldTxE3eiPdRBhA0VyTuLbFUwnyPJKMuH7FMBycz1xnq5Cfya0YqNiMs=
-  app: autorenter-api-aspnetcore
-  on: development
 script:
 - dotnet restore
 - dotnet test "./AutoRenter.Api.Tests/AutoRenter.Api.Tests.csproj"
