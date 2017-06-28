@@ -6,6 +6,7 @@ dotnet: 1.0.4
 deploy:
   provider: heroku
   app: autorenter-api-aspnetcore
+  on: development
 script:
 - dotnet restore
 - dotnet test "./AutoRenter.Api.Tests/AutoRenter.Api.Tests.csproj"
