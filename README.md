@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/fusionalliance/autorenter-api-aspnetcore.svg?branch=master)](https://travis-ci.org/fusionalliance/autorenter-api-aspnetcore)
+[![Build Status](https://travis-ci.org/fusionalliance/autorenter-api-aspnetcore.svg?branch=development)](https://travis-ci.org/fusionalliance/autorenter-api-aspnetcore)
 
 # AutoRenter - ASP.NET Core
 
