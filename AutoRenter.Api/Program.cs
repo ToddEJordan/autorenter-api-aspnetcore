@@ -19,7 +19,6 @@ namespace AutoRenter.Api
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
-                //.UseUrls("http://127.0.0.1:3000")
                 .Build();
 
             host.Run();
