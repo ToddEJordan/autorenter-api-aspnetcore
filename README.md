@@ -37,7 +37,7 @@ These instructions will cover usage information for the API and the optional dev
 4. To run api tests, navigate to a test folder (e.g., `./AutoRenter.Api.Tests`) and run `dotnet test'.
 5. To run all api tests in Bash run './RunTests.sh'.
 6. Ensure the ASPNETCORE_ENVIRONMENT variable is set to development. On Windows: `set ASPNETCORE_ENVIRONMENT=Development`. On Unix based OS: `export ASPNETCORE_ENVIRONMENT=Development`.
-6. To run the app, navigate to the `AutoRenter.Api` folder and run `dotnet run`.
+7. To run the app, navigate to the `AutoRenter.Api` folder and run `dotnet run`.
 
 
 ### Browse the app
