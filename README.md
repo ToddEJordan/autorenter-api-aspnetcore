@@ -36,17 +36,23 @@ These instructions will cover usage information for the API and the optional dev
    a. Note: running will also build.
 4. To run api tests, navigate to a test folder (e.g., `./AutoRenter.Api.Tests`) and run `dotnet test'.
 5. To run all api tests in Bash run './RunTests.sh'.
-6. To run the app, navigate to the `AutoRenter.Api` folder and run `dotnet run`.
+6. Ensure the ASPNETCORE_ENVIRONMENT variable is set to development. On Windows: `set ASPNETCORE_ENVIRONMENT=Development`. On Unix based OS: `export ASPNETCORE_ENVIRONMENT=Development`.
+7. To run the app, navigate to the `AutoRenter.Api` folder and run `dotnet run`.
 
 
 ### Browse the app
 
 After successfully starting the API app, you should be able to view data by browsing to [http://127.0.0.1:3000/api/locations](http://127.0.0.1:3000/api/locations).
+
+  > Note that in some cases the port number may be something other than 3000. For example, in my development environment the app runs on port 5000. This is what appears in my console when the app is launched: `Now listening on: http://localhost:5000`.
+
 For more in-depth testing, use a web debugging tool such as [Fiddler](https://www.telerik.com/download/fiddler) or [Postman](https://www.getpostman.com/).
 
 ### API Route Documentation
 
 Once running locally, you can access API route documentation (useful for those consuming the API) by going to: [http://localhost:3000/docs/api/](http://localhost:3000/docs/api/)
+
+  > NOTE: The adjust the port as necessary. For example, the app runs on port 5000 in my development environment.
 
 ### Docker Development
 
