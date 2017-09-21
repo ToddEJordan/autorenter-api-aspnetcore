@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Text;
 using AutoRenter.Api.Models;
 using Microsoft.Extensions.Options;
@@ -10,13 +9,13 @@ namespace AutoRenter.Api.Authorization
 {
     public class TokenManager : ITokenManager
     {
-        private readonly AppSettings appSettings;
+        private readonly AppSettings _appSettings;
 
         public DateTime UtcTime { get; set; }
 
         public TokenManager(IOptions<AppSettings> appSettings, DateTime utcTime)
         {
-            this.appSettings = appSettings.Value;
+            _appSettings = appSettings.Value;
             UtcTime = utcTime;
         }
 
@@ -33,30 +32,18 @@ namespace AutoRenter.Api.Authorization
         public virtual JwtSecurityToken CreateJsonWebToken(UserModel userModel)
         {
             return new JwtSecurityToken(
-                appSettings.TokenSettings.Issuer,
-                appSettings.TokenSettings.Audience,
-                GetClaims(userModel),
+                _appSettings.TokenSettings.Issuer,
+                _appSettings.TokenSettings.Audience,
+                null,
                 UtcTime,
-                UtcTime.AddMinutes(appSettings.TokenSettings.ExpirationMinutes),
+                UtcTime.AddMinutes(_appSettings.TokenSettings.ExpirationMinutes),
                 GetSigningCredentials());
         }
 
         public virtual SigningCredentials GetSigningCredentials()
         {
-            return new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(appSettings.TokenSettings.Secret)),
+            return new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_appSettings.TokenSettings.Secret)),
                 SecurityAlgorithms.HmacSha256);
-        }
-
-        public virtual Claim[] GetClaims(UserModel userModel)
-        {
-            return new[]
-            {
-                new Claim(AutoRenterClaimNames.Username, userModel.Username),
-                new Claim(AutoRenterClaimNames.Email, userModel.Email),
-                new Claim(AutoRenterClaimNames.FirstName, userModel.FirstName),
-                new Claim(AutoRenterClaimNames.LastName, userModel.LastName),
-                new Claim(AutoRenterClaimNames.IsAdministrator, userModel.IsAdministrator.ToString()),
-            };
         }
     }
 }

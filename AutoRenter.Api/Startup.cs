@@ -126,12 +126,6 @@ namespace AutoRenter.Api
                 a.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 a.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
             });
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("Administrator", policy => policy.Requirements.Add(new AdministratorAuthorizationRequirement()));
-            });
-            services.AddSingleton<IAuthorizationHandler, IsAdminHandler>();
         }
 
         private void ConfigureCors(IServiceCollection services)
