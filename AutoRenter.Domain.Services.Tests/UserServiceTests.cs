@@ -44,7 +44,7 @@ namespace AutoRenter.Domain.Services.Tests
         {
             var userService = new UserService(_context);
 
-            var result = await userService.GetUserByUsernameAndPassword("janesmith", "$2a$10$u4ONtuiO9bKjdMODbeXtzO1OauSlYm.bxb1VihX9uhHqbT0hOmFBG");
+            var result = await userService.GetUserByUsernameAndPassword("janesmith", "secret");
 
             Assert.Equal(ResultCode.Success, result.ResultCode);
             Assert.NotNull(result.Data);

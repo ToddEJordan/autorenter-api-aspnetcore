@@ -19,13 +19,12 @@ namespace AutoRenter.Domain.Services
 
         public async Task<Result<User>> GetUserByUsernameAndPassword(string username, string password)
         {
-            var user = context.Users.FirstOrDefault(x => x.Username == username && x.Password == password);
-            if (user == null)
+            var user = context.Users.FirstOrDefault(x => x.Username == username);
+            if (user != null && BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
-                return await Task.FromResult(new Result<User>(ResultCode.NotFound));
+                return await Task.FromResult(new Result<User>(ResultCode.Success, user));
             }
-
-            return await Task.FromResult(new Result<User>(ResultCode.Success, user));
+            return await Task.FromResult(new Result<User>(ResultCode.NotFound));
         }
 
         public void Dispose()

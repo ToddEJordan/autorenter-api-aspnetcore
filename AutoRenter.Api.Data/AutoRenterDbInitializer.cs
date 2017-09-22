@@ -219,7 +219,7 @@ namespace AutoRenter.Domain.Data
                         FirstName = "Jane",
                         LastName = "Smith",
                         Username = "janesmith",
-                        Password = "$2a$10$u4ONtuiO9bKjdMODbeXtzO1OauSlYm.bxb1VihX9uhHqbT0hOmFBG"
+                        Password = "$2b$10$0UVc4cSaf8PUFe6Bo4rfYOlkF0Vm5URICyApZMLiJMq3Rh19C.thW"
                     },
                     new User()
                     {
@@ -227,7 +227,7 @@ namespace AutoRenter.Domain.Data
                         FirstName = "Bob",
                         LastName = "Smith",
                         Username = "bobsmith",
-                        Password = "$2a$10$u4ONtuiO9bKjdMODbeXtzO1OauSlYm.bxb1VihX9uhHqbT0hOmFBG"
+                        Password = "$2b$10$0UVc4cSaf8PUFe6Bo4rfYOlkF0Vm5URICyApZMLiJMq3Rh19C.thW"
                     },
                     new User()
                     {
@@ -235,7 +235,7 @@ namespace AutoRenter.Domain.Data
                         FirstName = "Melissa",
                         LastName = "Jones",
                         Username = "melissajones",
-                        Password = "$2a$10$u4ONtuiO9bKjdMODbeXtzO1OauSlYm.bxb1VihX9uhHqbT0hOmFBG"
+                        Password = "$2b$10$0UVc4cSaf8PUFe6Bo4rfYOlkF0Vm5URICyApZMLiJMq3Rh19C.thW"
                     },
                     new User()
                     {
@@ -243,7 +243,7 @@ namespace AutoRenter.Domain.Data
                         FirstName = "George",
                         LastName = "Jones",
                         Username = "georgejones",
-                        Password = "$2a$10$u4ONtuiO9bKjdMODbeXtzO1OauSlYm.bxb1VihX9uhHqbT0hOmFBG"
+                        Password = "$2b$10$0UVc4cSaf8PUFe6Bo4rfYOlkF0Vm5URICyApZMLiJMq3Rh19C.thW"
                     }
                 };
 
