@@ -1,45 +1,38 @@
-﻿using System;
+﻿using System.Threading.Tasks;
 using AutoRenter.Api.Authorization;
 using AutoRenter.Api.Models;
+using AutoRenter.Api.Services;
+using AutoRenter.Domain.Interfaces;
+using AutoRenter.Domain.Models;
 
 namespace AutoRenter.Api.Authentication
 {
     public class AuthenticateUser : IAuthenticateUser
     {
         private readonly ITokenManager tokenManager;
+        private readonly IUserService userService;
+        private readonly IDataStructureConverter dataStructureConverter;
 
-        public AuthenticateUser(ITokenManager tokenManager)
+        public AuthenticateUser(ITokenManager tokenManager, IUserService userService, IDataStructureConverter dataStructureConverter)
         {
             this.tokenManager = tokenManager;
+            this.userService = userService;
+            this.dataStructureConverter = dataStructureConverter;
         }
 
-        public ResultModel Execute(LoginModel loginModel)
+        public async Task<Result<UserModel>> Execute(LoginModel loginModel)
         {
-            var userModel = LookupUser(loginModel);
+            var userResult = await userService.GetUserByUsernameAndPassword(loginModel.Username, loginModel.Password);
 
-            return new ResultModel
+            if (userResult.ResultCode != ResultCode.Success)
             {
-                Data = userModel,
-                Success = userModel != null,
-                Message = userModel == null ? "Login failed.  Please try again." : null
-            };
-        }
+                return new Result<UserModel>(ResultCode.Unauthorized);
+            }
 
-        public virtual UserModel LookupUser(LoginModel loginModel)
-        {
-            if (loginModel.Password != "admin" &&
-                loginModel.Password != "user") 
-                return null;
-            var userModel = new UserModel
-            {
-                FirstName = "John",
-                LastName = "Doe",
-                Email = "john.doe@fusionalliance.com",
-                Username = loginModel.Username,
-                IsAdministrator = loginModel.Password.ToUpper().IndexOf("ADMIN", StringComparison.Ordinal) > -1
-            };
-            userModel.BearerToken = tokenManager.CreateToken(userModel);
-            return userModel;
+            var userModel = dataStructureConverter.Map<UserModel, User>(userResult.Data);
+            userModel.Token = tokenManager.CreateToken(userModel);
+
+            return new Result<UserModel>(ResultCode.Success, userModel);
         }
     }
 }

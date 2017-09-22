@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using AutoRenter.Api.Models;
 
 namespace AutoRenter.Api.Tests.Helpers
@@ -20,10 +18,8 @@ namespace AutoRenter.Api.Tests.Helpers
             return new UserModel
             {
                 Username = "admin_jdoe",
-                Email = "test@test.com",
                 FirstName = "John",
-                LastName = "Doe",
-                IsAdministrator = true
+                LastName = "Doe"
             };
         }
         private static UserModel User()
@@ -31,10 +27,8 @@ namespace AutoRenter.Api.Tests.Helpers
             return new UserModel
             {
                 Username = "jdoe",
-                Email = "test@test.com",
                 FirstName = "John",
-                LastName = "Doe",
-                IsAdministrator = false
+                LastName = "Doe"
             };
         }
     }

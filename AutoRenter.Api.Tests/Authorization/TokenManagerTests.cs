@@ -2,15 +2,14 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using AutoRenter.Api.Models;
 using AutoRenter.Api.Authorization;
 using AutoRenter.Api.Tests.Helpers;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Xunit;
 using Moq;
+using Xunit;
 
-namespace AutoRenter.Api.Tests
+namespace AutoRenter.Api.Tests.Authorization
 {
     public class TokenManagerTests
     {

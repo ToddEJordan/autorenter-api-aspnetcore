@@ -286,6 +286,7 @@ namespace AutoRenter.Api
 
                 x.CreateMap<LogEntry, LogEntryModel>();
                 x.CreateMap<LogEntryModel, LogEntry>();
+                x.CreateMap<User, UserModel>();
             });
 
             services.AddSingleton(typeof(IMapper), new Mapper(config));

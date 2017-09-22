@@ -7,7 +7,7 @@ using AutoRenter.Domain.Models;
 
 namespace AutoRenter.Domain.Services
 {
-    public class UserService : IDomainService, IDisposable
+    public class UserService : IUserService, IDomainService, IDisposable
     {
         private bool disposed = false;
         private readonly AutoRenterContext context;

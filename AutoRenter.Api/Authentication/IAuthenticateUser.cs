@@ -1,9 +1,11 @@
-﻿using AutoRenter.Api.Models;
+﻿using System.Threading.Tasks;
+using AutoRenter.Api.Models;
+using AutoRenter.Domain.Models;
 
 namespace AutoRenter.Api.Authentication
 {
     public interface IAuthenticateUser
     {
-        ResultModel Execute(LoginModel loginModel);
+        Task<Result<UserModel>> Execute(LoginModel loginModel);
     }
 }

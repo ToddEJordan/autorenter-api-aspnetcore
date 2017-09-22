@@ -26,7 +26,7 @@ namespace AutoRenter.Api.Authorization
 
         public virtual string CreateToken(UserModel userModel)
         {
-            return $"Bearer {new JwtSecurityTokenHandler().WriteToken(CreateJsonWebToken(userModel))}";
+            return new JwtSecurityTokenHandler().WriteToken(CreateJsonWebToken(userModel));
         }
 
         public virtual JwtSecurityToken CreateJsonWebToken(UserModel userModel)

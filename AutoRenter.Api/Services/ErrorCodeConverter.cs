@@ -16,6 +16,8 @@ namespace AutoRenter.Api.Services
                     return new StatusCodeResult(StatusCodes.Status409Conflict);
                 case ResultCode.BadRequest:
                     return new BadRequestResult();
+                case ResultCode.Unauthorized:
+                    return new UnauthorizedResult();
                 case ResultCode.Unknown:
                 case ResultCode.Failed:
                 default:
