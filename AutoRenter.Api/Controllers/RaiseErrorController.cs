@@ -7,7 +7,7 @@ namespace AutoRenter.Api.Controllers
     public class RaiseErrorController : Controller
     {
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policy = "RequireToken")]
         [Route("api/raise-error")]
         public IActionResult Get()
         {

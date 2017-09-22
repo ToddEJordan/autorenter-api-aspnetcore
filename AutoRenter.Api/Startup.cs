@@ -1,21 +1,15 @@
-using System;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Text;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using AutoMapper;
-using Newtonsoft.Json.Serialization;
 using AutoRenter.Api.Authentication;
 using AutoRenter.Api.Authorization;
 using AutoRenter.Api.Models;
@@ -51,7 +45,6 @@ namespace AutoRenter.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
-
             ConfigureData(services);
             ConfigureCompression(services);
             ConfigureCors(services);
@@ -112,19 +105,13 @@ namespace AutoRenter.Api
             services.AddTransient<IValidatorFactory, ValidatorFactory>();
         }
 
-        private static void ConfigureMvc(IServiceCollection services)
+        private void ConfigureMvc(IServiceCollection services)
         {
-            services.AddMvc(config =>
+            services.AddMvc();
+            services.AddAuthorization(options =>
             {
-                var policy = new AuthorizationPolicyBuilder()
-                                 .RequireAuthenticatedUser()
-                                 .Build();
-                config.Filters.Add(new AuthorizeFilter(policy));
-            })
-            .AddJsonOptions(a =>
-            {
-                a.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                a.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                options.AddPolicy("RequireToken",
+                    policy => policy.Requirements.Add(new TokenRequirement(services.BuildServiceProvider().GetRequiredService<ITokenManager>())));
             });
         }
 
@@ -202,7 +189,6 @@ namespace AutoRenter.Api
             }
 
             app.UseStatusCodePages();
-            ValidateTokens(app);
             AutoRenterDbInitializer.Initialize(app.ApplicationServices);
             app.UseMvc();
             app.UseSwagger(options =>
@@ -218,33 +204,6 @@ namespace AutoRenter.Api
                 );
                 options.DocExpansion("none");
             });
-        }
-
-        private void ValidateTokens(IApplicationBuilder app)
-        {
-            app.UseJwtBearerAuthentication(new JwtBearerOptions
-            {
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = true,
-                TokenValidationParameters = GetTokenValidationParameters()
-            });
-        }
-
-        private TokenValidationParameters GetTokenValidationParameters()
-        {
-            return new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidIssuer = Configuration["AppSettings:TokenSettings:Issuer"],
-                ValidateAudience = true,
-                ValidAudience = Configuration["AppSettings:TokenSettings:Audience"],
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey =
-                    new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["AppSettings:TokenSettings:Secret"])),
-                RequireExpirationTime = true,
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
-            };
         }
 
         private static void ConfigureDIForAutoMapper(IServiceCollection services)

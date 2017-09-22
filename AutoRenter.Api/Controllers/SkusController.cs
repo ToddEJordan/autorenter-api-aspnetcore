@@ -25,7 +25,7 @@ namespace AutoRenter.Api.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policy = "RequireToken")]
         public async Task<IActionResult> GetAll()
         {
             var result = await skuService.GetAll();

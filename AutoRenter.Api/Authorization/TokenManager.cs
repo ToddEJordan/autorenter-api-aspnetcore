@@ -18,10 +18,10 @@ namespace AutoRenter.Api.Authorization
             _appSettings = appSettings.Value;
             UtcTime = utcTime;
         }
-
         public TokenManager(IOptions<AppSettings> appSettings)
-            : this(appSettings, DateTime.UtcNow)
         {
+            _appSettings = appSettings.Value;
+            UtcTime = DateTime.Now.ToUniversalTime();
         }
 
         public virtual string CreateToken(UserModel userModel)
@@ -44,6 +44,27 @@ namespace AutoRenter.Api.Authorization
         {
             return new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_appSettings.TokenSettings.Secret)),
                 SecurityAlgorithms.HmacSha256);
+        }
+
+        public virtual bool IsTokenValid(string token)
+        {
+            try
+            {
+                var tokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidAudiences = new[] { _appSettings.TokenSettings.Audience },
+                    ValidIssuers = new[] { _appSettings.TokenSettings.Issuer },
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_appSettings.TokenSettings.Secret))
+                };
+
+                var tokenHandler = new JwtSecurityTokenHandler();
+                tokenHandler.ValidateToken(token, tokenValidationParameters, out var _);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
