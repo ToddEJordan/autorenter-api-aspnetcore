@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 using AutoRenter.Api.Models;
 using Microsoft.Extensions.Options;
@@ -32,12 +33,17 @@ namespace AutoRenter.Api.Authorization
         public virtual JwtSecurityToken CreateJsonWebToken(UserModel userModel)
         {
             return new JwtSecurityToken(
-                _appSettings.TokenSettings.Issuer,
-                _appSettings.TokenSettings.Audience,
-                null,
-                UtcTime,
-                UtcTime.AddMinutes(_appSettings.TokenSettings.ExpirationMinutes),
-                GetSigningCredentials());
+                new JwtHeader(GetSigningCredentials()),
+                new JwtPayload(
+                    _appSettings.TokenSettings.Issuer,
+                    _appSettings.TokenSettings.Audience,
+                    new Claim[]{
+                        new Claim("username", userModel.Username),
+                        new Claim(JwtRegisteredClaimNames.Sub, userModel.Id.ToString())
+                    },
+                    UtcTime,
+                    UtcTime.AddMinutes(_appSettings.TokenSettings.ExpirationMinutes),
+                    UtcTime));
         }
 
         public virtual SigningCredentials GetSigningCredentials()
