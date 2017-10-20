@@ -21,12 +21,12 @@ namespace AutoRenter.Api.Authorization
                 if (!string.IsNullOrEmpty(token) && tokenManager.IsTokenValid(token))
                 {
                     context.Succeed(requirement);
-                    return Task.FromResult(0);
+                    return Task.CompletedTask;
                 }
             }
 
             context.Fail();
-            return Task.FromResult(0);
+            return Task.CompletedTask;
         }
     }
 }

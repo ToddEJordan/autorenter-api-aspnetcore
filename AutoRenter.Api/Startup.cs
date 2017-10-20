@@ -189,6 +189,7 @@ namespace AutoRenter.Api
             }
 
             app.UseStatusCodePages();
+            ValidateTokens(app);
             AutoRenterDbInitializer.Initialize(app.ApplicationServices);
             app.UseMvc();
             app.UseSwagger(options =>
@@ -206,6 +207,15 @@ namespace AutoRenter.Api
             });
         }
 
+        private void ValidateTokens(IApplicationBuilder app)
+        {
+            app.UseJwtBearerAuthentication(new JwtBearerOptions
+            {
+                AutomaticAuthenticate = false,
+                AutomaticChallenge = true
+            });
+        }
+        
         private static void ConfigureDIForAutoMapper(IServiceCollection services)
         {
             var config = new MapperConfiguration(x =>
