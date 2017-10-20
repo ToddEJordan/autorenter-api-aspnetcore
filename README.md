@@ -48,6 +48,13 @@ After successfully starting the API app, you should be able to view data by brow
 
 For more in-depth testing, use a web debugging tool such as [Fiddler](https://www.telerik.com/download/fiddler) or [Postman](https://www.getpostman.com/).
 
+You can log in with one of these username/password combinations:
+
+* janesmith / secret
+* bobsmith / secret
+* melissajones / secret
+* georgejones / secret
+
 ### API Route Documentation
 
 Once running locally, you can access API route documentation (useful for those consuming the API) by going to: [http://localhost:3000/docs/api/](http://localhost:3000/docs/api/)
