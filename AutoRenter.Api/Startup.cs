@@ -1,21 +1,15 @@
-using System;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Text;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using AutoMapper;
-using Newtonsoft.Json.Serialization;
 using AutoRenter.Api.Authentication;
 using AutoRenter.Api.Authorization;
 using AutoRenter.Api.Models;
@@ -51,7 +45,6 @@ namespace AutoRenter.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
-
             ConfigureData(services);
             ConfigureCompression(services);
             ConfigureCors(services);
@@ -112,26 +105,14 @@ namespace AutoRenter.Api
             services.AddTransient<IValidatorFactory, ValidatorFactory>();
         }
 
-        private static void ConfigureMvc(IServiceCollection services)
+        private void ConfigureMvc(IServiceCollection services)
         {
-            services.AddMvc(config =>
-            {
-                var policy = new AuthorizationPolicyBuilder()
-                                 .RequireAuthenticatedUser()
-                                 .Build();
-                config.Filters.Add(new AuthorizeFilter(policy));
-            })
-            .AddJsonOptions(a =>
-            {
-                a.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                a.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-            });
-
+            services.AddMvc();
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("Administrator", policy => policy.Requirements.Add(new AdministratorAuthorizationRequirement()));
+                options.AddPolicy("RequireToken",
+                    policy => policy.Requirements.Add(new TokenRequirement(services.BuildServiceProvider().GetRequiredService<ITokenManager>())));
             });
-            services.AddSingleton<IAuthorizationHandler, IsAdminHandler>();
         }
 
         private void ConfigureCors(IServiceCollection services)
@@ -230,29 +211,11 @@ namespace AutoRenter.Api
         {
             app.UseJwtBearerAuthentication(new JwtBearerOptions
             {
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = true,
-                TokenValidationParameters = GetTokenValidationParameters()
+                AutomaticAuthenticate = false,
+                AutomaticChallenge = true
             });
         }
-
-        private TokenValidationParameters GetTokenValidationParameters()
-        {
-            return new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidIssuer = Configuration["AppSettings:TokenSettings:Issuer"],
-                ValidateAudience = true,
-                ValidAudience = Configuration["AppSettings:TokenSettings:Audience"],
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey =
-                    new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["AppSettings:TokenSettings:Secret"])),
-                RequireExpirationTime = true,
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
-            };
-        }
-
+        
         private static void ConfigureDIForAutoMapper(IServiceCollection services)
         {
             var config = new MapperConfiguration(x =>
@@ -292,6 +255,7 @@ namespace AutoRenter.Api
 
                 x.CreateMap<LogEntry, LogEntryModel>();
                 x.CreateMap<LogEntryModel, LogEntry>();
+                x.CreateMap<User, UserModel>();
             });
 
             services.AddSingleton(typeof(IMapper), new Mapper(config));

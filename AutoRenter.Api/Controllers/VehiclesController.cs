@@ -29,7 +29,7 @@ namespace AutoRenter.Api.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policy = "RequireToken")]
         public async Task<IActionResult> GetAll()
         {
             var result = await vehicleService.GetAll();
@@ -45,7 +45,7 @@ namespace AutoRenter.Api.Controllers
         }
 
         [HttpGet("{id:Guid}", Name = "GetVehicle")]
-        [AllowAnonymous]
+        [Authorize(Policy = "RequireToken")]
         public async Task<IActionResult> Get([Required] Guid id)
         {
             if (id == Guid.Empty)
@@ -65,7 +65,7 @@ namespace AutoRenter.Api.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Policy = "RequireToken")]
         public async Task<IActionResult> Post([FromBody] VehicleModel vehicleModel)
         {
             if (!ModelState.IsValid)
@@ -85,7 +85,7 @@ namespace AutoRenter.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        [AllowAnonymous]
+        [Authorize(Policy = "RequireToken")]
         public async Task<IActionResult> Delete(Guid id)
         {
             if (id == Guid.Empty)
@@ -103,7 +103,7 @@ namespace AutoRenter.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        [AllowAnonymous]
+        [Authorize(Policy = "RequireToken")]
         public async Task<IActionResult> Put(Guid id, [FromBody] VehicleModel vehicleModel)
         {
             if (!ModelState.IsValid)

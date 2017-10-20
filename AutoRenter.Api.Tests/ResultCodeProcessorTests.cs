@@ -55,6 +55,22 @@ namespace AutoRenter.Api.Tests
             Assert.Equal(expected, conflictResult.StatusCode);
         }
 
+        [Fact]
+        public void Unauthorized()
+        {
+            // arrange
+            var payload = ResultCode.Unauthorized;
+            var expected = StatusCodes.Status401Unauthorized;
+            var sut = new ErrorCodeConverter();
+
+            // act
+            var result = sut.Convert(payload);
+            var conflictResult = result as StatusCodeResult;
+
+            // assert
+            Assert.Equal(expected, conflictResult.StatusCode);
+        }
+
         [Theory]
         [InlineData(ResultCode.Unknown)]
         [InlineData(ResultCode.Failed)]

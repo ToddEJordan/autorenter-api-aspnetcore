@@ -2,15 +2,14 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using AutoRenter.Api.Models;
 using AutoRenter.Api.Authorization;
 using AutoRenter.Api.Tests.Helpers;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Xunit;
 using Moq;
+using Xunit;
 
-namespace AutoRenter.Api.Tests
+namespace AutoRenter.Api.Tests.Authorization
 {
     public class TokenManagerTests
     {
@@ -85,21 +84,6 @@ namespace AutoRenter.Api.Tests
 
             //assert
             Assert.Equal("ThoseWhoRock", result.Audiences.FirstOrDefault());
-        }
-
-        [Fact]
-        public void CreateJsonWebToken_ResultShouldHaveCorrectClaimsCount()
-        {
-            //arrange
-            var userModel = UserModelHelper.GetUser();
-            var appSettings = MockAppSettings();
-            var tokenManager = new TokenManager(Options.Create(appSettings.Object), TestDateTime());
-
-            //act
-            var result = tokenManager.CreateJsonWebToken(userModel);
-
-            //assert
-            Assert.Equal(9, result.Claims.Count());
         }
 
         [Fact]
@@ -205,111 +189,6 @@ namespace AutoRenter.Api.Tests
 
             //assert
             appSettings.VerifyGet(i => i.TokenSettings.Secret, Times.Once);
-        }
-
-        [Fact]
-        public void GetClaims_ShouldReturnArraryOfExpectedLength()
-        {
-            //arrange
-            var userModel = UserModelHelper.GetUser();
-            var appSettings = Options.Create(new AppSettings());
-            var tokenManager = new TokenManager(appSettings);
-
-            //act
-            var result = tokenManager.GetClaims(userModel);
-
-            //assert
-            Assert.Equal(5, result.Length);
-        }
-
-        [Fact]
-        public void GetClaims_ShouldReturnMatchingUsernameClaim()
-        {
-            //arrange
-            var userModel = UserModelHelper.GetUser();
-            var appSettings = Options.Create(new AppSettings());
-            var tokenManager = new TokenManager(appSettings);
-
-            //act
-            var result = tokenManager.GetClaims(userModel);
-
-            //assert
-            Assert.Equal(userModel.Username, result.ToList().FirstOrDefault(i => i.Type == AutoRenterClaimNames.Username).Value);
-        }
-
-        [Fact]
-        public void GetClaims_ShouldReturnMatchingEmailCLaim()
-        {
-            //arrange
-            var userModel = UserModelHelper.GetUser();
-            var appSettings = Options.Create(new AppSettings());
-            var tokenManager = new TokenManager(appSettings);
-
-            //act
-            var result = tokenManager.GetClaims(userModel);
-
-            //assert
-            Assert.Equal(userModel.Email, result.ToList().FirstOrDefault(i => i.Type == AutoRenterClaimNames.Email).Value);
-        }
-
-        [Fact]
-        public void GetClaims_ShouldReturnMatchingFirstNameClaim()
-        {
-            //arrange
-            var userModel = UserModelHelper.GetUser();
-            var appSettings = Options.Create(new AppSettings());
-            var tokenManager = new TokenManager(appSettings);
-
-            //act
-            var result = tokenManager.GetClaims(userModel);
-
-            //assert
-            Assert.Equal(userModel.FirstName, result.ToList().FirstOrDefault(i => i.Type == AutoRenterClaimNames.FirstName).Value);
-        }
-
-        [Fact]
-        public void GetClaims_ShouldReturnMatchingLastNameClaim()
-        {
-            //arrange
-            var userModel = UserModelHelper.GetUser();
-            var appSettings = Options.Create(new AppSettings());
-            var tokenManager = new TokenManager(appSettings);
-
-            //act
-            var result = tokenManager.GetClaims(userModel);
-
-            //assert
-            Assert.Equal(userModel.LastName, result.ToList().FirstOrDefault(i => i.Type == AutoRenterClaimNames.LastName).Value);
-        }
-
-        [Fact]
-        public void GetClaims_ShouldReturnNonAdministratorUser()
-        {
-            //arrange
-            var userModel = UserModelHelper.GetUser();
-            var appSettings = Options.Create(new AppSettings());
-            var tokenManager = new TokenManager(appSettings);
-
-            //act
-            var result = tokenManager.GetClaims(userModel);
-
-            //assert
-            Assert.False(Convert.ToBoolean(result.ToList().FirstOrDefault(i => i.Type == AutoRenterClaimNames.IsAdministrator).Value));
-        }
-
-        [Fact]
-        public void GetClaims_ShouldReturnListOfClaimsWithAdministoratorClaimWhenUserIsAdministrator()
-        {
-            //arrange
-            var userModel = UserModelHelper.GetAdministratorUser();
-            var appSettings = Options.Create(new AppSettings());
-            var tokenManager = new TokenManager(appSettings);
-
-            //act
-            var result = tokenManager.GetClaims(userModel);
-
-            //assert
-            Assert.True(Convert.ToBoolean(result.ToList().FirstOrDefault(i => i.Type == AutoRenterClaimNames.IsAdministrator).Value));
         }
 
         private DateTime TestDateTime()

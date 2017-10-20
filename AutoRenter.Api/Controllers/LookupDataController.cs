@@ -28,7 +28,7 @@ namespace AutoRenter.Api.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policy = "RequireToken")]
         public async Task<dynamic> Get()
         {
             var query = Request.Query;

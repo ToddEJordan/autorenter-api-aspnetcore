@@ -1,67 +1,71 @@
 using System;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using Xunit;
+using System.ComponentModel.DataAnnotations;
 using AutoRenter.Api.Authentication;
 using AutoRenter.Api.Controllers;
 using AutoRenter.Api.Models;
+using AutoRenter.Api.Services;
+using AutoRenter.Domain.Models;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
+using Xunit;
 
-namespace AutoRenter.Api
+namespace AutoRenter.Api.Tests
 {
     public class LoginControllerTests
     {
-        [Fact]
-        public void Post_AccessesAuthencateUserObjectOnce(){
-            //arrange
-            var authenticateUser = new Mock<IAuthenticateUser>();
-            authenticateUser.Setup(i => 
-                    i.Execute(It.IsAny<LoginModel>()))
-                .Returns(new ResultModel());
-            var loginController = new LoginController(authenticateUser.Object);
+        private Mock<IAuthenticateUser> authenticateUserMock;
+        private Mock<IErrorCodeConverter> errorCodeConverterMock;
 
-            //act
-            loginController.Post( new LoginModel());
-            
-            //assert
-            authenticateUser.Verify(i => 
-                    i.Execute(It.IsAny<LoginModel>()), 
-                Times.Once);            
-
+        public LoginControllerTests()
+        {
+            authenticateUserMock = new Mock<IAuthenticateUser>();
+            errorCodeConverterMock = new Mock<IErrorCodeConverter>();
         }
 
         [Fact]
-        public void Post_ValidUserServiceReturnsSucessfulResult()
+        public async void Post_ShouldReturnUnauthorizedResult()
         {
-            //arrange
-            var authenticateUser = new Mock<IAuthenticateUser>();
-            authenticateUser.Setup(i => 
-                    i.Execute(It.IsAny<LoginModel>()))
-                .Returns(new ResultModel());
-            var loginController = new LoginController(authenticateUser.Object);
+            authenticateUserMock.Setup(x => x.Execute(It.IsAny<LoginModel>()))
+                .ReturnsAsync(() => new Result<UserModel>(ResultCode.Unauthorized));
 
-            //act
-            var result = loginController.Post( new LoginModel()) 
-                as OkObjectResult;
-            var resultModel = (ResultModel) result.Value;
+            errorCodeConverterMock.Setup(x => x.Convert(It.IsAny<ResultCode>())).Returns(new UnauthorizedResult());
 
-            //assert            
-            Assert.True(resultModel.Success);
+            var loginController = new LoginController(authenticateUserMock.Object, errorCodeConverterMock.Object);
+
+            var result = await loginController.Post(new LoginModel());
+            var unauthorizedResult = result as UnauthorizedResult;
+
+            Assert.Equal(401, unauthorizedResult.StatusCode);
         }
 
         [Fact]
-        public void Post_InvalidUserService()
+        public async void Post_ShouldReturnBadRequest()
         {
-            //arrange
-            var errorMessage = "Something bad happened.";
-            var authenticateUser = new Mock<IAuthenticateUser>();
-            authenticateUser.Setup(i => i.Execute(It.IsAny<LoginModel>())).Throws(new Exception(errorMessage));
-            var loginController = new LoginController(authenticateUser.Object);
+            authenticateUserMock.Setup(x => x.Execute(It.IsAny<LoginModel>())).Throws(new Exception("An error occured."));
 
-            //act
-            var result = loginController.Post(new LoginModel()) as BadRequestObjectResult;            
+            var loginController = new LoginController(authenticateUserMock.Object, errorCodeConverterMock.Object);
 
-            //assert
-            Assert.IsType(typeof(BadRequestObjectResult), result);
-        }       
-    }   
+            var result = await loginController.Post(new LoginModel());
+            var badResult = result as BadRequestObjectResult;
+
+            Assert.Equal(400, badResult.StatusCode);
+            Assert.Equal("An error occured.", badResult.Value);
+        }
+
+        [Fact]
+        public async void Post_ShouldReturnOk()
+        {
+            authenticateUserMock.Setup(x => x.Execute(It.IsAny<LoginModel>()))
+                .ReturnsAsync(() => new Result<UserModel>(ResultCode.Success, new UserModel { Username = "johndoe" }));
+
+            var loginController = new LoginController(authenticateUserMock.Object, errorCodeConverterMock.Object);
+
+            var result = await loginController.Post(new LoginModel());
+
+            var okResult = result as OkObjectResult;
+
+            Assert.Equal(200, okResult.StatusCode);
+            Assert.Equal("johndoe", ((UserModel)okResult.Value).Username);
+        }
+    }
 }

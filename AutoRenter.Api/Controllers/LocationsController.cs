@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoRenter.Api.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using AutoRenter.Api.Models;
@@ -26,7 +27,7 @@ namespace AutoRenter.Api.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policy = "RequireToken")]
         public async Task<IActionResult> GetAll()
         {
             var result = await locationService.GetAll();
@@ -42,7 +43,7 @@ namespace AutoRenter.Api.Controllers
         }
 
         [HttpGet("{id:Guid}", Name = "GetLocation")]
-        [AllowAnonymous]
+        [Authorize(Policy = "RequireToken")]
         public async Task<IActionResult> Get(Guid id)
         {
             if (id == Guid.Empty)
@@ -62,7 +63,7 @@ namespace AutoRenter.Api.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Policy = "RequireToken")]
         public async Task<IActionResult> Post([FromBody] LocationModel locationModel)
         {
             if (!ModelState.IsValid)
@@ -82,7 +83,7 @@ namespace AutoRenter.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        [AllowAnonymous]
+        [Authorize(Policy = "RequireToken")]
         public async Task<IActionResult> Delete(Guid id)
         {
             if (id == Guid.Empty)
@@ -100,7 +101,7 @@ namespace AutoRenter.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        [AllowAnonymous]
+        [Authorize(Policy = "RequireToken")]
         public async Task<IActionResult> Put(Guid id, [FromBody] LocationModel locationModel)
         {
             if (!ModelState.IsValid)
@@ -120,7 +121,7 @@ namespace AutoRenter.Api.Controllers
         }
 
         [HttpGet("{locationId}/vehicles")]
-        [AllowAnonymous]
+        [Authorize(Policy = "RequireToken")]
         public async Task<IActionResult> GetAllVehicles(Guid locationId)
         {
             if (locationId == Guid.Empty)
@@ -149,7 +150,7 @@ namespace AutoRenter.Api.Controllers
         }
 
         [HttpPost("{locationId}/vehicles")]
-        [AllowAnonymous]
+        [Authorize(Policy = "RequireToken")]
         public async Task<IActionResult> AddVehicleToLocation(Guid locationId, [FromBody] VehicleModel vehicleModel)
         {
             if (!ModelState.IsValid)

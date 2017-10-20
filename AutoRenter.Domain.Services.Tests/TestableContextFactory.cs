@@ -27,6 +27,7 @@ namespace AutoRenter.Domain.Services.Tests
             InitializeSkus(context);
             InitializeStates(context);
             InitializeVehicles(context);
+            InitializeUsers(context);
 
             return context;
         }
@@ -210,6 +211,53 @@ namespace AutoRenter.Domain.Services.Tests
 
                 foreach (var vehicle in vehicles)
                     context.Vehicles.Add(vehicle);
+            }
+
+            context.SaveChanges();
+        }
+
+        private static void InitializeUsers(AutoRenterContext context)
+        {
+            if (!context.Users.Any())
+            {
+                ICollection<User> users = new List<User>
+                {
+                    new User()
+                    {
+                        Id = new Guid("d20ed1a1-4650-4d8f-9df7-5faa91363341"),
+                        FirstName = "Jane",
+                        LastName = "Smith",
+                        Username = "janesmith",
+                        Password = "$2a$10$u4ONtuiO9bKjdMODbeXtzO1OauSlYm.bxb1VihX9uhHqbT0hOmFBG"
+                    },
+                    new User()
+                    {
+                        Id = new Guid("7cafedfb-616c-4093-bec6-b167bcd18ca8"),
+                        FirstName = "Bob",
+                        LastName = "Smith",
+                        Username = "bobsmith",
+                        Password = "$2a$10$u4ONtuiO9bKjdMODbeXtzO1OauSlYm.bxb1VihX9uhHqbT0hOmFBG"
+                    },
+                    new User()
+                    {
+                        Id = new Guid("95da18d2-1968-476e-bab8-799598c9962e"),
+                        FirstName = "Melissa",
+                        LastName = "Jones",
+                        Username = "melissajones",
+                        Password = "$2a$10$u4ONtuiO9bKjdMODbeXtzO1OauSlYm.bxb1VihX9uhHqbT0hOmFBG"
+                    },
+                    new User()
+                    {
+                        Id = new Guid("df9980bc-6b79-4fe3-8bbc-5a81c7b88e0b"),
+                        FirstName = "George",
+                        LastName = "Jones",
+                        Username = "georgejones",
+                        Password = "$2a$10$u4ONtuiO9bKjdMODbeXtzO1OauSlYm.bxb1VihX9uhHqbT0hOmFBG"
+                    }
+                };
+
+                foreach (var user in users)
+                    context.Users.Add(user);
             }
 
             context.SaveChanges();

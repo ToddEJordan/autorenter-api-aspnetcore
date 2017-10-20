@@ -15,5 +15,6 @@ namespace AutoRenter.Domain.Data
         public DbSet<Sku> Skus { get; set; }
         public DbSet<State> States { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }

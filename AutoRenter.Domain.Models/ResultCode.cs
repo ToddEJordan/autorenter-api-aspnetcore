@@ -7,6 +7,7 @@
         NotFound,
         Failed,
         BadRequest,
-        Conflict
+        Conflict,
+        Unauthorized
     }
 }

@@ -10,53 +10,67 @@ namespace AutoRenter.Api.Authorization
 {
     public class TokenManager : ITokenManager
     {
-        private readonly AppSettings appSettings;
+        private readonly AppSettings _appSettings;
 
         public DateTime UtcTime { get; set; }
 
         public TokenManager(IOptions<AppSettings> appSettings, DateTime utcTime)
         {
-            this.appSettings = appSettings.Value;
+            _appSettings = appSettings.Value;
             UtcTime = utcTime;
         }
-
         public TokenManager(IOptions<AppSettings> appSettings)
-            : this(appSettings, DateTime.UtcNow)
         {
+            _appSettings = appSettings.Value;
+            UtcTime = DateTime.Now.ToUniversalTime();
         }
 
         public virtual string CreateToken(UserModel userModel)
         {
-            return $"Bearer {new JwtSecurityTokenHandler().WriteToken(CreateJsonWebToken(userModel))}";
+            return new JwtSecurityTokenHandler().WriteToken(CreateJsonWebToken(userModel));
         }
 
         public virtual JwtSecurityToken CreateJsonWebToken(UserModel userModel)
         {
             return new JwtSecurityToken(
-                appSettings.TokenSettings.Issuer,
-                appSettings.TokenSettings.Audience,
-                GetClaims(userModel),
-                UtcTime,
-                UtcTime.AddMinutes(appSettings.TokenSettings.ExpirationMinutes),
-                GetSigningCredentials());
+                new JwtHeader(GetSigningCredentials()),
+                new JwtPayload(
+                    _appSettings.TokenSettings.Issuer,
+                    _appSettings.TokenSettings.Audience,
+                    new Claim[]{
+                        new Claim("username", userModel.Username),
+                        new Claim(JwtRegisteredClaimNames.Sub, userModel.Id.ToString())
+                    },
+                    UtcTime,
+                    UtcTime.AddMinutes(_appSettings.TokenSettings.ExpirationMinutes),
+                    UtcTime));
         }
 
         public virtual SigningCredentials GetSigningCredentials()
         {
-            return new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(appSettings.TokenSettings.Secret)),
+            return new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_appSettings.TokenSettings.Secret)),
                 SecurityAlgorithms.HmacSha256);
         }
 
-        public virtual Claim[] GetClaims(UserModel userModel)
+        public virtual bool IsTokenValid(string token)
         {
-            return new[]
+            try
             {
-                new Claim(AutoRenterClaimNames.Username, userModel.Username),
-                new Claim(AutoRenterClaimNames.Email, userModel.Email),
-                new Claim(AutoRenterClaimNames.FirstName, userModel.FirstName),
-                new Claim(AutoRenterClaimNames.LastName, userModel.LastName),
-                new Claim(AutoRenterClaimNames.IsAdministrator, userModel.IsAdministrator.ToString()),
-            };
+                var tokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidAudiences = new[] { _appSettings.TokenSettings.Audience },
+                    ValidIssuers = new[] { _appSettings.TokenSettings.Issuer },
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_appSettings.TokenSettings.Secret))
+                };
+
+                var tokenHandler = new JwtSecurityTokenHandler();
+                tokenHandler.ValidateToken(token, tokenValidationParameters, out var _);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
