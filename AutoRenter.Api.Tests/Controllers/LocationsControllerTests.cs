@@ -11,7 +11,7 @@ using AutoRenter.Domain.Interfaces;
 using AutoRenter.Domain.Models;
 
 
-namespace AutoRenter.Api.Tests
+namespace AutoRenter.Api.Tests.Controllers
 {
     public class LocationsControllerTests
     {

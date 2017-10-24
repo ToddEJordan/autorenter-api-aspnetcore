@@ -8,7 +8,7 @@ using AutoRenter.Api.Models;
 using AutoRenter.Api.Services;
 using AutoRenter.Api.Tests.Helpers;
 
-namespace AutoRenter.Api.Tests
+namespace AutoRenter.Api.Tests.Controllers
 {
     public class InfoControllerTests
     {

@@ -10,7 +10,7 @@ using AutoRenter.Api.Tests.Helpers;
 using AutoRenter.Domain.Interfaces;
 using AutoRenter.Domain.Models;
 
-namespace AutoRenter.Api.Tests
+namespace AutoRenter.Api.Tests.Controllers
 {
     public class VehiclesControllerTests
     {

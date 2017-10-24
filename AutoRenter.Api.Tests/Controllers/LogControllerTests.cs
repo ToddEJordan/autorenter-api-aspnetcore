@@ -7,7 +7,7 @@ using AutoRenter.Domain.Interfaces;
 using AutoRenter.Domain.Models;
 using AutoRenter.Api.Models;
 
-namespace AutoRenter.Api.Tests
+namespace AutoRenter.Api.Tests.Controllers
 {
     public class LogControllerTests
     {
