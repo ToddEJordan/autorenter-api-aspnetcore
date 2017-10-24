@@ -2,7 +2,7 @@
 using Xunit;
 using AutoRenter.Api.Controllers;
 
-namespace AutoRenter.Api.Tests
+namespace AutoRenter.Api.Tests.Controllers
 {
     public class RaiseErrorControllerTests
     {
